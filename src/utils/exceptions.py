@@ -98,6 +98,16 @@ class OCRException(ImageProcessException):
             self.details["api_error"] = api_error
 
 
+class ImageProcessingError(ImageProcessException):
+    """图片处理通用异常"""
+    
+    def __init__(self, message: str, image_path: str = None, **kwargs):
+        super().__init__(message, error_code="IMAGE_PROCESSING_ERROR", **kwargs)
+        self.image_path = image_path
+        if image_path:
+            self.details["image_path"] = image_path
+
+
 # 数据转换相关异常
 
 class TransformException(AutoTemuException):

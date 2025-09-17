@@ -54,27 +54,68 @@ TEMU_ACCESS_TOKEN=your_actual_token
 
 ### 4. 使用
 
+#### 基本命令
+
 ```bash
-python src/main.py --url "https://www.jp0663.com/detail/your-product-url"
+# 显示帮助信息
+python -m src.main --help
+
+# 测试系统连接
+python -m src.main --test
+
+# 显示系统状态
+python -m src.main --status
+
+# 处理单个商品URL
+python -m src.main --url "https://example.com/product"
+
+# 批量处理多个商品URL
+python -m src.main --urls "https://example.com/product1" "https://example.com/product2"
+
+# 指定输出目录
+python -m src.main --url "https://example.com/product" --output "./output"
+
+# 详细输出模式
+python -m src.main --url "https://example.com/product" --verbose
 ```
+
+#### 工作流程
+
+1. **商品信息爬取**: 从指定URL爬取商品信息
+2. **图片处理**: 下载并处理商品图片，使用OCR识别中文字符
+3. **数据转换**: 将爬取的数据转换为Temu API格式
+4. **尺码映射**: 自动映射商品尺码到Temu SKU系统
+5. **商品上架**: 通过Temu API完成商品上架
 
 ## 项目结构
 
 ```
 AutoTemu/
 ├── src/                    # 源代码目录
-│   ├── scraper/           # 爬虫模块
+│   ├── api/               # API客户端
+│   │   └── temu_client.py # Temu API封装
 │   ├── image/             # 图片处理模块
+│   │   ├── ocr_client.py  # OCR客户端
+│   │   └── image_processor.py # 图片处理器
+│   ├── scraper/           # 爬虫模块
+│   │   └── product_scraper.py # 商品爬虫
 │   ├── transformer/       # 数据转换模块
-│   ├── temu/              # Temu API封装
-│   ├── utils/             # 工具类
-│   └── models/            # 数据模型
+│   │   ├── data_transformer.py # 数据转换器
+│   │   └── size_mapper.py # 尺码映射器
+│   ├── utils/             # 工具模块
+│   │   ├── config.py      # 配置管理
+│   │   ├── logger.py      # 日志系统
+│   │   ├── exceptions.py  # 异常定义
+│   │   └── retry.py       # 重试机制
+│   ├── models/            # 数据模型
+│   │   └── data_models.py # 数据模型定义
+│   └── main.py            # 主程序入口
 ├── tests/                 # 测试目录
 ├── logs/                  # 日志目录
 ├── images/                # 图片存储目录
 ├── docs/                  # 文档目录
 ├── requirements.txt       # 依赖列表
-├── .env.example          # 环境变量示例
+├── env.example           # 环境变量示例
 └── README.md             # 本文件
 ```
 
@@ -120,12 +161,35 @@ AutoTemu/
 ### 运行测试
 
 ```bash
-pytest tests/
+# 运行所有测试
+python -m pytest tests/ -v
+
+# 运行特定测试
+python -m pytest tests/test_main.py -v
+
+# 生成测试覆盖率报告
+python -m pytest tests/ --cov=src --cov-report=html
 ```
 
 ### 代码风格
 
 项目遵循PEP8编码规范，使用black进行代码格式化。
+
+### 测试覆盖率
+
+项目包含216个测试用例，覆盖所有核心功能模块：
+- 配置管理 (10个测试)
+- 数据模型 (25个测试)
+- 数据转换 (25个测试)
+- 异常处理 (15个测试)
+- 图片处理 (15个测试)
+- 日志系统 (10个测试)
+- 主程序 (12个测试)
+- OCR客户端 (20个测试)
+- 商品爬虫 (15个测试)
+- 重试机制 (15个测试)
+- 尺码映射 (15个测试)
+- Temu API客户端 (20个测试)
 
 ## 许可证
 

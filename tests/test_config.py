@@ -50,7 +50,7 @@ class TestConfig:
         
         # 应该抛出ConfigError
         with pytest.raises(ConfigError) as exc_info:
-            Config()
+            Config(load_default_env=False)
         
         assert "必需的环境变量" in str(exc_info.value)
     
