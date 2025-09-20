@@ -1,5 +1,5 @@
 ---
-alwaysApply: false
+alwaysApply: true
 ---
 激活方式
 用户输入以下6A开头的内容即可启动工作流:

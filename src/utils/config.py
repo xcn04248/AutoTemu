@@ -45,7 +45,7 @@ class Config:
         self.temu_app_key = self._get_required_env("TEMU_APP_KEY")
         self.temu_app_secret = self._get_required_env("TEMU_APP_SECRET")
         self.temu_access_token = self._get_required_env("TEMU_ACCESS_TOKEN")
-        self.temu_base_url = os.getenv("TEMU_BASE_URL", "https://openapi-jp.temu.com")
+        self.temu_base_url = os.getenv("TEMU_BASE_URL", "https://openapi-b-global.temu.com")
         
         # 业务配置
         self.price_markup = float(os.getenv("PRICE_MARKUP", "1.3"))

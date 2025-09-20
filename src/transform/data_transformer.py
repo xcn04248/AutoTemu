@@ -98,6 +98,9 @@ class DataTransformer:
             result.temu_product = temu_product
             result.skus = skus
             
+            # 将SKU设置到TemuProduct对象中
+            temu_product.skus = skus
+            
             logger.info(f"商品转换成功: {temu_product.title}")
             
         except Exception as e:

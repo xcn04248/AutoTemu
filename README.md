@@ -1,200 +1,221 @@
-# AutoTemu - 商品自动化上架系统
+# AutoTemu
 
-AutoTemu是一个自动化系统，用于从购物网站抓取商品信息并自动上架到Temu日本站。
+🤖 **自动化商品信息爬取和Temu平台商品上架系统**
 
-## 功能特性
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://python.org)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/status-active-brightgreen.svg)]()
 
-- 🕷️ **智能爬虫**：基于Firecrawl技术，稳定抓取商品信息
-- 🔍 **OCR筛选**：自动识别并过滤包含中文的图片
-- 💹 **价格策略**：自动加价30%适配市场需求
-- 🏷️ **智能分类**：使用Temu API自动推荐商品分类
-- 📏 **尺码映射**：自动转换尺码信息符合Temu标准
-- 🔄 **错误重试**：网络异常自动重试，确保稳定性
-- 📝 **日志记录**：完整的操作日志便于追踪问题
+## ✨ 功能特性
 
-## 快速开始
+- 🔍 **智能爬取**: 基于Firecrawl的网页爬取，支持多种电商平台
+- 🖼️ **图片处理**: OCR识别中文内容，自动过滤含中文图片
+- 🔄 **数据转换**: 智能数据转换和尺码映射到Temu格式
+- 🛒 **API集成**: 完整的Temu API集成和商品上架流程
+- 🛡️ **错误处理**: 完善的错误处理和自动重试机制
+- 📊 **合规检查**: 自动合规性检查和属性验证
 
-### 1. 环境要求
+## 🚀 快速开始
 
-- Python 3.8+
-- 稳定的网络连接
-- 必要的API密钥（Firecrawl、百度OCR、Temu）
-
-### 2. 安装
-
+### 1. 环境准备
 ```bash
 # 克隆项目
-git clone https://github.com/yourusername/AutoTemu.git
+git clone <repository-url>
 cd AutoTemu
 
 # 创建虚拟环境
-python3 -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# 或
+venv\Scripts\activate     # Windows
 
 # 安装依赖
 pip install -r requirements.txt
 ```
 
-### 3. 配置
-
-1. 复制环境变量示例文件：
+### 2. 配置API密钥
 ```bash
-cp .env.example .env
+# 复制环境变量模板
+cp env.example .env
+
+# 编辑 .env 文件，填入你的API密钥
+vim .env
 ```
 
-2. 编辑`.env`文件，填入您的API密钥：
-```ini
-FIRECRAWL_API_KEY=your_actual_key
-BAIDU_API_KEY=your_actual_key
-BAIDU_SECRET_KEY=your_actual_key
-TEMU_APP_KEY=your_actual_key
-TEMU_APP_SECRET=your_actual_key
-TEMU_ACCESS_TOKEN=your_actual_token
-```
-
-### 4. 使用
-
-#### 基本命令
-
+### 3. 运行示例
 ```bash
-# 显示帮助信息
-python -m src.main --help
+# 运行完整流程示例
+python docs/examples/complete_product_listing.py
 
-# 测试系统连接
-python -m src.main --test
-
-# 显示系统状态
-python -m src.main --status
-
-# 处理单个商品URL
-python -m src.main --url "https://example.com/product"
-
-# 批量处理多个商品URL
-python -m src.main --urls "https://example.com/product1" "https://example.com/product2"
-
-# 指定输出目录
-python -m src.main --url "https://example.com/product" --output "./output"
-
-# 详细输出模式
-python -m src.main --url "https://example.com/product" --verbose
+# 或运行基本示例
+python src/main.py
 ```
 
-#### 工作流程
+## 📚 文档
 
-1. **商品信息爬取**: 从指定URL爬取商品信息
-2. **图片处理**: 下载并处理商品图片，使用OCR识别中文字符
-3. **数据转换**: 将爬取的数据转换为Temu API格式
-4. **尺码映射**: 自动映射商品尺码到Temu SKU系统
-5. **商品上架**: 通过Temu API完成商品上架
+### 🎯 快速开始
+- [快速开始指南](docs/guides/quick_start.md) - 5分钟快速上手
+- [环境配置指南](docs/guides/environment_setup.md) - 详细环境配置
 
-## 项目结构
+### 📖 核心文档
+- [项目概述](docs/AutoTemu/PROJECT_SUMMARY.md) - 项目整体介绍
+- [系统设计](docs/AutoTemu/DESIGN_AutoTemu.md) - 系统架构设计
+- [任务分解](docs/AutoTemu/TASK_AutoTemu.md) - 开发任务分解
+
+### 🔧 Temu API 文档
+- [商品上架流程](docs/temu_api/temu_product_listing_flow.md) - 完整的商品上架流程
+- [字段验证规则](docs/temu_api/temu_field_validation_rules.md) - 详细的字段验证规则
+- [图片规格要求](docs/temu_api/temu_image_specifications.md) - 图片和媒体规格要求
+
+### 📋 项目状态
+- [项目完成报告](docs/PROJECT_COMPLETION_REPORT.md) - 项目完成情况总结
+- [待办事项](docs/AutoTemu/TODO_AutoTemu.md) - 待完成任务列表
+
+## 🏗️ 项目结构
 
 ```
 AutoTemu/
-├── src/                    # 源代码目录
-│   ├── api/               # API客户端
-│   │   └── temu_client.py # Temu API封装
+├── docs/                    # 📚 项目文档
+│   ├── AutoTemu/           # 6A工作流文档
+│   ├── temu_api/           # Temu API相关文档
+│   ├── guides/             # 使用指南
+│   ├── examples/           # 示例代码
+│   └── tests/              # 测试脚本
+├── src/                    # 💻 源代码
+│   ├── api/               # API相关模块
 │   ├── image/             # 图片处理模块
-│   │   ├── ocr_client.py  # OCR客户端
-│   │   └── image_processor.py # 图片处理器
-│   ├── scraper/           # 爬虫模块
-│   │   └── product_scraper.py # 商品爬虫
-│   ├── transformer/       # 数据转换模块
-│   │   ├── data_transformer.py # 数据转换器
-│   │   └── size_mapper.py # 尺码映射器
-│   ├── utils/             # 工具模块
-│   │   ├── config.py      # 配置管理
-│   │   ├── logger.py      # 日志系统
-│   │   ├── exceptions.py  # 异常定义
-│   │   └── retry.py       # 重试机制
 │   ├── models/            # 数据模型
-│   │   └── data_models.py # 数据模型定义
-│   └── main.py            # 主程序入口
-├── tests/                 # 测试目录
-├── logs/                  # 日志目录
-├── images/                # 图片存储目录
-├── docs/                  # 文档目录
-├── requirements.txt       # 依赖列表
-├── env.example           # 环境变量示例
-└── README.md             # 本文件
+│   ├── scraper/           # 爬虫模块
+│   ├── transform/         # 数据转换模块
+│   └── utils/             # 工具模块
+├── tests/                 # 🧪 单元测试
+├── images/                # 🖼️ 图片资源
+├── logs/                  # 📝 日志文件
+└── requirements.txt       # 📦 依赖列表
 ```
 
-## API密钥获取
+## 🎯 核心功能
 
-### Firecrawl API
-访问 [Firecrawl官网](https://firecrawl.com) 注册获取API密钥。
+### 1. 商品信息爬取
+- 基于 Firecrawl 的网页爬取
+- 支持多种电商平台
+- 自动提取商品信息（名称、价格、描述、图片等）
 
-### 百度OCR API
-1. 访问 [百度AI开放平台](https://ai.baidu.com)
-2. 创建文字识别应用
-3. 获取API Key和Secret Key
+### 2. 图片处理
+- 自动下载商品图片
+- OCR 识别中文内容
+- 自动过滤含中文图片
+- 支持多种图片格式和规格
 
-### Temu开发者API
-1. 访问 [Temu开发者平台](https://seller.temu.com)
-2. 申请开发者账号
-3. 创建应用获取凭证
+### 3. 数据转换
+- 爬取数据到 Temu 格式转换
+- 智能尺码信息映射
+- 价格计算和货币转换
+- 属性验证和合规检查
 
-## 注意事项
+### 4. Temu API 集成
+- 完整的商品上架流程
+- 分类推荐和属性获取
+- 合规性检查和验证
+- 商品创建和发布
 
-- 请确保图片符合Temu要求：3:4比例，宽度≥1340px，高度≥1785px
-- 每个商品至少需要3个尺码（如S、M、L）
-- 上架失败的商品会记录在日志中，需要人工检查
+## 🔧 使用示例
 
-## 故障排查
+### 基本使用
+```python
+from src.main import AutoTemuApp
 
-### 常见问题
+# 创建应用实例
+app = AutoTemuApp()
 
-1. **OCR识别失败**
-   - 检查百度OCR API配额
-   - 确认网络连接正常
+# 处理单个商品URL
+url = "https://example.com/product/123"
+result = app.process_single_url(url)
 
-2. **商品上架失败**
-   - 检查Temu API凭证是否有效
-   - 查看日志文件了解详细错误
+if result.success:
+    print(f"✅ 商品上架成功！商品ID: {result.product_id}")
+else:
+    print(f"❌ 商品上架失败: {', '.join(result.errors)}")
+```
 
-3. **图片处理异常**
-   - 确保有足够的磁盘空间
-   - 检查图片URL是否可访问
+### 高级配置
+```python
+# 自定义配置
+from src.utils.config import get_config
 
-## 开发
+config = get_config()
+config.price_markup = 1.5  # 价格加价50%
+config.log_level = "DEBUG"  # 调试模式
+```
+
+## 🧪 测试
 
 ### 运行测试
-
 ```bash
 # 运行所有测试
-python -m pytest tests/ -v
+python -m pytest tests/
 
 # 运行特定测试
-python -m pytest tests/test_main.py -v
+python -m pytest tests/test_main.py
 
-# 生成测试覆盖率报告
-python -m pytest tests/ --cov=src --cov-report=html
+# 运行测试并显示覆盖率
+python -m pytest --cov=src tests/
 ```
 
-### 代码风格
+### 集成测试
+```bash
+# 运行集成测试
+python docs/tests/test_temu_api_comprehensive.py
+```
 
-项目遵循PEP8编码规范，使用black进行代码格式化。
+## 📊 项目状态
 
-### 测试覆盖率
+### ✅ 已完成
+- [x] 项目基础设施搭建
+- [x] 商品信息爬取模块
+- [x] 图片处理模块
+- [x] 数据转换模块
+- [x] Temu API 集成
+- [x] 完整文档编写
 
-项目包含216个测试用例，覆盖所有核心功能模块：
-- 配置管理 (10个测试)
-- 数据模型 (25个测试)
-- 数据转换 (25个测试)
-- 异常处理 (15个测试)
-- 图片处理 (15个测试)
-- 日志系统 (10个测试)
-- 主程序 (12个测试)
-- OCR客户端 (20个测试)
-- 商品爬虫 (15个测试)
-- 重试机制 (15个测试)
-- 尺码映射 (15个测试)
-- Temu API客户端 (20个测试)
+### 🔄 进行中
+- [ ] 合规信息处理优化
+- [ ] 图片规格自动调整
+- [ ] 外部产品ID验证
 
-## 许可证
+### 📋 待办
+- [ ] 性能优化
+- [ ] 错误处理增强
+- [ ] 监控和日志完善
 
-MIT License
+## 🤝 贡献指南
 
-## 贡献
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
 
-欢迎提交Issue和Pull Request！
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
+
+## 🆘 支持
+
+如有问题或建议，请：
+1. 查看 [FAQ](docs/guides/faq.md)
+2. 提交 [Issue](../../issues)
+3. 联系维护者
+
+## 🙏 致谢
+
+感谢以下开源项目的支持：
+- [Firecrawl](https://firecrawl.dev/) - 网页爬取服务
+- [百度智能云](https://cloud.baidu.com/) - OCR 识别服务
+- [Temu API](https://partner.temu.com/) - 商品上架服务
+
+---
+
+**最后更新**: 2024-01-XX  
+**版本**: v1.0.0  
+**维护者**: AutoTemu Team

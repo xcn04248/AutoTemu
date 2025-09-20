@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temu Partner Platform - How to release product?</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
+    <!-- 引入代码高亮库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #FF6B35;
+            --secondary-color: #004E89;
+            --accent-color: #FFB627;
+            --success-color: #27AE60;
+            --warning-color: #F39C12;
+            --error-color: #E74C3C;
+            --text-primary: #2C3E50;
+            --text-secondary: #7F8C8D;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-tertiary: #ECEFF1;
+            --border-color: #E1E5E9;
+            --shadow-light: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.12);
+            --sidebar-width: 300px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            z-index: 1000;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header-title {
+            margin-left: 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            z-index: 999;
+            transition: var(--transition);
+            box-shadow: var(--shadow-light);
+        }
+
+        .sidebar-content {
+            padding: 2rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            padding: 0 1.5rem 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-tertiary);
+            border-left-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 107, 53, 0.1);
+            border-left-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .nav-item i {
+            margin-right: 0.75rem;
+            width: 1.2rem;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            min-height: calc(100vh - var(--header-height));
+            padding: 2rem;
+            max-width: calc(100% - var(--sidebar-width));
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg-tertiary);
+        }
+
+        .section-icon {
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        h5 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        h6 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-primary);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        tr:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Code Blocks */
+        .code-container {
+            position: relative;
+            margin: 1.5rem 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .code-header {
+            background: var(--bg-tertiary);
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .copy-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .copy-button:hover {
+            background: var(--secondary-color);
+        }
+
+        pre {
+            margin: 0;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--text-primary);
+        }
+
+        /* Info Boxes */
+        .info-box {
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .info-box.note {
+            background: rgba(52, 152, 219, 0.1);
+            border-left-color: #3498DB;
+        }
+
+        .info-box.warning {
+            background: rgba(243, 156, 18, 0.1);
+            border-left-color: var(--warning-color);
+        }
+
+        .info-box.important {
+            background: rgba(231, 76, 60, 0.1);
+            border-left-color: var(--error-color);
+        }
+
+        .info-box.success {
+            background: rgba(39, 174, 96, 0.1);
+            border-left-color: var(--success-color);
+        }
+
+        .info-box-header {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.required {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--error-color);
+        }
+
+        .badge.optional {
+            background: rgba(149, 165, 166, 0.1);
+            color: var(--text-secondary);
+        }
+
+        .badge.api {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498DB;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-medium);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                max-width: 100%;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .header-title {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 280px;
+            }
+
+            .header-content {
+                padding: 0 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .table-container {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .section-icon {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 1.1rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        .sidebar::-webkit-scrollbar,
+        .main-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track,
+        .main-content::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb,
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover,
+        .main-content::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                Temu Partner Platform
+            </div>
+            <div class="header-title">How to release product? - Complete Documentation</div>
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="nav-section">
+                <div class="nav-section-title">Overview</div>
+                <a href="#overview" class="nav-item active">
+                    <i class="fas fa-info-circle"></i>
+                    Overview
+                </a>
+                <a href="#api-interfaces" class="nav-item">
+                    <i class="fas fa-code"></i>
+                    API Interfaces
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Product Configuration</div>
+                <a href="#goods-basic" class="nav-item">
+                    <i class="fas fa-box"></i>
+                    Product Basic Info
+                </a>
+                <a href="#goods-gallery" class="nav-item">
+                    <i class="fas fa-images"></i>
+                    Product Gallery
+                </a>
+                <a href="#goods-service" class="nav-item">
+                    <i class="fas fa-truck"></i>
+                    Service Promise
+                </a>
+                <a href="#goods-property" class="nav-item">
+                    <i class="fas fa-tags"></i>
+                    Product Properties
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Compliance & Certification</div>
+                <a href="#goods-origin" class="nav-item">
+                    <i class="fas fa-globe"></i>
+                    Origin Information
+                </a>
+                <a href="#certification-info" class="nav-item">
+                    <i class="fas fa-certificate"></i>
+                    Certification Info
+                </a>
+                <a href="#compliance-templates" class="nav-item">
+                    <i class="fas fa-shield-alt"></i>
+                    Compliance Templates
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Product Details</div>
+                <a href="#bullet-points" class="nav-item">
+                    <i class="fas fa-list-ul"></i>
+                    Bullet Points
+                </a>
+                <a href="#goods-desc" class="nav-item">
+                    <i class="fas fa-align-left"></i>
+                    Product Description
+                </a>
+                <a href="#size-chart" class="nav-item">
+                    <i class="fas fa-ruler"></i>
+                    Size Chart
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">SKU Management</div>
+                <a href="#sku-list" class="nav-item">
+                    <i class="fas fa-barcode"></i>
+                    SKU Configuration
+                </a>
+                <a href="#pricing-inventory" class="nav-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    Pricing & Inventory
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Additional Information</div>
+                <a href="#trademark-brand" class="nav-item">
+                    <i class="fas fa-trademark"></i>
+                    Trademark & Brand
+                </a>
+                <a href="#tax-info" class="nav-item">
+                    <i class="fas fa-receipt"></i>
+                    Tax Information
+                </a>
+                <a href="#test-categories" class="nav-item">
+                    <i class="fas fa-flask"></i>
+                    Test Categories
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Overview Section -->
+            <section id="overview" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div>
+                        <h1>How to release product?</h1>
+                        <p style="margin: 0; color: var(--text-secondary);">Last update time: 2025-09-09 11:37:06</p>
+                    </div>
+                </div>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-lightbulb"></i>
+                        Overview
+                    </div>
+                    <p>The Product API helps sellers manage their product catalog at scale. Using the Product API, a seller can create products.</p>
+                    <p>The following is an explanation of the field values and API calls involved in product publishing. We hope this document will help you to publish products more efficiently.</p>
+                </div>
+            </section>
+
+            <!-- API Interfaces Section -->
+            <section id="api-interfaces" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h2>API Interfaces for Product Release</h2>
+                </div>
+
+                <p>The following are the interfaces involved in product release:</p>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>API Name</th>
+                                <th>Interface Overview</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>bg.local.goods.cats.get</code></td><td>Get the complete category of temu</td></tr>
+                            <tr><td><code>bg.local.goods.template.get</code></td><td>Obtain attribute/variant data corresponding to temu category</td></tr>
+                            <tr><td><code>bg.local.goods.spec.id.get</code></td><td>Used to generate custom variant specification IDs</td></tr>
+                            <tr><td><code>bg.local.goods.size.element.get</code></td><td>Whether to fill in the size chart and requirements for obtaining categories</td></tr>
+                            <tr><td><code>bg.local.goods.image.upload</code></td><td>Upload product images</td></tr>
+                            <tr><td><code>bg.local.goods.gallery.signature.get</code></td><td>Upload product videos, files, and images</td></tr>
+                            <tr><td><code>bg.local.goods.compliance.property.check</code></td><td>Verify whether the product attributes comply with the site's sales rules</td></tr>
+                            <tr><td><code>bg.local.goods.tax.code.get</code></td><td>Obtain the product tax code</td></tr>
+                            <tr><td><code>bg.local.goods.out.sn.check</code></td><td>Verify if the external product code and SKU code are duplicated</td></tr>
+                            <tr><td><code>bg.local.goods.sku.out.sn.check</code></td><td>Verify if the external product code and SKU code are duplicated</td></tr>
+                            <tr><td><code>bg.freight.template.list.query</code></td><td>Get the seller's set product shipping template</td></tr>
+                            <tr><td><code>bg.local.goods.brand.trademark.get</code></td><td>Obtain the brand information registered by the seller</td></tr>
+                            <tr><td><code>temu.local.goods.sku.net.content.unit.query</code></td><td>Obtain SKU net content unit information</td></tr>
+                            <tr><td><code>temu.local.goods.illegal.vocabulary.check</code></td><td>Verify whether there are any violations in the product name, product description, and other information</td></tr>
+                            <tr><td><code>bg.local.goods.compliance.rules.get</code></td><td>Used to query product compliance and governance attribute requirements</td></tr>
+                            <tr><td><code>bg.local.goods.compliance.extra.template.get</code></td><td>Used to query product compliance and governance attribute requirements</td></tr>
+                            <tr><td><code>bg.local.goods.compliance.info.fill.list.query</code></td><td>Used to obtain product compliance information and fill in</td></tr>
+                            <tr><td><code>bg.local.goods.add</code></td><td>Create a new product</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Product Basic Information -->
+            <section id="goods-basic" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <h2>goodsBasic <span class="badge required">Required</span></h2>
+                </div>
+
+                <h3>goodsName <span class="badge required">Required</span></h3>
+                <ul>
+                    <li><strong>How to fill in:</strong> User inputs</li>
+                    <li><strong>Validation Rules:</strong>
+                        <ul>
+                            <li>Only supports English letters, numbers, and symbols</li>
+                            <li>Does not support decorative characters: ~ ! * $ ? _ ~ { } # < > | * ; ^ ¬ ¦</li>
+                            <li>Does not support high ASCII characters type 1, such as ®, ©, ™, etc.</li>
+                            <li>Character count: Within 500 characters</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="info-box warning">
+                    <div class="info-box-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Precautions
+                    </div>
+                    <p>Use <code>temu.local.goods.illegal.vocabulary.check</code> to check for any violations in product information to avoid affecting sales.</p>
+                </div>
+
+                <h3>catId <span class="badge required">Required</span></h3>
+                <ul>
+                    <li><strong>How to fill in:</strong> Retrieve from other APIs</li>
+                    <li><strong>API Reference:</strong> <span class="badge api">bg.local.goods.cats.get</span></li>
+                    <li><strong>Helper API:</strong> <span class="badge api">bg.local.goods.category.recommend</span> will help you quickly match temu categories based on product information</li>
+                </ul>
+
+                <div class="info-box important">
+                    <div class="info-box-header">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Important Notes
+                    </div>
+                    <ul>
+                        <li>Entering parentCatId = 0 retrieves all available first-level categories for posting</li>
+                        <li>To obtain leaf categories: Recursively call this interface, entering parentCatId with the catId selected from the previous call's results to get the next level of category ID until the leaf categories are reached</li>
+                        <li>When entering a leaf category, the interface returns empty</li>
+                        <li>Ensure to use the most specific (leaf) category ID for posting products</li>
+                        <li>catType is an important variable for judgement whether category is an Apparel (catType=0) or Non-Apparel (catType=1) one, it will effect at the image required shape</li>
+                        <li>Some categories on different sites are not sellable, only the categories with availableStatus=0 need to be obtained</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Product Gallery -->
+            <section id="goods-gallery" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <h2>goodsGallery <span class="badge optional">Optional</span></h2>
+                </div>
+
+                <h3>detailVideo <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li><strong>How to fill in:</strong> User inputs</li>
+                    <li><strong>Specifications:</strong>
+                        <ul>
+                            <li>Max number of video URIs: 1</li>
+                            <li>Duration: ≤180s</li>
+                            <li>Aspect Ratio: 1:1, 4:3, 16:9</li>
+                            <li>Resolution: ≥720P</li>
+                            <li>Size: ≤300 MB</li>
+                            <li>Format: wmv, avi, 3gp, mov, mp4, flv, rmvb, mkv, m4v, x-flv, WMV, AVI, 3GP, MOV, MP4, FLV, RMVB, MKV, M4V, X-FLV</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-info-circle"></i>
+                        Note
+                    </div>
+                    <p>Uploading requires an additional call to the video upload interface.</p>
+                </div>
+
+                <h3>detailImage <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li><strong>How to fill in:</strong> User inputs</li>
+                    <li><strong>Specifications:</strong>
+                        <ul>
+                            <li>Max number of image URIs: 49</li>
+                            <li>Aspect Ratio: ≥1:3</li>
+                            <li>Width: ≥480px</li>
+                            <li>Height: ≥480px</li>
+                            <li>Size: ≤3 MB</li>
+                            <li>Format: JPEG, JPG, PNG</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-info-circle"></i>
+                        Note
+                    </div>
+                    <p>Image upload requires an additional call to <code>bg.local.goods.image.upload</code> for conversion.</p>
+                </div>
+
+                <h3>carouselVideo <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li><strong>Specifications:</strong>
+                        <ul>
+                            <li>Quantity: ≤1</li>
+                            <li>Aspect Ratio: Not restricted</li>
+                            <li>Duration: ≤60s</li>
+                            <li>Resolution: ≥720P</li>
+                            <li>Size: ≤100MB</li>
+                            <li>Format: wmv, avi, 3gp, mov mp4, flv, rmvb, mkv, m4v, x-flv, WMV, AVI, 3GP, MOV, MP4, FLV, RMVB, MKV, M4V, X-FLV</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>outGoodsSn <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> This is used to associate the SKU between TEMU and the external ecommerce platform. Must be unique within the store. Max length: 100 characters. Please do not use leading or trailing spaces in SKUs.</p>
+                
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-check-circle"></i>
+                        Verification
+                    </div>
+                    <p><code>bg.local.goods.out.sn.check</code> can be used to verify whether the seller's products have duplicate goods codes.</p>
+                </div>
+            </section>
+
+            <!-- Service Promise -->
+            <section id="goods-service" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h2>goodsServicePromise <span class="badge required">Required</span></h2>
+                </div>
+
+                <h3>shipmentLimitDay <span class="badge required">Required</span></h3>
+                <p><strong>Description:</strong> Indicates the time, in days, between when you receive an order for an item and when you can ship the item. The default production time is 1 or 2.</p>
+
+                <h3>fulfillmentType <span class="badge required">Required</span></h3>
+                <p><strong>Description:</strong> Delivery Method: 1 - Self-fulfillment, Fixed setting to 1</p>
+
+                <h3>costTemplateId <span class="badge required">Required</span></h3>
+                <ul>
+                    <li><strong>How to fill in:</strong> Retrieve from other APIs</li>
+                    <li><strong>API Reference:</strong> <span class="badge api">bg.freight.template.list.query</span></li>
+                </ul>
+
+                <div class="info-box warning">
+                    <div class="info-box-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Note
+                    </div>
+                    <p>Users need to go to the seller center to create the shipping template page in order for this interface to return the corresponding data.</p>
+                </div>
+            </section>
+
+            <!-- Product Properties -->
+            <section id="goods-property" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h2>goodsProperty <span class="badge required">Required</span></h2>
+                </div>
+
+                <ul>
+                    <li><strong>How to fill in:</strong> Retrieve from other APIs</li>
+                    <li><strong>API Reference:</strong> <span class="badge api">bg.local.goods.template.get</span></li>
+                    <li><strong>Description:</strong> This is a very important and complex piece of information, and it takes more time to process it when entering it</li>
+                </ul>
+
+                <div class="info-box important">
+                    <div class="info-box-header">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Important Notes
+                    </div>
+                    <ul>
+                        <li>Determine whether the field isSale=false is a normal attribute or isSale=true is a variant attribute</li>
+                        <li>Required attributes must be passed in, judging by <code>bg.local.goods.template.get</code> - required=True</li>
+                        <li>There is a parent-child relationship attribute. When the parent attribute selects a value, the child attribute must be passed in</li>
+                        <li>showType = 0: Parent attribute</li>
+                        <li>showType = 1: Child attribute</li>
+                        <li>Child attributes appear based on the controlType of the parent attribute</li>
+                        <li>If controlType = 0, showCondition will indicate the conditions under which child attributes are triggered based on parent attribute values</li>
+                        <li>If controlType is 1, 3, or 16, the templatePropertyValueParentList will determine when child attributes are triggered</li>
+                        <li>Attributes that have units should include both valueUnitId and valueUnit when available in the valueUnitList</li>
+                    </ul>
+                </div>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-check-circle"></i>
+                        Verification
+                    </div>
+                    <p>Use <code>bg.local.goods.compliance.property.check</code> to check for any violations in product information to avoid affecting sales.</p>
+                </div>
+            </section>
+
+            <!-- Origin Information -->
+            <section id="goods-origin" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h2>goodsOriginInfo <span class="badge optional">Optional</span></h2>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="info-box-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Important Note
+                    </div>
+                    <p>This field is not mandatory for product publishing, but if this information is missing, it will not be able to be sold. It is recommended to provide a feature for users to set it together when publishing products.</p>
+                </div>
+
+                <h3>originRegion1 <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> Origin enumeration information</p>
+
+                <h3>originRegion2 <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> When originRegion1 selects China, this information needs to be entered</p>
+
+                <h3>agreeDefaultOriginRegion <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> A flag for identifying the method of value retrieval:</p>
+                <ul>
+                    <li><strong>True:</strong> This modification will be automatically retrieved and entered by Temu based on the product and the seller's certified information by default</li>
+                    <li><strong>False:</strong> This modification will read and input the value passed through the API</li>
+                </ul>
+                <p><strong>Default:</strong> False</p>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-list-ol"></i>
+                        Default Rules
+                    </div>
+                    <ol>
+                        <li>Priority is given to obtaining the address information of the product manufacturer</li>
+                        <li>If the manufacturer's address is unavailable, the business address will be obtained</li>
+                    </ol>
+                </div>
+
+                <h3>proofImageUrls <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li><strong>Specifications:</strong>
+                        <ul>
+                            <li>Size: ≤3 MB</li>
+                            <li>Format: JPG, PNG, JPEG</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-info-circle"></i>
+                        Note
+                    </div>
+                    <p>Image upload requires an additional call to <code>bg.local.goods.image.upload</code> for conversion.</p>
+                </div>
+            </section>
+
+            <!-- Bullet Points -->
+            <section id="bullet-points" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-list-ul"></i>
+                    </div>
+                    <h2>bulletPoints <span class="badge optional">Optional</span></h2>
+                </div>
+
+                <p><strong>Description:</strong> Highlight the main characteristics and advantages of the product</p>
+
+                <h3>Validation Rules:</h3>
+                <ul>
+                    <li>Only supports English letters, numbers, and symbols</li>
+                    <li>Data type: string</li>
+                    <li>Character count: Within 200 characters</li>
+                    <li>Up to 5 lines maximum (5 objects)</li>
+                </ul>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-check-circle"></i>
+                        Verification
+                    </div>
+                    <p>Use <code>temu.local.goods.illegal.vocabulary.check</code> to check for any violations.</p>
+                </div>
+            </section>
+
+            <!-- Product Description -->
+            <section id="goods-desc" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-align-left"></i>
+                    </div>
+                    <h2>goodsDesc <span class="badge optional">Optional</span></h2>
+                </div>
+
+                <p><strong>Description:</strong> Detailed explanation of the product's features and uses</p>
+
+                <h3>Validation Rules:</h3>
+                <ul>
+                    <li>Only supports letters, numbers, and symbols; does not support rich text</li>
+                    <li>Data type: string</li>
+                    <li>Character count: Within 2000 characters</li>
+                </ul>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-check-circle"></i>
+                        Verification
+                    </div>
+                    <p>Use <code>temu.local.goods.illegal.vocabulary.check</code> to check for any violations.</p>
+                </div>
+            </section>
+
+            <!-- Certification Information -->
+            <section id="certification-info" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h2>certificationInfo <span class="badge optional">Optional</span></h2>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="info-box-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Important Note
+                    </div>
+                    <p>When publishing a product, it is not mandatory. Merchants need to supplement it completely before selling, otherwise the sale will be restricted.</p>
+                </div>
+
+                <h3>certificateInfo <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li><strong>How to fill in:</strong> User inputs & Retrieve from other APIs</li>
+                    <li><strong>API Reference:</strong> <span class="badge api">bg.local.goods.compliance.rules.get</span></li>
+                    <li><strong>Description:</strong> According to this interface, obtain the qualification rules that need to be uploaded [isRequired=true]. When calling this interface, you need to pass in the product category and attributes. Different attribute information for the same category will affect the qualification requirements</li>
+                </ul>
+
+                <h4>certType <span class="badge required">Required</span></h4>
+                <p>Return the corresponding qualification type that needs to be set from this interface. It should be noted that there may be multiple qualifications that need to be uploaded, and they should be passed in according to the format of the object.</p>
+
+                <h4>authCodes <span class="badge optional">Optional</span></h4>
+                <ul>
+                    <li><strong>Description:</strong> The user manually enters the corresponding file name</li>
+                    <li><strong>Specifications:</strong>
+                        <ul>
+                            <li>Size: ≤120 characters</li>
+                            <li>Only supports English and numbers</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h4>certFiles <span class="badge optional">Optional</span></h4>
+                
+                <h5>fileName <span class="badge optional">Optional</span></h5>
+                <ul>
+                    <li><strong>Specifications:</strong>
+                        <ul>
+                            <li>Size: ≤200 characters</li>
+                            <li>Only supports English and numbers</li>
+                            <li>Quantity: ≤6</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h5>fileUrl <span class="badge optional">Optional</span></h5>
+                <p><strong>Description:</strong> Need to call the file upload interface to upload the file to temu in advance</p>
+                <p><strong>Upload Type:</strong> <code>bg.local.goods.gallery.signature.get</code> - uploadFileType: 4-Qualification Document</p>
+
+                <h4>energyLabel <span class="badge optional">Optional</span></h4>
+                <p><strong>API Reference:</strong> <span class="badge api">bg.local.goods.compliance.rules.get</span></p>
+
+                <h5>model & brand <span class="badge optional">Optional</span></h5>
+                <p><strong>Description:</strong> Merchants need to register on relevant EU websites in advance and enter the corresponding value information themselves.</p>
+
+                <h4>selectedCheckItems <span class="badge optional">Optional</span></h4>
+                <p><strong>Description:</strong> Obtain the qualification corresponding to isRequired=true from the interface, and the page displays the information of all refPid under the checkItems object.</p>
+            </section>
+
+            <!-- Compliance Templates -->
+            <section id="compliance-templates" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h2>extraTemplate <span class="badge optional">Optional</span></h2>
+                </div>
+
+                <ul>
+                    <li><strong>API Reference:</strong> <span class="badge api">bg.local.goods.compliance.extra.template.get</span></li>
+                    <li><strong>templateDimensionType:</strong> 1 (goods) or 2 (goods and sku) this value needs to be passed in</li>
+                </ul>
+
+                <div class="info-box warning">
+                    <div class="info-box-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Note
+                    </div>
+                    <p>When publishing a product, it is not mandatory. Merchants need to supplement it completely before selling, otherwise the sale will be restricted.</p>
+                </div>
+
+                <h3>Content Types:</h3>
+                <ul>
+                    <li>contentType=1: qualification certificate (use certFiles to upload)</li>
+                    <li>contentType=2: inspection report (use inspectReportFiles to upload)</li>
+                    <li>contentType=3: qualification code (use authCodes to upload)</li>
+                    <li>contentType=4: actualPhoto (use actualPhoto to upload)</li>
+                    <li>contentType=5: selectedCheckItems (use selectedCheckItems to upload)</li>
+                    <li>contentType=6: EU-energyLabel (use energyLabel to upload)</li>
+                </ul>
+
+                <h3>Simple Example:</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>JSON Configuration</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "extraTemplate": {
+    "extraTemplateDetailList": [
+      {
+        "templateId": 51,
+        "inputText": {
+          "refPid": {
+            "multiLineInputs": [
+              {"name": "2222"},
+              {"name": "111"}
+            ]
+          }
+        }
+      }
+    ]
+  }
+}</code></pre>
+                </div>
+
+                <h3>Complex Example:</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>JSON Configuration</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "extraTemplate": {
+    "extraTemplateDetailList": [
+      {
+        "templateId": 36,
+        "properties": {
+          "1000100110": [1000131288]
+        }
+      },
+      {
+        "templateId": 51,
+        "inputText": {
+          "1100100115": {
+            "multiLineInputs": [{"name": "12"}]
+          }
+        }
+      },
+      {
+        "templateId": 248,
+        "properties": {
+          "refPid": ["vid"]
+        }
+      },
+      {
+        "templateId": 1004,
+        "compliancePropertyList": [
+          {
+            "specIdList": [72537019, 77008250],
+            "inputTextList": [
+              {
+                "properties": {
+                  "1100100460": [1000274743],
+                  "1100100461": [1000278143],
+                  "1100100463": [1000277743],
+                  "1100100475": [1000277343]
+                },
+                "inputText": {
+                  "1100100464": {"name": "1"}
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+                </div>
+
+                <h3>actualPhoto <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li><strong>API Reference:</strong> <span class="badge api">bg.local.goods.compliance.rules.get</span> ~ actualPhotoRequirement</li>
+                    <li><strong>Mandatory Check:</strong> Determine whether it is mandatory based on <code>bg.local.goods.compliance.rules.get</code> ~ mustHaveActualPhoto</li>
+                </ul>
+
+                <h3>gpsrInfo <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li><strong>API Reference:</strong> <span class="badge api">bg.local.goods.compliance.info.fill.list.query</span></li>
+                    <li><strong>Types:</strong>
+                        <ul>
+                            <li>repType: 2 - EU Head (only eu)</li>
+                            <li>repType: 3 - EU Manufacturer (only eu)</li>
+                            <li>repStatus=3: Application successful</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>repInfo <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li><strong>API Reference:</strong> <span class="badge api">bg.local.goods.compliance.info.fill.list.query</span></li>
+                    <li><strong>Types:</strong>
+                        <ul>
+                            <li>repType: 4 - Korea A/S REP (only Korea)</li>
+                            <li>repType: 5 - Turkey REP (only Turkey)</li>
+                            <li>repStatus=3: Application successful</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="info-box warning">
+                    <div class="info-box-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Note
+                    </div>
+                    <p>Need to apply in advance in the seller center. When publishing a product, it is not mandatory. Merchants need to supplement it completely before selling, otherwise the sale will be restricted.</p>
+                </div>
+            </section>
+
+            <!-- Guide File Info -->
+            <section class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h2>guideFileInfo <span class="badge optional">Optional</span></h2>
+                </div>
+
+                <h3>lang2GuideFileUrl <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> According to the <code>bg.local.goods.compliance.extra.template.get</code>, determine whether it is necessary to upload the instruction manual. It is not mandatory when publishing products, but some categories will be restricted from sale if they are not supplemented before sale. It is recommended to add a feature for users to set when publishing products.</p>
+
+                <ul>
+                    <li><strong>Format:</strong> Language-PDF Product Manual Mapping: key is the language, value is the file URL</li>
+                    <li><strong>Required:</strong> The English version must be imported</li>
+                </ul>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>JSON Example</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "lang2GuideFileUrl": {
+    "en": "",
+    "es": "",
+    "de": ""
+  }
+}</code></pre>
+                </div>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-info-circle"></i>
+                        Note
+                    </div>
+                    <p>Uploading requires an additional call to the file upload interface.</p>
+                </div>
+            </section>
+
+            <!-- Size Chart -->
+            <section id="size-chart" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-ruler"></i>
+                    </div>
+                    <h2>Size Chart Information</h2>
+                </div>
+
+                <h3>goodsSizeChartList <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> For some categories, corresponding size chart information needs to be set. Currently, it is not mandatory when products are released, but if it is not supplemented before sale, sales will be restricted.</p>
+                <p><strong>API Reference:</strong> <span class="badge api">bg.local.goods.size.element.get</span> to determine if size chart is necessary for the category</p>
+
+                <h3>goodsSizeImage <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li><strong>Description:</strong> Size chart image</li>
+                    <li><strong>API Reference:</strong> <span class="badge api">bg.local.goods.size.element.get</span> to determine if size chart is necessary for the category</li>
+                    <li><strong>Recommendations:</strong> The image should include the following information: all selected size, product parameters, use size units</li>
+                    <li><strong>Conversion:</strong> Convert images from <code>bg.local.goods.image.upload</code> to Temu</li>
+                </ul>
+
+                <h4>Specifications:</h4>
+                <ul>
+                    <li>Quantity: 1 piece</li>
+                    <li>Format: jpeg, jpg, png</li>
+                    <li>Aspect Ratio (width:height): ≥1:3</li>
+                    <li>Width: ≥800px</li>
+                    <li>Height: ≥800px</li>
+                    <li>Size: ≤3 MB</li>
+                </ul>
+            </section>
+
+            <!-- SKU Configuration -->
+            <section id="sku-list" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-barcode"></i>
+                    </div>
+                    <h2>skuList <span class="badge required">Required</span></h2>
+                </div>
+
+                <p><strong>Description:</strong> This amount information is the amount that the merchant plans to sell in TEMU. If there are subsequent orders generated, this amount information will be used to calculate the settlement amount with the merchant.</p>
+
+                <h3>specIdList <span class="badge required">Required</span></h3>
+                <p><strong>Description:</strong> This is a field used to distinguish variants, such as color, size, etc. Please note that there are two ways to set this information for different categories on the platform. Setting this information is often prone to errors and requires special attention.</p>
+
+                <div class="info-box important">
+                    <div class="info-box-header">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Category Template System
+                    </div>
+                    <ul>
+                        <li>Each category has a set of attribute templates, which can be retrieved via the <code>bg.local.goods.template.get</code> interface</li>
+                        <li>Sales attributes are further classified based on whether customization is allowed</li>
+                    </ul>
+                </div>
+
+                <h4>Customization Rules:</h4>
+                <ul>
+                    <li>If the category allows user-defined attributes, <code>inputMaxSpecNum > 0</code> is returned</li>
+                    <li>If the category only allows selecting predefined attributes, <code>inputMaxSpecNum = 0</code> is returned. In this case, you should only select attributes marked with <code>required = true</code> in the goodsSpecProperties object, and pick a few values</li>
+                    <li>Custom attributes are allowed only when <code>inputMaxSpecNum > 0</code></li>
+                    <li>In this case, you can choose a parentSpec from userInputParentSpecList, and use <code>bg.local.goods.spec.id.get</code> to generate specification values</li>
+                    <li>It's possible for <code>inputMaxSpecNum > 0</code> and <code>goodsSpecProperties != []</code> to occur at the same time, which means the category allows both custom attributes and predefined attribute values</li>
+                    <li><code>singleSpecValueNum</code> defines the maximum number of variants that can be created</li>
+                </ul>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-info-circle"></i>
+                        Important Note
+                    </div>
+                    <p><code>bg.local.goods.spec.id.get</code> generates specification values, which should be passed as input parameters in the <code>skuList[*].specIdList</code> field of the goods.add method.</p>
+                </div>
+
+                <h3>outSkuSn <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> If a merchant operates on multiple platforms, they usually use this field to identify products associated with other platforms. This field is very important for sellers and will affect the subsequent inventory and order product information association.</p>
+
+                <h4>Specifications:</h4>
+                <ul>
+                    <li>Characters: English letters/numbers/symbols</li>
+                    <li>Number of characters: ≤100</li>
+                    <li>Must not be the same as any other SKU/SPU ID in the same store</li>
+                </ul>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-check-circle"></i>
+                        Verification
+                    </div>
+                    <p><code>bg.local.goods.sku.out.sn.check</code> can be used to verify whether the seller's products have duplicate goods codes.</p>
+                </div>
+
+                <h3>Physical Dimensions <span class="badge required">Required</span></h3>
+                <p>All physical dimension fields (weight, weightUnit, length, width, height, volumeUnit) are required and different sites have corresponding requirements for this information.</p>
+
+                <h3>images <span class="badge required">Required</span></h3>
+                <p><strong>Description:</strong> Identify whether it belongs to the clothing category through the <code>bg.local.goods.cats.get</code> - catType, as different types have differences in size ratios.</p>
+
+                <h4>Apparel Carousel Images:</h4>
+                <ul>
+                    <li>Aspect Ratio: 3:4</li>
+                    <li>Width: ≥1340px</li>
+                    <li>Height: ≥1785px</li>
+                </ul>
+
+                <h4>Non-Apparel Carousel Images:</h4>
+                <ul>
+                    <li>Aspect Ratio: 1:1</li>
+                    <li>Width: ≥800px</li>
+                    <li>Height: ≥800px</li>
+                </ul>
+
+                <h4>Common Specifications:</h4>
+                <ul>
+                    <li>Size: ≤3 MB</li>
+                    <li>Format: jpeg, jpg, png</li>
+                </ul>
+
+                <div class="info-box note">
+                    <div class="info-box-header">
+                        <i class="fas fa-info-circle"></i>
+                        Note
+                    </div>
+                    <p>It is necessary to upload the images to TEMU in advance, and using <code>bg.local.goods.image.upload</code> will facilitate users to handle the corresponding image proportions and sizes in a portable manner.</p>
+                </div>
+
+                <h3>External Product Information</h3>
+                
+                <h4>externalProductType <span class="badge optional">Optional</span></h4>
+                <p><strong>Values:</strong> 1=EAN, 2=UPC, 3=ISBN, 4=GTIN-14</p>
+
+                <h4>externalProductId <span class="badge optional">Optional</span></h4>
+                <p><strong>Description:</strong> When setting externalProductType, this field is mandatory and the platform will verify the authenticity of the entered externalProductId. Different categories have mandatory requirements.</p>
+                <p><strong>Note:</strong> <code>bg.local.goods.template.get</code> - Added parameters [additionalInfo] and [needIsbn] to determine if a mandatory ISBN code is required.</p>
+
+                <h3>multiplePackage <span class="badge optional">Optional</span></h3>
+                
+                <h4>skuClassification <span class="badge optional">Optional</span></h4>
+                <p><strong>Values:</strong> 1-Single Product, 2-Combination, 3-Mixed</p>
+
+                <h4>numberOfPieces <span class="badge optional">Optional</span></h4>
+                <p><strong>Description:</strong> When skuClassification is set to 1, this field defaults to 1, while other types are set by the merchant. The value of the "Count" field should be between [1,100].</p>
+
+                <h4>originNetContentNumber <span class="badge optional">Optional</span></h4>
+                <p><strong>Description:</strong> For products consumed by volume, weight, length and area, this field is used to describe the quantity of the corresponding physical units in the SKU to calculate the unit price, such as $5.94/kg. Unit count can contain 3 decimal places, and any decimal places exceeding 3 will be rounded off. For skuClassification=2, only then will this field be displayed for users to set.</p>
+
+                <h4>netContentUnitCode <span class="badge optional">Optional</span></h4>
+                <p><strong>Description:</strong> The unit corresponding to Unit count. This can be weight, volume, length or area. For skuClassification=2, only then will this field be displayed for users to set.</p>
+                <p><strong>API Reference:</strong> <span class="badge api">temu.local.goods.sku.net.content.unit.query</span> to obtain specific values</p>
+            </section>
+
+            <!-- Pricing & Inventory -->
+            <section id="pricing-inventory" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h2>Pricing & Inventory Configuration</h2>
+                </div>
+
+                <h3>basePrice <span class="badge required">Required</span></h3>
+                <p><strong>Note:</strong> Different sites have corresponding requirements for currency information.</p>
+
+                <h3>listPrice <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> Recommended retail price (must be ≥ basePrice)</p>
+
+                <h3>listPriceType <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li>If the parameter is set to 1, it is understood that the seller does not have a market price, and there is no need to provide a value for listPrice (even if a value is provided, it will be ignored)</li>
+                    <li>If the parameter is left empty or set to 0, the listPrice field is required. Failure to provide listPrice will result in an error</li>
+                </ul>
+
+                <h3>quantity <span class="badge required">Required</span></h3>
+                <p><strong>Description:</strong> This is the inventory information corresponding to the product, with a setting range of [0, 999999].</p>
+
+                <h3>referenceLink <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> Provide links to products sold on other platforms. It is recommended to provide this feature for merchants to set up, which will help with their sales process.</p>
+            </section>
+
+            <!-- Trademark & Brand -->
+            <section id="trademark-brand" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-trademark"></i>
+                    </div>
+                    <h2>goodsTrademark <span class="badge optional">Optional</span></h2>
+                </div>
+
+                <h3>brandId <span class="badge optional">Optional</span></h3>
+                <ul>
+                    <li><strong>How to fill in:</strong> Retrieve from other APIs</li>
+                    <li><strong>Description:</strong> The parameters returned by <code>bg.local.goods.template.get</code> with refpid=1960 are all brand attributes</li>
+                </ul>
+
+                <div class="info-box warning">
+                    <div class="info-box-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Note
+                    </div>
+                    <p>Please note that the brand information of each seller is different, and it needs to be reviewed and approved in advance in the seller center before the product can be published for use.</p>
+                </div>
+
+                <h3>trademarkId <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> The specific information is returned through the interface, and it should be noted that this data is different for each merchant. It is necessary to apply in advance to the seller center.</p>
+            </section>
+
+            <!-- Tax Information -->
+            <section id="tax-info" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <h2>taxCodeInfo <span class="badge optional">Optional</span></h2>
+                </div>
+
+                <ul>
+                    <li><strong>How to fill in:</strong> Retrieve from other APIs</li>
+                    <li><strong>API Reference:</strong> <span class="badge api">bg.local.goods.tax.code.get</span></li>
+                    <li><strong>Description:</strong> Different categories have corresponding tax rate codes. It is recommended to obtain them by referencing the corresponding category at the time of shipment</li>
+                </ul>
+
+                <h3>goodsVehiclePropertyRelation <span class="badge optional">Optional</span></h3>
+
+                <h3>secondHand <span class="badge optional">Optional</span></h3>
+                <p><strong>Description:</strong> If a merchant needs to sell second-hand goods, they need to contact Temu's internal operations in advance to open it. Only stores that have applied for approval can publish second-hand goods. The merchant can determine whether they meet the conditions for publishing second-hand goods based on BG. If they meet the requirements, <code>bg.local.goods.cats.get</code> - secondHandCategory=true will return the corresponding results.</p>
+
+                <h4>secondHandGoods <span class="badge optional">Optional</span></h4>
+                <p><strong>Description:</strong> If selling second-hand goods, fill in true by default</p>
+
+                <h4>level <span class="badge optional">Optional</span></h4>
+                <p><strong>Values:</strong> 1-usedLikeNew, 2-usedVeryGood, 3-usedGood, 4-UsedAcceptable</p>
+            </section>
+
+            <!-- Test Categories -->
+            <section id="test-categories" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h2>Test Product Categories</h2>
+                </div>
+
+                <p>Next, you can try to publish test products in the following categories, which are very typical product types. If they can all be successfully published, then the product publishing function can be launched for use:</p>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category ID</th>
+                                <th>Category Path</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>29069</code></td>
+                                <td>Clothing, Shoes & Jewelry / Women / Clothing / Tops, Tees & Blouses / T-Shirts</td>
+                            </tr>
+                            <tr>
+                                <td><code>44936</code></td>
+                                <td>Books / Arts & Photography / History & Criticism / Criticism</td>
+                            </tr>
+                            <tr>
+                                <td><code>24388</code></td>
+                                <td>Cell Phones & Accessories / Cell Phones</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Conclusion -->
+            <section class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>Conclusion</h2>
+                </div>
+
+                <div class="info-box success">
+                    <div class="info-box-header">
+                        <i class="fas fa-lightbulb"></i>
+                        Final Notes
+                    </div>
+                    <p>After reading the above explanation, you can understand that product publishing is an important and carefully handled function. A correct product release is the first step for merchants to start their business. Once you are familiar with this document, if you have any other questions about the details of product release, please feel free to point them out. We will do our best to make modifications to make it easier for merchants to operate in Temu.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Initialize highlight.js
+        hljs.highlightAll();
+
+        // Sidebar toggle functionality
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('.content-section');
+
+            // Add click event to navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Scroll to target section
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    if (targetSection) {
+                        const headerHeight = document.querySelector('.header').offsetHeight;
+                        const targetPosition = targetSection.offsetTop - headerHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+
+                    // Close sidebar on mobile
+                    if (window.innerWidth <= 1024) {
+                        document.getElementById('sidebar').classList.remove('open');
+                    }
+                });
+            });
+
+            // Update active navigation on scroll
+            window.addEventListener('scroll', function() {
+                const scrollPosition = window.scrollY + 100;
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+
+                // Show/hide back to top button
+                const backToTop = document.getElementById('backToTop');
+                if (window.scrollY > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+        });
+
+        // Back to top functionality
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.parentNode.nextElementSibling.querySelector('code');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = 'var(--success-color)';
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'var(--primary-color)';
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = 'var(--success-color)';
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'var(--primary-color)';
+                }, 2000);
+            });
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (window.innerWidth <= 1024) {
+                if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>

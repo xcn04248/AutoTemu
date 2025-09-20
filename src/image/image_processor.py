@@ -44,6 +44,85 @@ class ImageProcessor:
         self.size_keywords = ['size', 'sizing', '尺码', 'サイズ', 'measurement', 'measure']
         self.detail_keywords = ['detail', 'details', 'close', 'closeup', '详细', '詳細', 'close-up']
         self.main_keywords = ['main', 'primary', 'hero', 'featured', '主要', 'メイン']
+        
+        # 图片下载记录文件
+        self.download_record_file = self.image_save_path / "download_records.json"
+        self.downloaded_urls = self._load_download_records()
+
+        # OCR结果记录文件与缓存
+        self.ocr_record_file = self.image_save_path / "ocr_records.json"
+        self.ocr_results = self._load_ocr_records()
+
+    def _load_download_records(self) -> Dict[str, str]:
+        """加载图片下载记录"""
+        if not self.download_record_file.exists():
+            return {}
+        
+        try:
+            import json
+            with open(self.download_record_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            logger.warning(f"加载下载记录失败: {e}")
+            return {}
+
+    def _save_download_records(self):
+        """保存图片下载记录"""
+        try:
+            import json
+            with open(self.download_record_file, 'w', encoding='utf-8') as f:
+                json.dump(self.downloaded_urls, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            logger.warning(f"保存下载记录失败: {e}")
+
+    def _load_ocr_records(self) -> Dict[str, Dict[str, str]]:
+        """加载OCR结果缓存记录: {url: {"has_chinese": bool, "text": str}}"""
+        if not self.ocr_record_file.exists():
+            return {}
+        try:
+            import json
+            with open(self.ocr_record_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            logger.warning(f"加载OCR记录失败: {e}")
+            return {}
+
+    def _save_ocr_records(self):
+        """保存OCR结果缓存记录"""
+        try:
+            import json
+            with open(self.ocr_record_file, 'w', encoding='utf-8') as f:
+                json.dump(self.ocr_results, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            logger.warning(f"保存OCR记录失败: {e}")
+
+    def _get_cached_ocr(self, url: str) -> Optional[Tuple[bool, str]]:
+        """获取已缓存的OCR结果"""
+        record = self.ocr_results.get(url)
+        if not record:
+            return None
+        try:
+            has_chinese = bool(record.get("has_chinese", False))
+            text = record.get("text", "")
+            return has_chinese, text
+        except Exception:
+            return None
+
+    def _record_ocr_result(self, url: str, has_chinese: bool, text: str):
+        """记录OCR结果到缓存"""
+        self.ocr_results[url] = {"has_chinese": has_chinese, "text": text}
+        self._save_ocr_records()
+
+    def _is_image_downloaded(self, url: str) -> Optional[Path]:
+        """检查图片是否已经下载过（仅依据URL，不校验本地文件）"""
+        if url in self.downloaded_urls:
+            return Path(self.downloaded_urls[url])
+        return None
+
+    def _record_downloaded_image(self, url: str, file_path: Path):
+        """记录已下载的图片"""
+        self.downloaded_urls[url] = str(file_path)
+        self._save_download_records()
 
     @retry()
     def download_image(self, url: str, filename: Optional[str] = None) -> Path:
@@ -61,7 +140,13 @@ class ImageProcessor:
             ImageProcessingError: 下载失败时抛出
         """
         try:
-            # 解析URL获取文件名
+            # 首先检查是否已经下载过
+            existing_path = self._is_image_downloaded(url)
+            if existing_path:
+                logger.info(f"图片已下载过，跳过下载: {url} -> {existing_path}")
+                return existing_path
+
+            # 解析URL获取原始文件名
             if not filename:
                 parsed_url = urlparse(url)
                 filename = os.path.basename(parsed_url.path)
@@ -72,7 +157,7 @@ class ImageProcessor:
             if not any(filename.lower().endswith(ext) for ext in self.supported_formats):
                 filename += '.jpg'
 
-            # 构建保存路径
+            # 构建保存路径（不重命名，保持原始文件名）
             save_path = self.image_save_path / filename
 
             # 下载图片
@@ -85,6 +170,9 @@ class ImageProcessor:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
 
+            # 记录已下载的图片
+            self._record_downloaded_image(url, save_path)
+            
             logger.info(f"图片下载成功: {save_path}")
             return save_path
 
@@ -119,10 +207,10 @@ class ImageProcessor:
         """
         try:
             # 使用OCR识别图片中的文字
-            ocr_text = self.ocr_client.recognize_text(str(image_path))
+            has_chinese, words_list = self.ocr_client.recognize_text(str(image_path))
             
-            # 检查是否包含中文字符
-            has_chinese = self.is_chinese_text(ocr_text)
+            # 将识别出的文字列表合并为字符串
+            ocr_text = " ".join(words_list) if words_list else ""
             
             logger.debug(f"图片OCR结果: {image_path.name}, 包含中文: {has_chinese}, 文本: {ocr_text[:100]}...")
             
@@ -194,22 +282,42 @@ class ImageProcessor:
 
         for i, url in enumerate(image_urls):
             try:
-                # 生成文件名
+                # 生成文件名（仅用于首次下载时保存）
                 filename = f"image_{i+1:03d}_{hash(url) % 10000}"
+
+                # 基于URL的去重逻辑：
+                # 1) 如果URL已存在记录且本地文件存在，则直接使用该文件，避免重复下载
+                # 2) 如果URL已存在记录但本地文件不存在，则按需跳过（不重新下载）
+                # 3) 如果URL未记录，则执行下载
+                recorded_path_str = self.downloaded_urls.get(url)
+                if recorded_path_str:
+                    recorded_path = Path(recorded_path_str)
+                    if recorded_path.exists():
+                        logger.info(f"URL已记录，使用已存在文件，跳过下载: {url} -> {recorded_path}")
+                        image_path = recorded_path
+                    else:
+                        logger.info(f"URL已记录但本地文件缺失，按要求跳过下载与处理: {url}")
+                        continue
+                else:
+                    # 首次下载
+                    image_path = self.download_image(url, filename)
                 
-                # 下载图片
-                image_path = self.download_image(url, filename)
-                
-                # 检查图片是否包含中文
-                has_chinese, ocr_text = self.check_image_for_chinese(image_path)
+                # 检查图片是否包含中文（优先使用缓存）
+                cached = self._get_cached_ocr(url)
+                if cached is not None:
+                    has_chinese, ocr_text = cached
+                    logger.info(f"使用缓存OCR结果: {image_path.name}, 包含中文: {has_chinese}")
+                else:
+                    has_chinese, ocr_text = self.check_image_for_chinese(image_path)
+                    # 记录OCR结果
+                    self._record_ocr_result(url, has_chinese, ocr_text)
                 
                 if has_chinese:
-                    # 包含中文，移动到过滤目录
-                    filtered_path = self.image_save_path / "filtered" / image_path.name
-                    filtered_path.parent.mkdir(exist_ok=True)
-                    image_path.rename(filtered_path)
-                    result['filtered'].append(filtered_path)
-                    logger.info(f"图片包含中文，已过滤: {image_path.name}")
+                    # 包含中文，直接删除图片
+                    image_path.unlink()  # 删除文件
+                    # 不移除URL记录，确保后续运行依旧不会重复下载该URL
+                    result['filtered'].append(image_path)  # 记录已删除的图片
+                    logger.info(f"图片包含中文，已删除: {image_path.name}")
                     continue
 
                 # 分类图片

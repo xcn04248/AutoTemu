@@ -84,6 +84,7 @@ class TemuProduct:
     category_id: Optional[str] = None
     size_type: str = "unknown"
     images: List[str] = field(default_factory=list)
+    skus: List["TemuSKU"] = field(default_factory=list)
     source_url: Optional[str] = None
     status: ProductStatus = ProductStatus.DRAFT
     created_at: datetime = field(default_factory=datetime.now)

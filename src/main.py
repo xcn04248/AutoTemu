@@ -18,10 +18,41 @@ from .image.image_processor import ImageProcessor
 from .image.ocr_client import OCRClient
 from .transform.size_mapper import SizeMapper
 from .transform.data_transformer import DataTransformer
-from .api.temu_client import TemuAPIClient
+from temu_api import TemuClient
 from .models.product import ScrapedProduct, TemuProduct, TemuSKU, TemuListingResult
+from .models.data_models import ProductData
 
 logger = get_logger(__name__)
+
+
+def convert_product_data_to_scraped_product(product_data: ProductData) -> ScrapedProduct:
+    """
+    将ProductData转换为ScrapedProduct
+    
+    Args:
+        product_data: 爬虫返回的ProductData对象
+        
+    Returns:
+        ScrapedProduct: 数据转换器期望的ScrapedProduct对象
+    """
+    # 合并主图和详情图
+    all_images = [product_data.main_image_url] + product_data.detail_images
+    
+    # 提取尺码名称列表
+    size_names = [size.size_name for size in product_data.sizes]
+    
+    return ScrapedProduct(
+        title=product_data.name,
+        price=product_data.price,
+        description=product_data.description,
+        images=all_images,
+        sizes=size_names,
+        url=product_data.url,
+        currency="JPY",
+        brand=product_data.brand,
+        category=product_data.category,
+        scraped_at=product_data.scraped_at
+    )
 
 
 class AutoTemuApp:
@@ -47,7 +78,13 @@ class AutoTemuApp:
             self.image_processor = ImageProcessor(self.ocr_client)
             self.size_mapper = SizeMapper()
             self.data_transformer = DataTransformer(self.size_mapper)
-            self.temu_client = TemuAPIClient(self.config)
+            self.temu_client = TemuClient(
+            app_key=self.config.temu_app_key,
+            app_secret=self.config.temu_app_secret,
+            access_token=self.config.temu_access_token,
+            base_url=self.config.temu_base_url,
+            debug=False
+        )
             self.scraper = ProductScraper()
             
             logger.info("AutoTemu应用程序初始化成功")
@@ -58,6 +95,28 @@ class AutoTemuApp:
         except Exception as e:
             logger.error(f"应用程序初始化失败: {str(e)}")
             raise AutoTemuException(f"初始化失败: {str(e)}")
+
+    def _is_leaf_category(self, category_id: str) -> bool:
+        """
+        检查分类是否为叶子分类
+        
+        Args:
+            category_id: 分类ID
+            
+        Returns:
+            bool: 是否为叶子分类
+        """
+        try:
+            result = self.temu_client.product.cats_get(parent_cat_id=int(category_id))
+            if result.get("success"):
+                sub_categories = result.get("result", {}).get("goodsCatsList", [])
+                if sub_categories is None:
+                    return True  # 如果没有子分类列表，认为是叶子分类
+                return len(sub_categories) == 0
+            return False
+        except Exception as e:
+            logger.error(f"检查叶子分类失败: {e}")
+            return False
 
     def process_single_url(self, url: str, output_dir: Optional[str] = None) -> TemuListingResult:
         """
@@ -75,8 +134,11 @@ class AutoTemuApp:
         try:
             # 1. 爬取商品信息
             logger.info("步骤1: 爬取商品信息")
-            scraped_product = self.scraper.scrape_product(url)
-            logger.info(f"商品爬取成功: {scraped_product.title}")
+            product_data = self.scraper.scrape_product(url)
+            logger.info(f"商品爬取成功: {product_data.name}")
+            
+            # 转换为ScrapedProduct格式
+            scraped_product = convert_product_data_to_scraped_product(product_data)
             
             # 2. 处理图片
             logger.info("步骤2: 处理图片")
@@ -96,36 +158,170 @@ class AutoTemuApp:
             skus = transform_result.skus
             logger.info(f"数据转换成功: {temu_product.title}, {len(skus)} 个SKU")
             
-            # 4. 获取分类推荐
-            logger.info("步骤4: 获取分类推荐")
-            categories = self.temu_client.get_category_recommend(temu_product.title, temu_product.description)
-            if not categories:
-                raise AutoTemuException("无法获取商品分类推荐")
+            # 4. 获取分类推荐并确认叶子分类
+            logger.info("步骤4: 获取分类推荐并确认叶子分类")
+            category_result = self.temu_client.product.category_recommend(
+                goods_name=temu_product.title,
+                goods_desc=temu_product.description
+            )
             
-            # 选择第一个推荐分类
-            selected_category = categories[0]
-            logger.info(f"选择分类: {selected_category.name} (ID: {selected_category.category_id})")
+            if not category_result.get("success"):
+                raise AutoTemuException(f"无法获取商品分类推荐: {category_result.get('errorMsg', 'Unknown error')}")
+            
+            # 获取推荐分类ID
+            cat_data = category_result.get("result", {})
+            recommended_cat_id = None
+            
+            if "catId" in cat_data:
+                recommended_cat_id = str(cat_data["catId"])
+            elif "catIdList" in cat_data and cat_data["catIdList"]:
+                recommended_cat_id = str(cat_data["catIdList"][0])
+            
+            if not recommended_cat_id:
+                raise AutoTemuException("无法获取推荐分类ID")
+            
+            # 检查是否为叶子分类
+            is_leaf = self._is_leaf_category(recommended_cat_id)
+            if is_leaf:
+                logger.info(f"推荐分类 {recommended_cat_id} 是叶子分类")
+            else:
+                logger.warning(f"推荐分类 {recommended_cat_id} 不是叶子分类，但将尝试使用")
+            
+            selected_category_id = recommended_cat_id
             
             # 5. 获取尺码表元素
             logger.info("步骤5: 获取尺码表元素")
-            size_elements = self.temu_client.get_size_chart_elements(
-                selected_category.category_id, 
-                temu_product.size_type
-            )
-            logger.info(f"尺码表元素: {size_elements}")
-            
-            # 更新SKU的尺码表元素
-            for sku in skus:
-                if size_elements:
-                    sku.size_chart_element = size_elements[0]  # 使用第一个元素
+            try:
+                size_result = self.temu_client.product.size_element_get(
+                    cat_id=selected_category_id,
+                    size_type=temu_product.size_type
+                )
+                if size_result.get("success"):
+                    size_elements = size_result.get("result", {}).get("sizeElementList", [])
+                    logger.info(f"尺码表元素: {len(size_elements)} 个")
+                else:
+                    logger.warning(f"获取尺码表元素失败: {size_result.get('errorMsg', 'Unknown error')}")
+                    size_elements = []
+            except Exception as e:
+                logger.warning(f"获取尺码表元素异常: {e}")
+                size_elements = []
             
             # 6. 上架商品
             logger.info("步骤6: 上架商品到Temu")
-            listing_result = self.temu_client.list_product(
-                temu_product, 
-                skus, 
-                selected_category.category_id
-            )
+            # 设置商品分类ID
+            temu_product.category_id = selected_category_id
+            
+            # 将SKU信息添加到商品对象中
+            temu_product.skus = skus
+            
+            # 创建商品
+            try:
+                # 先获取 specId
+                logger.info("获取规格ID...")
+                spec_result = self.temu_client.product.spec_id_get(
+                    cat_id=selected_category_id,
+                    parent_spec_id="1001",  # 颜色规格
+                    child_spec_name="颜色"
+                )
+                
+                if not spec_result.get("success"):
+                    raise AutoTemuException(f"获取规格ID失败: {spec_result.get('errorMsg', 'Unknown error')}")
+                
+                spec_id = spec_result.get("result", {}).get("specId")
+                logger.info(f"获取到规格ID: {spec_id}")
+                
+                # 构建商品创建参数
+                goods_basic = {
+                    "goodsName": temu_product.title,
+                    "goodsDesc": temu_product.description,
+                    "catId": temu_product.category_id,
+                    "specIdList": [spec_id],  # 添加规格ID列表
+                    "brandId": None,
+                    "trademarkId": None,
+                    "goodsType": 1,
+                    "goodsStatus": 1,
+                    "goodsWeight": 0.1,
+                    "goodsLength": 10,
+                    "goodsWidth": 10,
+                    "goodsHeight": 10,
+                    "packageLength": 15,
+                    "packageWidth": 15,
+                    "packageHeight": 15,
+                    "packageWeight": 0.2,
+                    "goodsImageList": [],
+                    "goodsVideoList": [],
+                    "goodsAttributeList": []
+                }
+                
+                goods_service_promise = {
+                    "shippingTemplateId": None,
+                    "warrantyTemplateId": None,
+                    "returnTemplateId": None,
+                    "servicePromise": []
+                }
+                
+                goods_property = {
+                    "material": "Cotton",
+                    "style": "Casual",
+                    "season": "All Season",
+                    "gender": "Unisex",
+                    "ageGroup": "Adult",
+                    "color": "Multi",
+                    "pattern": "Solid",
+                    "sleeveLength": "Long Sleeve",
+                    "neckline": "Round Neck",
+                    "fit": "Regular",
+                    "occasion": "Daily",
+                    "careInstructions": "Machine Wash"
+                }
+                
+                sku_list = []
+                for sku in temu_product.skus:
+                    sku_data = {
+                        "skuId": sku.sku_id,
+                        "skuName": sku.size,
+                        "skuImageList": [],
+                        "skuAttributeList": [],
+                        "price": sku.price,
+                        "currency": "USD",
+                        "inventory": sku.stock_quantity,
+                        "skuStatus": 1,
+                        "specIdList": [spec_id]  # 添加规格ID列表
+                    }
+                    sku_list.append(sku_data)
+                
+                # 调用原生API创建商品
+                create_result = self.temu_client.product.goods_add(
+                    goods_basic=goods_basic,
+                    goods_service_promise=goods_service_promise,
+                    goods_property=goods_property,
+                    sku_list=sku_list
+                )
+                
+                if create_result.get("success"):
+                    product_id = create_result.get("result", {}).get("goodsId")
+                    sku_ids = [sku.get("skuId") for sku in create_result.get("result", {}).get("goodsSkuList", [])]
+                    image_ids = [img.get("imageId") for img in create_result.get("result", {}).get("goodsImageList", [])]
+                    
+                    listing_result = TemuListingResult(
+                        success=True,
+                        product_id=product_id,
+                        sku_ids=sku_ids,
+                        image_ids=image_ids
+                    )
+                else:
+                    error_msg = create_result.get("errorMsg", "Unknown error")
+                    listing_result = TemuListingResult(
+                        success=False,
+                        errors=[f"商品创建失败: {error_msg}"]
+                    )
+                    
+            except Exception as e:
+                logger.error(f"商品创建异常: {e}")
+                listing_result = TemuListingResult(
+                    success=False,
+                    errors=[f"商品创建异常: {str(e)}"]
+                )
             
             if listing_result.success:
                 logger.info(f"商品上架成功: {temu_product.title}")
@@ -194,7 +390,8 @@ class AutoTemuApp:
         
         try:
             # 测试Temu API连接
-            if not self.temu_client.test_connection():
+            result = self.temu_client.product.cats_get(parent_cat_id=0)
+            if not result.get("success"):
                 logger.error("Temu API连接失败")
                 return False
             
@@ -230,7 +427,7 @@ class AutoTemuApp:
                 "data_transformer": "已初始化",
                 "temu_client": "已初始化"
             },
-            "api_connection": self.temu_client.test_connection()
+            "api_connection": self.test_connection()
         }
         
         return status
