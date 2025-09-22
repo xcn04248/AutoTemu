@@ -58,6 +58,9 @@ class RealProductTester:
         self.templates_cache = {}
         self.spec_ids_cache = {}
         self.uploaded_images_cache = []
+        # 运行结果
+        self.created_goods_id: Optional[str] = None
+        self.created_sku_ids: List[str] = []
     
     def step1_scrape_product(self, url: str) -> bool:
         """步骤1: 抓取商品信息"""
@@ -549,15 +552,15 @@ class RealProductTester:
         return out_path
     
     def step10_create_product(self) -> bool:
-        """步骤10: 创建商品"""
-        print("\n🔍 步骤10: 创建商品")
+        """步骤10: 添加商品"""
+        print("\n🔍 步骤10: 添加商品")
         print("-" * 40)
         
         try:
             # 构建商品数据
             product_data = self._build_product_data()
             
-            # 创建商品
+            # 添加商品
             # 调试：打印要发送的数据
             print(f"🔍 调试信息 - goods_basic: {product_data['goods_basic']}")
             print(f"🔍 调试信息 - sku_list 第一个: {product_data['sku_list'][0] if product_data['sku_list'] else 'Empty'}")
@@ -571,16 +574,24 @@ class RealProductTester:
             )
             
             if result.get("success"):
-                product_id = result.get("result", {}).get("goodsId")
-                print(f"✅ 商品创建成功: {product_id}")
+                result_obj = result.get("result", {}) or {}
+                product_id = result_obj.get("goodsId")
+                self.created_goods_id = str(product_id) if product_id is not None else None
+                # 尝试解析SKU列表
+                try:
+                    sku_list = result_obj.get("goodsSkuList") or []
+                    self.created_sku_ids = [str(s.get("skuId")) for s in sku_list if s.get("skuId") is not None]
+                except Exception:
+                    self.created_sku_ids = []
+                print(f"✅ 商品添加成功: {self.created_goods_id}")
                 return True
             else:
-                print(f"❌ 商品创建失败: {result.get('errorMsg')}")
+                print(f"❌ 商品添加失败: {result.get('errorMsg')}")
                 print(f"📋 错误详情: {result}")
                 return False
                 
         except Exception as e:
-            print(f"❌ 创建商品异常: {e}")
+            print(f"❌ 添加商品异常: {e}")
             return False
     
     def _find_leaf_categories(self, parent_cat_id: int, max_depth: int = 3) -> List[Dict[str, Any]]:
@@ -671,9 +682,15 @@ class RealProductTester:
             fallback_used = True
 
         for i, sku in enumerate(filtered_skus):
-            # JPY不允许小数，四舍五入为整数
+            # 价格从CNY转换到JPY；JPY不允许小数
             from decimal import Decimal, ROUND_HALF_UP
-            amount_jpy = str(int(Decimal(str(sku.price)).quantize(Decimal('1'), rounding=ROUND_HALF_UP)))
+            rate_str = os.getenv("TEMU_CNY_TO_JPY_RATE") or os.getenv("CNY_TO_JPY_RATE") or "20"
+            try:
+                rate = Decimal(rate_str)
+            except Exception:
+                rate = Decimal("20")
+            jpy_amount_dec = (Decimal(str(sku.price)) * rate).quantize(Decimal('1'), rounding=ROUND_HALF_UP)
+            amount_jpy = str(int(jpy_amount_dec))
             # 仅为该SKU选择对应尺码的specId（如无可用spec则留空）
             size_key = extract_token(sku.size or "")
             sku_spec_ids = []
@@ -682,7 +699,7 @@ class RealProductTester:
                     sku_spec_ids = [normalized_spec_map[size_key]]
 
             sku_data = {
-                "outSkuSn": f"sku_{self.temu_product.title}_{i+1:03d}",
+                "outSkuSn": f"sku_{int(time.time())}_{i+1:03d}",
                 **({"specIdList": sku_spec_ids} if sku_spec_ids else {}),
                 "price": {
                     "basePrice": {
@@ -748,6 +765,9 @@ class RealProductTester:
             or "LFT-14230731738276073558"  # 日本物流模版
         )
 
+        # 构建尺码表（满足发布要求）
+        size_chart = self._build_size_chart()
+
         return {
             "goods_basic": {
                 "goodsName": self.temu_product.title,
@@ -764,8 +784,62 @@ class RealProductTester:
                 **({"goodsSpecProperties": goods_spec_properties} if goods_spec_properties else {})
             },
             "goods_desc": self.temu_product.description,
-            "sku_list": sku_list
+            "sku_list": sku_list,
+            **({"goodsSizeChartList": size_chart} if size_chart else {})
         }
+
+    def _build_size_chart(self) -> Optional[Dict[str, Any]]:
+        """根据SKU尺码生成基础尺码表，满足类目发布要求。
+        返回结构示例:
+        {
+          "unit": "cm",
+          "sizeChartList": [
+            {"size": "M", "bust": "100", "length": "65", "shoulder": "45", "sleeve": "60"},
+            ...
+          ]
+        }
+        """
+        try:
+            # 收集已选尺码（去重，保序）
+            sizes = []
+            for sku in self.temu_product.skus:
+                s = (sku.size or "").strip().upper()
+                if s and s not in sizes:
+                    sizes.append(s)
+            if not sizes:
+                return None
+
+            # 以常见卫衣尺码为模板，按顺序略微递增
+            base = {
+                "bust": 100,
+                "length": 65,
+                "shoulder": 45,
+                "sleeve": 60
+            }
+            step = {
+                "bust": 4,
+                "length": 2,
+                "shoulder": 2,
+                "sleeve": 1
+            }
+
+            chart = []
+            for idx, sz in enumerate(sizes):
+                row = {
+                    "size": sz,
+                    "bust": str(base["bust"] + step["bust"] * idx),
+                    "length": str(base["length"] + step["length"] * idx),
+                    "shoulder": str(base["shoulder"] + step["shoulder"] * idx),
+                    "sleeve": str(base["sleeve"] + step["sleeve"] * idx)
+                }
+                chart.append(row)
+
+            return {
+                "unit": "cm",
+                "sizeChartList": chart
+            }
+        except Exception:
+            return None
 
     def _get_default_freight_template_id(self) -> Optional[str]:
         """获取一个可用的运费模板ID"""
@@ -848,7 +922,7 @@ class RealProductTester:
             images=all_images,
             sizes=sizes,
             url=self.scraped_product.url,
-            currency="JPY",
+            currency="CNY",
             brand=self.scraped_product.brand,
             category=self.scraped_product.category,
             specifications={}
@@ -933,7 +1007,7 @@ class RealProductTester:
             ("获取分类模板", self.step7_get_category_template),
             ("生成规格ID", self.step8_generate_spec_ids),
             ("上传商品图片", self.step9_upload_images),
-            ("创建商品", self.step10_create_product)
+            ("添加商品", self.step10_create_product)
         ]
         
         success_count = 0

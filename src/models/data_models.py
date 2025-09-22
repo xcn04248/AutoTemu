@@ -15,10 +15,10 @@ class ProductStatus(Enum):
     """商品状态枚举"""
     SCRAPED = "scraped"          # 已爬取
     PROCESSING = "processing"    # 处理中
-    READY = "ready"             # 准备上架
-    UPLOADING = "uploading"     # 上架中
-    SUCCESS = "success"         # 上架成功
-    FAILED = "failed"           # 上架失败
+    READY = "ready"             # 准备添加
+    UPLOADING = "uploading"     # 添加中
+    SUCCESS = "success"         # 添加成功
+    FAILED = "failed"           # 添加失败
 
 
 class ImageStatus(Enum):

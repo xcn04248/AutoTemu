@@ -16,8 +16,8 @@ class ProductStatus(Enum):
     PENDING = "pending"       # 待审核
     APPROVED = "approved"     # 已审核
     REJECTED = "rejected"     # 已拒绝
-    ACTIVE = "active"         # 已上架
-    INACTIVE = "inactive"     # 已下架
+    ACTIVE = "active"         # 已激活
+    INACTIVE = "inactive"     # 已停用
     DELETED = "deleted"       # 已删除
 
 
@@ -248,7 +248,7 @@ class TemuImage:
 
 @dataclass
 class TemuListingResult:
-    """Temu上架结果"""
+    """Temu添加结果"""
     success: bool
     product_id: Optional[str] = None
     sku_ids: List[str] = field(default_factory=list)

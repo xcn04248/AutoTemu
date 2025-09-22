@@ -1,7 +1,7 @@
 """
 AutoTemu主程序
 
-整合所有模块，实现完整的商品爬取和上架流程
+整合所有模块，实现完整的商品爬取和添加流程
 """
 
 import argparse
@@ -119,226 +119,24 @@ class AutoTemuApp:
             return False
 
     def process_single_url(self, url: str, output_dir: Optional[str] = None) -> TemuListingResult:
-        """
-        处理单个商品URL
-        
-        Args:
-            url: 商品URL
-            output_dir: 输出目录，如果为None则使用默认目录
-            
-        Returns:
-            上架结果
-        """
-        logger.info(f"开始处理商品URL: {url}")
-        
+        """处理单个商品URL（真实运行）：复用经验证的完整添加流程。"""
+        logger.info(f"开始处理商品URL(真实运行): {url}")
         try:
-            # 1. 爬取商品信息
-            logger.info("步骤1: 爬取商品信息")
-            product_data = self.scraper.scrape_product(url)
-            logger.info(f"商品爬取成功: {product_data.name}")
-            
-            # 转换为ScrapedProduct格式
-            scraped_product = convert_product_data_to_scraped_product(product_data)
-            
-            # 2. 处理图片
-            logger.info("步骤2: 处理图片")
-            image_result = self.image_processor.process_images(scraped_product.images)
-            logger.info(f"图片处理完成: 主图 {len(image_result['main'])} 张, "
-                       f"详情图 {len(image_result['detail'])} 张, "
-                       f"尺码图 {len(image_result['size'])} 张, "
-                       f"过滤 {len(image_result['filtered'])} 张")
-            
-            # 3. 转换数据
-            logger.info("步骤3: 转换数据")
-            transform_result = self.data_transformer.transform_product(scraped_product)
-            if not transform_result.success:
-                raise AutoTemuException(f"数据转换失败: {', '.join(transform_result.errors)}")
-            
-            temu_product = transform_result.temu_product
-            skus = transform_result.skus
-            logger.info(f"数据转换成功: {temu_product.title}, {len(skus)} 个SKU")
-            
-            # 4. 获取分类推荐并确认叶子分类
-            logger.info("步骤4: 获取分类推荐并确认叶子分类")
-            category_result = self.temu_client.product.category_recommend(
-                goods_name=temu_product.title,
-                goods_desc=temu_product.description
-            )
-            
-            if not category_result.get("success"):
-                raise AutoTemuException(f"无法获取商品分类推荐: {category_result.get('errorMsg', 'Unknown error')}")
-            
-            # 获取推荐分类ID
-            cat_data = category_result.get("result", {})
-            recommended_cat_id = None
-            
-            if "catId" in cat_data:
-                recommended_cat_id = str(cat_data["catId"])
-            elif "catIdList" in cat_data and cat_data["catIdList"]:
-                recommended_cat_id = str(cat_data["catIdList"][0])
-            
-            if not recommended_cat_id:
-                raise AutoTemuException("无法获取推荐分类ID")
-            
-            # 检查是否为叶子分类
-            is_leaf = self._is_leaf_category(recommended_cat_id)
-            if is_leaf:
-                logger.info(f"推荐分类 {recommended_cat_id} 是叶子分类")
-            else:
-                logger.warning(f"推荐分类 {recommended_cat_id} 不是叶子分类，但将尝试使用")
-            
-            selected_category_id = recommended_cat_id
-            
-            # 5. 获取尺码表元素
-            logger.info("步骤5: 获取尺码表元素")
-            try:
-                size_result = self.temu_client.product.size_element_get(
-                    cat_id=selected_category_id,
-                    size_type=temu_product.size_type
+            from importlib import import_module
+            tester_mod = import_module("docs.examples.test_real_product")
+            tester = tester_mod.RealProductTester()
+            ok = tester.run_complete_test(url)
+            if ok:
+                return TemuListingResult(
+                    success=True,
+                    product_id=tester.created_goods_id,
+                    sku_ids=tester.created_sku_ids,
+                    image_ids=[]
                 )
-                if size_result.get("success"):
-                    size_elements = size_result.get("result", {}).get("sizeElementList", [])
-                    logger.info(f"尺码表元素: {len(size_elements)} 个")
-                else:
-                    logger.warning(f"获取尺码表元素失败: {size_result.get('errorMsg', 'Unknown error')}")
-                    size_elements = []
-            except Exception as e:
-                logger.warning(f"获取尺码表元素异常: {e}")
-                size_elements = []
-            
-            # 6. 上架商品
-            logger.info("步骤6: 上架商品到Temu")
-            # 设置商品分类ID
-            temu_product.category_id = selected_category_id
-            
-            # 将SKU信息添加到商品对象中
-            temu_product.skus = skus
-            
-            # 创建商品
-            try:
-                # 先获取 specId
-                logger.info("获取规格ID...")
-                spec_result = self.temu_client.product.spec_id_get(
-                    cat_id=selected_category_id,
-                    parent_spec_id="1001",  # 颜色规格
-                    child_spec_name="颜色"
-                )
-                
-                if not spec_result.get("success"):
-                    raise AutoTemuException(f"获取规格ID失败: {spec_result.get('errorMsg', 'Unknown error')}")
-                
-                spec_id = spec_result.get("result", {}).get("specId")
-                logger.info(f"获取到规格ID: {spec_id}")
-                
-                # 构建商品创建参数
-                goods_basic = {
-                    "goodsName": temu_product.title,
-                    "goodsDesc": temu_product.description,
-                    "catId": temu_product.category_id,
-                    "specIdList": [spec_id],  # 添加规格ID列表
-                    "brandId": None,
-                    "trademarkId": None,
-                    "goodsType": 1,
-                    "goodsStatus": 1,
-                    "goodsWeight": 0.1,
-                    "goodsLength": 10,
-                    "goodsWidth": 10,
-                    "goodsHeight": 10,
-                    "packageLength": 15,
-                    "packageWidth": 15,
-                    "packageHeight": 15,
-                    "packageWeight": 0.2,
-                    "goodsImageList": [],
-                    "goodsVideoList": [],
-                    "goodsAttributeList": []
-                }
-                
-                goods_service_promise = {
-                    "shippingTemplateId": None,
-                    "warrantyTemplateId": None,
-                    "returnTemplateId": None,
-                    "servicePromise": []
-                }
-                
-                goods_property = {
-                    "material": "Cotton",
-                    "style": "Casual",
-                    "season": "All Season",
-                    "gender": "Unisex",
-                    "ageGroup": "Adult",
-                    "color": "Multi",
-                    "pattern": "Solid",
-                    "sleeveLength": "Long Sleeve",
-                    "neckline": "Round Neck",
-                    "fit": "Regular",
-                    "occasion": "Daily",
-                    "careInstructions": "Machine Wash"
-                }
-                
-                sku_list = []
-                for sku in temu_product.skus:
-                    sku_data = {
-                        "skuId": sku.sku_id,
-                        "skuName": sku.size,
-                        "skuImageList": [],
-                        "skuAttributeList": [],
-                        "price": sku.price,
-                        "currency": "USD",
-                        "inventory": sku.stock_quantity,
-                        "skuStatus": 1,
-                        "specIdList": [spec_id]  # 添加规格ID列表
-                    }
-                    sku_list.append(sku_data)
-                
-                # 调用原生API创建商品
-                create_result = self.temu_client.product.goods_add(
-                    goods_basic=goods_basic,
-                    goods_service_promise=goods_service_promise,
-                    goods_property=goods_property,
-                    sku_list=sku_list
-                )
-                
-                if create_result.get("success"):
-                    product_id = create_result.get("result", {}).get("goodsId")
-                    sku_ids = [sku.get("skuId") for sku in create_result.get("result", {}).get("goodsSkuList", [])]
-                    image_ids = [img.get("imageId") for img in create_result.get("result", {}).get("goodsImageList", [])]
-                    
-                    listing_result = TemuListingResult(
-                        success=True,
-                        product_id=product_id,
-                        sku_ids=sku_ids,
-                        image_ids=image_ids
-                    )
-                else:
-                    error_msg = create_result.get("errorMsg", "Unknown error")
-                    listing_result = TemuListingResult(
-                        success=False,
-                        errors=[f"商品创建失败: {error_msg}"]
-                    )
-                    
-            except Exception as e:
-                logger.error(f"商品创建异常: {e}")
-                listing_result = TemuListingResult(
-                    success=False,
-                    errors=[f"商品创建异常: {str(e)}"]
-                )
-            
-            if listing_result.success:
-                logger.info(f"商品上架成功: {temu_product.title}")
-                logger.info(f"商品ID: {listing_result.product_id}")
-                logger.info(f"SKU数量: {len(listing_result.sku_ids)}")
-                logger.info(f"图片数量: {len(listing_result.image_ids)}")
-            else:
-                logger.error(f"商品上架失败: {', '.join(listing_result.errors)}")
-            
-            return listing_result
-            
+            return TemuListingResult(success=False, errors=["真实运行失败"])
         except Exception as e:
-            logger.error(f"处理商品URL失败: {url}, 错误: {str(e)}")
-            return TemuListingResult(
-                success=False,
-                errors=[f"处理失败: {str(e)}"]
-            )
+            logger.error(f"真实运行异常: {e}")
+            return TemuListingResult(success=False, errors=[f"异常: {e}"])
 
     def process_batch_urls(self, urls: List[str], output_dir: Optional[str] = None) -> List[TemuListingResult]:
         """
@@ -349,7 +147,7 @@ class AutoTemuApp:
             output_dir: 输出目录，如果为None则使用默认目录
             
         Returns:
-            上架结果列表
+            添加结果列表
         """
         logger.info(f"开始批量处理 {len(urls)} 个商品URL")
         
@@ -435,7 +233,7 @@ class AutoTemuApp:
 
 def main():
     """主函数"""
-    parser = argparse.ArgumentParser(description="AutoTemu - 自动化商品爬取和上架工具")
+    parser = argparse.ArgumentParser(description="AutoTemu - 自动化商品爬取和添加工具")
     parser.add_argument("--url", type=str, help="单个商品URL")
     parser.add_argument("--urls", type=str, nargs="+", help="多个商品URL")
     parser.add_argument("--config", type=str, help="配置文件路径")
@@ -443,6 +241,7 @@ def main():
     parser.add_argument("--test", action="store_true", help="测试系统连接")
     parser.add_argument("--status", action="store_true", help="显示系统状态")
     parser.add_argument("--verbose", "-v", action="store_true", help="详细输出")
+    parser.add_argument("--golden", action="store_true", help="运行金测试（docs/examples/test_real_product.py）")
     
     args = parser.parse_args()
     
@@ -465,14 +264,34 @@ def main():
             print(json.dumps(status, indent=2, ensure_ascii=False))
             sys.exit(0)
         
-        # 处理商品URL
+        # 运行金测试
+        if args.golden:
+            # 直接复用金测试脚本的完整流程，确保与真实测试一致
+            try:
+                # 动态导入，避免循环依赖
+                from importlib import import_module
+                tester_mod = import_module("docs.examples.test_real_product")
+                tester = tester_mod.RealProductTester()
+                test_url = args.url or "https://www.jp0663.com/detail/V52ZD9Ex1OKaCj1biny2494lGc4TVj0a"
+                ok = tester.run_complete_test(test_url)
+                if ok:
+                    print(f"✅ 金测试通过 goodsId={tester.created_goods_id} skus={len(tester.created_sku_ids)}")
+                    sys.exit(0)
+                else:
+                    print("❌ 金测试未通过")
+                    sys.exit(2)
+            except Exception as e:
+                print(f"❌ 金测试执行失败: {e}")
+                sys.exit(2)
+
+        # 处理商品URL（常规流程）
         if args.url:
             result = app.process_single_url(args.url, args.output)
             if result.success:
-                print(f"✅ 商品上架成功: {result.product_id}")
+                print(f"✅ 商品添加成功: {result.product_id}")
                 sys.exit(0)
             else:
-                print(f"❌ 商品上架失败: {', '.join(result.errors)}")
+                print(f"❌ 商品添加失败: {', '.join(result.errors)}")
                 sys.exit(1)
         
         elif args.urls:
