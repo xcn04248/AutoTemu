@@ -130,7 +130,7 @@ class ProductManager:
             ("转换数据格式", self._transform_data),
             ("获取商品分类", self._get_categories),
             ("获取分类推荐", self._get_category_recommendation),
-            ("查找叶子分类", self._find_leaf_category),
+            # ("查找叶子分类", self._find_leaf_category),  # 暂时禁用叶子分类查找
             ("获取分类模板", self._get_category_template),
             ("生成规格ID", self._generate_spec_ids),
             ("上传商品图片", self._upload_images),
@@ -628,7 +628,7 @@ class ProductManager:
             return None
     
     def _get_cat_type(self, target_cat_id: int) -> int:
-        """获取catType（0=服饰，1=非服饰）"""
+        """获取catType（0=服饰，1=非服饰）- 默认返回服装类"""
         try:
             # 环境变量强制指定
             env_cat_type = os.getenv("TEMU_CAT_TYPE")
@@ -636,57 +636,62 @@ class ProductManager:
                 logger.info(f"使用环境变量指定的catType: {env_cat_type}")
                 return int(env_cat_type)
 
-            # 已知类目快速规则
-            if str(target_cat_id) == "30847" or str(self.temu_product.category_id) == "30847":
-                logger.info("使用已知服装类目: 30847")
-                return 0
+            # 默认返回服装类（catType=0）
+            logger.info("默认使用服装类分类 (catType=0)")
+            return 0
 
-            # 从模板缓存中尝试读取
-            tmpl = self.templates_cache.get(str(target_cat_id)) or self.templates_cache.get(self.temu_product.category_id) or {}
-            if isinstance(tmpl, dict) and "catType" in tmpl:
-                cat_type = int(tmpl.get("catType", 1))
-                logger.info(f"从模板缓存获取catType: {cat_type}")
-                return cat_type
+            # 以下代码已注释，如需启用可取消注释
+            # # 已知类目快速规则
+            # if str(target_cat_id) == "30847" or str(self.temu_product.category_id) == "30847":
+            #     logger.info("使用已知服装类目: 30847")
+            #     return 0
 
-            # 智能判断：基于商品标题和描述
-            if self.temu_product and self.temu_product.title:
-                title_lower = self.temu_product.title.lower()
-                # 英文关键词
-                english_keywords = ['pants', 'trousers', 'shirt', 'dress', 'jacket', 'coat', 'sweater', 'hoodie', 'jeans', 'shorts', 'skirt', 'blouse', 'top', 'bottom', 'clothing', 'apparel', 'fashion', 'wear', 'outfit', 'garment']
-                # 中文关键词
-                chinese_keywords = ['裤', '衣', '裙', '外套', '衬衫', '卫衣', '毛衣', '夹克', '大衣', '短裤', '长裤', '牛仔裤', '运动裤', '休闲裤', '工装裤', '登山裤', '街舞', 'hiphop', '机能', '户外', '运动', '休闲', '服装', '服饰']
-                
-                if any(keyword in title_lower for keyword in english_keywords) or any(keyword in self.temu_product.title for keyword in chinese_keywords):
-                    logger.info(f"基于商品标题判断为服装类: {self.temu_product.title}")
-                    return 0
+            # # 从模板缓存中尝试读取
+            # tmpl = self.templates_cache.get(str(target_cat_id)) or self.templates_cache.get(self.temu_product.category_id) or {}
+            # if isinstance(tmpl, dict) and "catType" in tmpl:
+            #     cat_type = int(tmpl.get("catType", 1))
+            #     logger.info(f"从模板缓存获取catType: {cat_type}")
+            #     return cat_type
 
-            # 受限BFS查找
-            queue = [0]
-            visited = set()
-            api_calls = 0
-            max_calls = 30  # 减少API调用次数
-            while queue and api_calls < max_calls:
-                parent = queue.pop(0)
-                if parent in visited:
-                    continue
-                visited.add(parent)
-                resp = self.temu_client.product.cats_get(parent_cat_id=parent)
-                api_calls += 1
-                if not resp.get("success"):
-                    continue
-                lst = (resp.get("result") or {}).get("goodsCatsList") or []
-                for c in lst:
-                    cid = c.get("catId")
-                    if cid == target_cat_id:
-                        ct = int(c.get("catType", 1))
-                        logger.info(f"通过BFS找到catType: {ct} (分类ID: {target_cat_id})")
-                        return ct
-                    queue.append(cid)
-            
-            logger.warning(f"未在限制内解析catType，使用默认1 (API calls={api_calls})")
+            # # 智能判断：基于商品标题和描述（优先执行）
+            # if self.temu_product and self.temu_product.title:
+            #     title_lower = self.temu_product.title.lower()
+            #     # 英文关键词
+            #     english_keywords = ['pants', 'trousers', 'shirt', 'dress', 'jacket', 'coat', 'sweater', 'hoodie', 'jeans', 'shorts', 'skirt', 'blouse', 'top', 'bottom', 'clothing', 'apparel', 'fashion', 'wear', 'outfit', 'garment']
+            #     # 中文关键词（扩展更多服装相关词汇）
+            #     chinese_keywords = ['裤', '衣', '裙', '外套', '衬衫', '卫衣', '毛衣', '夹克', '大衣', '短裤', '长裤', '牛仔裤', '运动裤', '休闲裤', '工装裤', '登山裤', '街舞', 'hiphop', '机能', '户外', '运动', '休闲', '服装', '服饰', '针织衫', '背心', '马甲', '坎肩', '毛织', '无袖', '情侣', '学院风']
+            #     
+            #     if any(keyword in title_lower for keyword in english_keywords) or any(keyword in self.temu_product.title for keyword in chinese_keywords):
+            #         logger.info(f"基于商品标题判断为服装类: {self.temu_product.title}")
+            #         return 0
+
+            # # 受限BFS查找
+            # queue = [0]
+            # visited = set()
+            # api_calls = 0
+            # max_calls = 30  # 减少API调用次数
+            # while queue and api_calls < max_calls:
+            #     parent = queue.pop(0)
+            #     if parent in visited:
+            #         continue
+            #     visited.add(parent)
+            #     resp = self.temu_client.product.cats_get(parent_cat_id=parent)
+            #     api_calls += 1
+            #     if not resp.get("success"):
+            #         continue
+            #     lst = (resp.get("result") or {}).get("goodsCatsList") or []
+            #     for c in lst:
+            #         cid = c.get("catId")
+            #         if cid == target_cat_id:
+            #             ct = int(c.get("catType", 1))
+            #             logger.info(f"通过BFS找到catType: {ct} (分类ID: {target_cat_id})")
+            #             return ct
+            #         queue.append(cid)
+            # 
+            # logger.warning(f"未在限制内解析catType，使用默认1 (API calls={api_calls})")
         except Exception as e:
-            logger.warning(f"获取catType异常: {e}，使用默认1")
-        return 1
+            logger.warning(f"获取catType异常: {e}，使用默认服装类")
+        return 0  # 默认返回服装类
     
     def _filter_and_select_images(self, image_urls: List[str], cat_type: int) -> List[str]:
         """过滤和选择最佳图片"""
