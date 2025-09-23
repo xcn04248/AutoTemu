@@ -1,0 +1,179 @@
+{
+  "classId": 128,
+  "meta": {
+    "groups": [
+      {
+        "id": 1,
+        "name": "size"
+      },
+      {
+        "id": 20,
+        "name": "JP"
+      }
+    ],
+    "elements": [
+      {
+        "id": 10002,
+        "name": "腰围",
+        "unit": 2
+      },
+      {
+        "id": 10003,
+        "name": "臀围",
+        "unit": 2
+      },
+      {
+        "id": 10004,
+        "name": "裤长",
+        "unit": 2
+      }
+    ]
+  },
+  "records": [
+    {
+      "values": [
+        {
+          "id": 1,
+          "value": "M",
+          "unit_value": "cm"
+        },
+        {
+          "id": 20,
+          "value": "M",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10002,
+          "value": "108",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10003,
+          "value": "112",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10004,
+          "value": "98",
+          "unit_value": "cm"
+        }
+      ]
+    },
+    {
+      "values": [
+        {
+          "id": 1,
+          "value": "L",
+          "unit_value": "cm"
+        },
+        {
+          "id": 20,
+          "value": "L",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10002,
+          "value": "112",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10003,
+          "value": "116",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10004,
+          "value": "100",
+          "unit_value": "cm"
+        }
+      ]
+    },
+    {
+      "values": [
+        {
+          "id": 1,
+          "value": "XL",
+          "unit_value": "cm"
+        },
+        {
+          "id": 20,
+          "value": "XL",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10002,
+          "value": "116",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10003,
+          "value": "120",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10004,
+          "value": "102",
+          "unit_value": "cm"
+        }
+      ]
+    },
+    {
+      "values": [
+        {
+          "id": 1,
+          "value": "2XL",
+          "unit_value": "cm"
+        },
+        {
+          "id": 20,
+          "value": "2XL",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10002,
+          "value": "120",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10003,
+          "value": "124",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10004,
+          "value": "104",
+          "unit_value": "cm"
+        }
+      ]
+    },
+    {
+      "values": [
+        {
+          "id": 1,
+          "value": "3XL",
+          "unit_value": "cm"
+        },
+        {
+          "id": 20,
+          "value": "3XL",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10002,
+          "value": "124",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10003,
+          "value": "128",
+          "unit_value": "cm"
+        },
+        {
+          "id": 10004,
+          "value": "106",
+          "unit_value": "cm"
+        }
+      ]
+    }
+  ]
+}

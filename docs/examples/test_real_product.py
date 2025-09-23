@@ -21,6 +21,7 @@ load_dotenv()
 from src.scraper.product_scraper import ProductScraper
 from src.image.image_processor import ImageProcessor
 from src.image.ocr_client import OCRClient
+from src.image.size_chart_processor import SizeChartProcessor
 from src.transform.data_transformer import DataTransformer
 from src.transform.size_mapper import SizeMapper
 from temu_api import TemuClient
@@ -34,30 +35,10 @@ class RealProductTester:
     
     def __init__(self):
         """初始化测试器"""
-        # 初始化各个模块
-        self.scraper = ProductScraper()
-        self.ocr_client = OCRClient()
-        self.image_processor = ImageProcessor(self.ocr_client)
-        self.size_mapper = SizeMapper()
-        self.data_transformer = DataTransformer(self.size_mapper)
+        # 使用生产环境的商品管理器
+        from src.core.product_manager import ProductManager
+        self.product_manager = ProductManager()
         
-        # 初始化Temu客户端
-        self.temu_client = TemuClient(
-            app_key=os.getenv("TEMU_APP_KEY"),
-            app_secret=os.getenv("TEMU_APP_SECRET"),
-            access_token=os.getenv("TEMU_ACCESS_TOKEN"),
-            base_url=os.getenv("TEMU_BASE_URL", "https://openapi-b-global.temu.com"),
-            debug=True
-        )
-        
-        # 缓存数据
-        self.scraped_product = None
-        self.temu_product = None
-        self.categories_cache = {}
-        self.leaf_categories_cache = {}
-        self.templates_cache = {}
-        self.spec_ids_cache = {}
-        self.uploaded_images_cache = []
         # 运行结果
         self.created_goods_id: Optional[str] = None
         self.created_sku_ids: List[str] = []
@@ -170,6 +151,58 @@ class RealProductTester:
         except Exception as e:
             print(f"❌ 图片处理异常: {e}")
             return False
+    
+    def step2_5_process_size_chart(self) -> bool:
+        """步骤2.5: 处理尺码表"""
+        print("\n🔍 步骤2.5: 处理尺码表")
+        print("-" * 40)
+        
+        if not self.scraped_product:
+            print("⚠️ 没有商品数据")
+            return True
+        
+        # 收集详情图片URL
+        detail_images = []
+        if self.scraped_product.detail_images:
+            detail_images.extend([img for img in self.scraped_product.detail_images if isinstance(img, str)])
+        
+        if not detail_images:
+            print("⚠️ 没有详情图片，跳过尺码表处理")
+            return True
+        
+        try:
+            # 获取商品分类类型
+            cat_type = self._get_cat_type(int(self.temu_product.category_id)) if self.temu_product else 0
+            
+            # 尝试从详情图片中提取尺码表
+            for i, image_url in enumerate(detail_images[:3]):  # 只检查前3张详情图
+                print(f"  🔍 检查图片 {i+1}/{min(3, len(detail_images))}: {image_url[:50]}...")
+                
+                # 下载图片到临时文件
+                temp_image_path = self._download_image_temp(image_url)
+                if not temp_image_path:
+                    continue
+                
+                # 处理尺码表
+                size_chart = self.size_chart_processor.process_size_chart_from_image(temp_image_path, cat_type)
+                
+                # 清理临时文件
+                try:
+                    os.remove(temp_image_path)
+                except:
+                    pass
+                
+                if size_chart:
+                    self.size_chart_cache = size_chart
+                    print(f"✅ 从图片中提取到尺码表，尺码数量: {len(size_chart[0].get('records', []))}")
+                    return True
+            
+            print("ℹ️ 未在详情图片中发现尺码表")
+            return True
+            
+        except Exception as e:
+            print(f"❌ 尺码表处理异常: {e}")
+            return True  # 尺码表处理失败不影响整体流程
     
     def step3_transform_data(self) -> bool:
         """步骤3: 转换数据格式"""
@@ -412,58 +445,153 @@ class RealProductTester:
             return True
         
         try:
-            uploaded_images = []
             # 获取类目类型：0=Apparel, 1=Non-Apparel
             cat_type = self._get_cat_type(int(self.temu_product.category_id))
+            print(f"📂 商品分类类型: {'服装类' if cat_type == 0 else '非服装类'}")
+            
+            # 尝试使用服装类缩放规格，因为商品名称包含"外套"等服装关键词
             # 选择缩放规格：服饰类目 -> 1350x1800(2)，非服饰 -> 800x800(1)
-            scaling_type = 2 if cat_type == 0 else 1
-            for i, image_url in enumerate(all_images):
+            scaling_type = 2  # 强制使用服装类缩放规格
+            print(f"🖼️ 图片缩放规格: {scaling_type} (1350x1800 - 服装类)")
+            
+            # 过滤和选择最佳图片
+            valid_images = self._filter_and_select_images(all_images, cat_type)
+            if not valid_images:
+                print("❌ 没有符合要求的图片")
+                return False
+            
+            print(f"📷 准备上传 {len(valid_images)} 张图片")
+            
+            uploaded_images = []
+            for i, image_url in enumerate(valid_images):
                 if len(uploaded_images) >= 5:
                     break
-                if not isinstance(image_url, str) or not image_url.startswith("http"):
-                    continue
-                print(f"  📷 处理图片 {len(uploaded_images)+1}/{min(5, len(all_images))}: {image_url[:80]}...")
-                # 若已缓存为包含中文的图片，跳过
-                try:
-                    cached = self.image_processor._get_cached_ocr(image_url)
-                    if cached is not None and bool(cached[0]):
-                        print("    ⏭️ 跳过含中文图片(缓存)")
-                        continue
-                except Exception:
-                    pass
-                # 使用Temu图片上传接口对远程URL进行规格化处理
-                try:
-                    resp = self.temu_client.product.image_upload(
-                        scaling_type=scaling_type,
-                        file_url=image_url,
-                        compression_type=1,
-                        format_conversion_type=0
-                    )
-                    if resp.get("success"):
-                        result_obj = resp.get("result", {}) or {}
-                        processed_url = (
-                            result_obj.get("url")
-                            or result_obj.get("imageUrl")
-                            or result_obj.get("hdThumbUrl")
-                            or result_obj.get("fileUrl")
-                        )
-                        if processed_url:
-                            uploaded_images.append(processed_url)
-                            print(f"    ✅ 上传图片成功: {processed_url}")
-                        else:
-                            print(f"    ⚠️ 上传成功但未返回URL，原始: {resp}")
-                    else:
-                        print(f"    ❌ 上传图片失败: {resp.get('errorMsg')}")
-                except Exception as e:
-                    print(f"    ❌ 上传图片异常: {e}")
+                    
+                print(f"  📷 处理图片 {len(uploaded_images)+1}/{min(5, len(valid_images))}: {image_url[:80]}...")
+                
+                # 使用重试机制上传图片
+                success = self._upload_single_image_with_retry(
+                    image_url, scaling_type, uploaded_images, max_retries=3
+                )
+                
+                if not success:
+                    print(f"    ❌ 图片上传失败，跳过: {image_url[:50]}...")
 
             self.uploaded_images_cache = uploaded_images
             print(f"✅ 图片上传完成，成功上传 {len(uploaded_images)} 张")
-            return True
+            return len(uploaded_images) > 0
 
         except Exception as e:
             print(f"❌ 上传图片异常: {e}")
             return False
+
+    def _filter_and_select_images(self, image_urls: List[str], cat_type: int) -> List[str]:
+        """过滤和选择最佳图片"""
+        print("🔍 开始过滤和选择图片...")
+        
+        valid_urls = []
+        for i, url in enumerate(image_urls):
+            if not isinstance(url, str) or not url.startswith("http"):
+                continue
+                
+            # 检查是否已缓存为含中文图片
+            try:
+                cached = self.image_processor._get_cached_ocr(url)
+                if cached is not None and bool(cached[0]):
+                    print(f"    ⏭️ 跳过含中文图片(缓存): {url[:50]}...")
+                    continue
+            except Exception:
+                pass
+            
+            # 简化验证：直接使用URL，不下载到本地
+            try:
+                # 检查URL是否可访问
+                import requests
+                response = requests.head(url, timeout=10)
+                if response.status_code == 200:
+                    # 检查Content-Type
+                    content_type = response.headers.get('content-type', '').lower()
+                    if 'image' in content_type:
+                        valid_urls.append(url)
+                        print(f"    ✅ 图片URL有效: {url[:50]}...")
+                    else:
+                        print(f"    ❌ 不是图片文件: {url[:50]}...")
+                else:
+                    print(f"    ❌ 图片URL不可访问: {url[:50]}...")
+                    
+            except Exception as e:
+                print(f"    ❌ 检查图片失败: {url[:50]}..., 错误: {str(e)}")
+                continue
+        
+        print(f"📊 图片过滤完成: 从 {len(image_urls)} 张中筛选出 {len(valid_urls)} 张有效图片")
+        return valid_urls
+
+    def _upload_single_image_with_retry(self, image_url: str, scaling_type: int, 
+                                      uploaded_images: List[str], max_retries: int = 3) -> bool:
+        """使用重试机制上传单张图片"""
+        import time
+        
+        for attempt in range(max_retries):
+            try:
+                if attempt > 0:
+                    print(f"    🔄 重试上传 (第 {attempt + 1} 次): {image_url[:50]}...")
+                    time.sleep(2 ** attempt)  # 指数退避
+                
+                resp = self.temu_client.product.image_upload(
+                    scaling_type=scaling_type,
+                    file_url=image_url,
+                    compression_type=1,
+                    format_conversion_type=0
+                )
+                
+                if resp.get("success"):
+                    result_obj = resp.get("result", {}) or {}
+                    processed_url = (
+                        result_obj.get("url") or
+                        result_obj.get("imageUrl") or
+                        result_obj.get("hdThumbUrl") or
+                        result_obj.get("fileUrl")
+                    )
+                    
+                    if processed_url:
+                        uploaded_images.append(processed_url)
+                        print(f"    ✅ 上传图片成功: {processed_url}")
+                        return True
+                    else:
+                        print(f"    ⚠️ 上传成功但未返回URL: {resp}")
+                        return False
+                else:
+                    error_msg = resp.get('errorMsg', '未知错误')
+                    print(f"    ❌ 上传图片失败: {error_msg}")
+                    
+                    # 如果是特定错误，不重试
+                    if any(err in error_msg.lower() for err in ['invalid', 'format', 'size', 'corrupt', 'unsupported']):
+                        return False
+                        
+            except Exception as e:
+                print(f"    ❌ 上传图片异常: {str(e)}")
+                if attempt == max_retries - 1:
+                    return False
+        
+        return False
+
+    def _download_image_temp(self, image_url: str) -> Optional[str]:
+        """下载图片到临时文件"""
+        try:
+            import tempfile
+            import requests
+            
+            response = requests.get(image_url, timeout=30)
+            response.raise_for_status()
+            
+            # 创建临时文件
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg') as temp_file:
+                temp_file.write(response.content)
+                return temp_file.name
+                
+        except Exception as e:
+            print(f"    ❌ 下载图片失败: {e}")
+            return None
 
     def _get_cat_type(self, target_cat_id: int) -> int:
         """获取catType（0=服饰，1=非服饰），带有安全回退与上限，避免长时间阻塞。"""
@@ -565,13 +693,24 @@ class RealProductTester:
             print(f"🔍 调试信息 - goods_basic: {product_data['goods_basic']}")
             print(f"🔍 调试信息 - sku_list 第一个: {product_data['sku_list'][0] if product_data['sku_list'] else 'Empty'}")
             
-            result = self.temu_client.product.goods_add(
-                goods_basic=product_data["goods_basic"],
-                goods_service_promise=product_data["goods_service_promise"],
-                goods_property=product_data["goods_property"],
-                sku_list=product_data["sku_list"],
-                goods_desc=product_data.get("goods_desc")
-            )
+            # 构建完整的goods.add参数
+            goods_add_params = {
+                "goods_basic": product_data["goods_basic"],
+                "goods_service_promise": product_data["goods_service_promise"],
+                "goods_property": product_data["goods_property"],
+                "sku_list": product_data["sku_list"],
+                "goods_desc": product_data.get("goods_desc")
+            }
+            
+            # 添加图片轮播图（如果存在）- 通过kwargs传递
+            if product_data.get("goodsGalleryList"):
+                goods_add_params["goodsGalleryList"] = product_data["goodsGalleryList"]
+            
+            # 添加尺码表（如果存在）
+            if product_data.get("goodsSizeChartList"):
+                goods_add_params["goodsSizeChartList"] = product_data["goodsSizeChartList"]
+            
+            result = self.temu_client.product.goods_add(**goods_add_params)
             
             if result.get("success"):
                 result_obj = result.get("result", {}) or {}
@@ -698,6 +837,13 @@ class RealProductTester:
                 if size_key and size_key in normalized_spec_map:
                     sku_spec_ids = [normalized_spec_map[size_key]]
 
+            # 为每个SKU分配不同的图片（如果有的话）
+            sku_images = []
+            if self.uploaded_images_cache:
+                # 为每个SKU分配一张图片，循环使用
+                sku_image_index = i % len(self.uploaded_images_cache)
+                sku_images = [self.uploaded_images_cache[sku_image_index]]
+            
             sku_data = {
                 "outSkuSn": f"sku_{int(time.time())}_{i+1:03d}",
                 **({"specIdList": sku_spec_ids} if sku_spec_ids else {}),
@@ -708,7 +854,7 @@ class RealProductTester:
                     }
                 },
                 "quantity": sku.stock_quantity,
-                "images": self.uploaded_images_cache[:5],
+                "images": sku_images,
                 "weight": "300",
                 "weightUnit": "g",
                 "length": "30",
@@ -765,14 +911,34 @@ class RealProductTester:
             or "LFT-14230731738276073558"  # 日本物流模版
         )
 
-        # 构建尺码表（满足发布要求）
-        size_chart = self._build_size_chart()
+        # 构建尺码表（仅服装类商品需要）
+        size_chart = None
+        cat_type = self._get_cat_type(int(self.temu_product.category_id))
+        if cat_type == 0:  # 仅服装类商品需要尺码表
+            size_chart = self._build_size_chart()
+
+        # 构建图片列表
+        goods_gallery_list = []
+        if self.uploaded_images_cache:
+            for i, image_url in enumerate(self.uploaded_images_cache[:10]):  # 最多10张轮播图
+                goods_gallery_list.append({
+                    "galleryType": 1,  # 轮播图
+                    "galleryUrl": image_url,
+                    "sortOrder": i + 1
+                })
+        
+        # 调试信息：打印图片配置
+        print(f"🔍 调试信息 - goods_gallery_list: {goods_gallery_list}")
+        print(f"🔍 调试信息 - uploaded_images_cache: {self.uploaded_images_cache}")
 
         return {
             "goods_basic": {
                 "goodsName": self.temu_product.title,
                 "catId": self.temu_product.category_id,
-                "outGoodsSn": f"goods_{int(time.time())}"
+                "outGoodsSn": f"goods_{int(time.time())}",
+                # 添加主图URL
+                "hdThumbUrl": self.uploaded_images_cache[0] if self.uploaded_images_cache else "",
+                "carouselImageList": self.uploaded_images_cache[:10] if self.uploaded_images_cache else []
             },
             "goods_service_promise": {
                 "shipmentLimitDay": 2,
@@ -785,21 +951,21 @@ class RealProductTester:
             },
             "goods_desc": self.temu_product.description,
             "sku_list": sku_list,
+            **({"goodsGalleryList": goods_gallery_list} if goods_gallery_list else {}),
             **({"goodsSizeChartList": size_chart} if size_chart else {})
         }
 
-    def _build_size_chart(self) -> Optional[Dict[str, Any]]:
-        """根据SKU尺码生成基础尺码表，满足类目发布要求。
-        返回结构示例:
-        {
-          "unit": "cm",
-          "sizeChartList": [
-            {"size": "M", "bust": "100", "length": "65", "shoulder": "45", "sleeve": "60"},
-            ...
-          ]
-        }
-        """
+    def _build_size_chart(self) -> Optional[List[Dict]]:
+        """构建尺码表，优先使用从图片中提取的尺码表"""
         try:
+            # 优先使用从图片中提取的尺码表
+            if self.size_chart_cache:
+                print("✅ 使用从图片中提取的尺码表")
+                return self.size_chart_cache
+            
+            # 如果没有提取到尺码表，则生成基础尺码表
+            print("ℹ️ 使用生成的尺码表")
+            
             # 收集已选尺码（去重，保序）
             sizes = []
             for sku in self.temu_product.skus:
@@ -809,36 +975,46 @@ class RealProductTester:
             if not sizes:
                 return None
 
+            # 生成Temu格式的尺码表
+            size_chart = {
+                "classId": 128,  # 尺码表类型ID
+                "meta": {
+                    "groups": [
+                        {"id": 1, "name": "size"},
+                        {"id": 20, "name": "JP"}  # 日本站
+                    ],
+                    "elements": [
+                        {"id": 10002, "name": "胸围", "unit": 2},  # 胸围
+                        {"id": 10003, "name": "衣长", "unit": 2}   # 衣长
+                    ]
+                },
+                "records": []
+            }
+            
             # 以常见卫衣尺码为模板，按顺序略微递增
             base = {
                 "bust": 100,
-                "length": 65,
-                "shoulder": 45,
-                "sleeve": 60
+                "length": 65
             }
             step = {
                 "bust": 4,
-                "length": 2,
-                "shoulder": 2,
-                "sleeve": 1
+                "length": 2
             }
 
-            chart = []
             for idx, sz in enumerate(sizes):
-                row = {
-                    "size": sz,
-                    "bust": str(base["bust"] + step["bust"] * idx),
-                    "length": str(base["length"] + step["length"] * idx),
-                    "shoulder": str(base["shoulder"] + step["shoulder"] * idx),
-                    "sleeve": str(base["sleeve"] + step["sleeve"] * idx)
+                record = {
+                    "values": [
+                        {"id": 1, "value": sz, "unit_value": "cm"},  # 尺码
+                        {"id": 20, "value": sz, "unit_value": "cm"},  # 日本尺码
+                        {"id": 10002, "value": str(base["bust"] + step["bust"] * idx), "unit_value": "cm"},  # 胸围
+                        {"id": 10003, "value": str(base["length"] + step["length"] * idx), "unit_value": "cm"}   # 衣长
+                    ]
                 }
-                chart.append(row)
+                size_chart["records"].append(record)
 
-            return {
-                "unit": "cm",
-                "sizeChartList": chart
-            }
-        except Exception:
+            return [size_chart]
+        except Exception as e:
+            print(f"❌ 构建尺码表异常: {e}")
             return None
 
     def _get_default_freight_template_id(self) -> Optional[str]:
@@ -997,54 +1173,77 @@ class RealProductTester:
         print(f"🎯 测试商品: {url}")
         print("=" * 60)
         
-        steps = [
-            ("抓取商品信息", self.step1_scrape_product),
-            ("处理商品图片", self.step2_process_images),
-            ("转换数据格式", self.step3_transform_data),
-            ("获取商品分类", self.step4_get_categories),
-            ("获取分类推荐", self.step5_get_category_recommendation),
-            ("查找叶子分类", self.step6_find_leaf_category),
-            ("获取分类模板", self.step7_get_category_template),
-            ("生成规格ID", self.step8_generate_spec_ids),
-            ("上传商品图片", self.step9_upload_images),
-            ("添加商品", self.step10_create_product)
-        ]
-        
-        success_count = 0
-        total_steps = len(steps)
-        
-        for i, (step_name, step_func) in enumerate(steps, 1):
-            print(f"\n📋 步骤 {i}/{total_steps}: {step_name}")
-            print("-" * 40)
+        try:
+            # 使用商品管理器添加商品
+            result = self.product_manager.add_product(url, force_scrape=False)  # 测试时允许缓存
             
-            try:
-                if step_name == "抓取商品信息":
-                    success = step_func(url)
-                else:
-                    success = step_func()
+            if result["success"]:
+                self.created_goods_id = result["product_id"]
+                self.created_sku_ids = result["sku_ids"]
                 
-                if success:
-                    print(f"✅ 步骤 {i} 完成")
-                    success_count += 1
-                else:
-                    print(f"❌ 步骤 {i} 失败")
-                    break
-                    
-            except Exception as e:
-                print(f"❌ 步骤 {i} 异常: {e}")
-                break
-        
-        print(f"\n📊 测试结果汇总")
-        print("=" * 40)
-        print(f"✅ 成功步骤: {success_count}/{total_steps}")
-        print(f"📈 成功率: {success_count/total_steps*100:.1f}%")
-        
-        if success_count == total_steps:
-            print("🎉 所有测试通过！")
-            return True
-        else:
-            print("⚠️ 部分测试失败")
+                print("🎉 商品添加测试成功！")
+                print(f"📦 创建的商品ID: {self.created_goods_id}")
+                print(f"📦 创建的SKU IDs: {self.created_sku_ids}")
+                
+                # 检查商品状态
+                self.check_product_status()
+                return True
+            else:
+                print(f"❌ 商品添加测试失败: {result.get('error', '未知错误')}")
+                return False
+            
+        except Exception as e:
+            print(f"❌ 测试异常: {e}")
+            import traceback
+            traceback.print_exc()
             return False
+    
+    def check_product_status(self):
+        """检查商品状态"""
+        if not self.created_goods_id:
+            print("❌ 没有商品ID，无法检查状态")
+            return
+        
+        print(f"\n🔍 检查商品状态: {self.created_goods_id}")
+        print("-" * 40)
+        
+        try:
+            # 使用商品管理器的客户端获取商品状态
+            resp = self.product_manager.temu_client.product.publish_status_get(
+                goods_id=self.created_goods_id
+            )
+            
+            if resp.get("success"):
+                result = resp["result"]
+                status = result.get("status", "未知")
+                sub_status = result.get("subStatus", "未知")
+                
+                print(f"📊 商品状态: {status}")
+                print(f"📊 子状态: {sub_status}")
+                
+                # 状态说明
+                status_map = {
+                    0: "草稿",
+                    1: "审核中", 
+                    2: "已上架",
+                    3: "已下架",
+                    4: "审核失败"
+                }
+                
+                sub_status_map = {
+                    201: "完整",
+                    301: "不完整",
+                    302: "待补充信息"
+                }
+                
+                print(f"📋 状态说明: {status_map.get(status, '未知')}")
+                print(f"📋 子状态说明: {sub_status_map.get(sub_status, '未知')}")
+                
+            else:
+                print(f"❌ 获取状态失败: {resp.get('errorMsg', '未知错误')}")
+                
+        except Exception as e:
+            print(f"❌ 检查状态异常: {e}")
 
 
 def main():

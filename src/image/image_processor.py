@@ -125,7 +125,7 @@ class ImageProcessor:
         self._save_download_records()
 
     @retry()
-    def download_image(self, url: str, filename: Optional[str] = None) -> Path:
+    def download_image(self, url: str, filename: Optional[str] = None, force_scrape: bool = False) -> Path:
         """
         下载图片
 
@@ -140,11 +140,12 @@ class ImageProcessor:
             ImageProcessingError: 下载失败时抛出
         """
         try:
-            # 首先检查是否已经下载过
-            existing_path = self._is_image_downloaded(url)
-            if existing_path:
-                logger.info(f"图片已下载过，跳过下载: {url} -> {existing_path}")
-                return existing_path
+            # 首先检查是否已经下载过（除非强制抓取）
+            if not force_scrape:
+                existing_path = self._is_image_downloaded(url)
+                if existing_path:
+                    logger.info(f"图片已下载过，跳过下载: {url} -> {existing_path}")
+                    return existing_path
 
             # 解析URL获取原始文件名
             if not filename:
@@ -254,7 +255,7 @@ class ImageProcessor:
         # 默认分类为其他
         return 'other'
 
-    def process_images(self, image_urls: List[str]) -> Dict[str, List[Path]]:
+    def process_images(self, image_urls: List[str], force_scrape: bool = False) -> Dict[str, List[Path]]:
         """
         批量处理图片：下载、OCR检测、中文过滤、分类
 
@@ -286,28 +287,38 @@ class ImageProcessor:
                 filename = f"image_{i+1:03d}_{hash(url) % 10000}"
 
                 # 基于URL的去重逻辑：
-                # 1) 如果URL已存在记录且本地文件存在，则直接使用该文件，避免重复下载
+                # 1) 如果URL已存在记录且本地文件存在，则直接使用该文件，避免重复下载（除非强制抓取）
                 # 2) 如果URL已存在记录但本地文件不存在，则按需跳过（不重新下载）
                 # 3) 如果URL未记录，则执行下载
-                recorded_path_str = self.downloaded_urls.get(url)
-                if recorded_path_str:
-                    recorded_path = Path(recorded_path_str)
-                    if recorded_path.exists():
-                        logger.info(f"URL已记录，使用已存在文件，跳过下载: {url} -> {recorded_path}")
-                        image_path = recorded_path
+                if not force_scrape:
+                    recorded_path_str = self.downloaded_urls.get(url)
+                    if recorded_path_str:
+                        recorded_path = Path(recorded_path_str)
+                        if recorded_path.exists():
+                            logger.info(f"URL已记录，使用已存在文件，跳过下载: {url} -> {recorded_path}")
+                            image_path = recorded_path
+                        else:
+                            logger.info(f"URL已记录但本地文件缺失，按要求跳过下载与处理: {url}")
+                            continue
                     else:
-                        logger.info(f"URL已记录但本地文件缺失，按要求跳过下载与处理: {url}")
-                        continue
+                        # 首次下载
+                        image_path = self.download_image(url, filename, force_scrape=force_scrape)
                 else:
-                    # 首次下载
-                    image_path = self.download_image(url, filename)
+                    # 强制抓取，重新下载
+                    image_path = self.download_image(url, filename, force_scrape=force_scrape)
                 
-                # 检查图片是否包含中文（优先使用缓存）
-                cached = self._get_cached_ocr(url)
-                if cached is not None:
-                    has_chinese, ocr_text = cached
-                    logger.info(f"使用缓存OCR结果: {image_path.name}, 包含中文: {has_chinese}")
+                # 检查图片是否包含中文（优先使用缓存，除非强制抓取）
+                if not force_scrape:
+                    cached = self._get_cached_ocr(url)
+                    if cached is not None:
+                        has_chinese, ocr_text = cached
+                        logger.info(f"使用缓存OCR结果: {image_path.name}, 包含中文: {has_chinese}")
+                    else:
+                        has_chinese, ocr_text = self.check_image_for_chinese(image_path)
+                        # 记录OCR结果
+                        self._record_ocr_result(url, has_chinese, ocr_text)
                 else:
+                    # 强制抓取，跳过缓存
                     has_chinese, ocr_text = self.check_image_for_chinese(image_path)
                     # 记录OCR结果
                     self._record_ocr_result(url, has_chinese, ocr_text)
@@ -386,12 +397,13 @@ class ImageProcessor:
             except Exception as e:
                 logger.warning(f"删除临时图片失败: {image_path}, 错误: {str(e)}")
 
-    def validate_image_requirements(self, image_paths: List[Path]) -> Dict[str, List[Path]]:
+    def validate_image_requirements(self, image_paths: List[Path], cat_type: int = 0) -> Dict[str, List[Path]]:
         """
         验证图片是否符合Temu要求
 
         Args:
             image_paths: 图片路径列表
+            cat_type: 分类类型，0=服装，1=非服装
 
         Returns:
             验证结果: {
@@ -401,35 +413,167 @@ class ImageProcessor:
         """
         result = {'valid': [], 'invalid': []}
         
+        # 根据分类类型设置不同的要求
+        if cat_type == 0:  # 服装类
+            min_width, min_height = 1340, 1785
+            expected_ratio = 3 / 4
+            max_size = 3 * 1024 * 1024  # 3MB
+        else:  # 非服装类
+            min_width, min_height = 800, 800
+            expected_ratio = 1.0
+            max_size = 3 * 1024 * 1024  # 3MB
+        
         for image_path in image_paths:
             try:
                 with Image.open(image_path) as img:
-                    # 检查尺寸要求 (最小1340x1785)
-                    if img.width < 1340 or img.height < 1785:
+                    # 检查图片格式
+                    if img.format not in ['JPEG', 'JPG', 'PNG']:
                         result['invalid'].append(image_path)
-                        logger.warning(f"图片尺寸不符合要求: {image_path.name} ({img.width}x{img.height})")
+                        logger.warning(f"图片格式不支持: {image_path.name} ({img.format})")
                         continue
                     
-                    # 检查文件大小 (最大2MB)
+                    # 检查尺寸要求
+                    if img.width < min_width or img.height < min_height:
+                        result['invalid'].append(image_path)
+                        logger.warning(f"图片尺寸不符合要求: {image_path.name} ({img.width}x{img.height}, 最小: {min_width}x{min_height})")
+                        continue
+                    
+                    # 检查文件大小
                     file_size = image_path.stat().st_size
-                    if file_size > 2 * 1024 * 1024:  # 2MB
+                    if file_size > max_size:
                         result['invalid'].append(image_path)
-                        logger.warning(f"图片文件过大: {image_path.name} ({file_size / 1024 / 1024:.2f}MB)")
+                        logger.warning(f"图片文件过大: {image_path.name} ({file_size / 1024 / 1024:.2f}MB, 最大: {max_size / 1024 / 1024:.2f}MB)")
                         continue
                     
-                    # 检查宽高比 (3:4)
+                    # 检查宽高比
                     ratio = img.width / img.height
-                    expected_ratio = 3 / 4
                     if abs(ratio - expected_ratio) > 0.1:  # 允许10%的误差
                         result['invalid'].append(image_path)
                         logger.warning(f"图片宽高比不符合要求: {image_path.name} ({ratio:.2f}, 期望: {expected_ratio:.2f})")
                         continue
                     
+                    # 检查图片质量（避免模糊或低质量图片）
+                    if img.width < min_width * 1.2 or img.height < min_height * 1.2:
+                        logger.warning(f"图片分辨率较低: {image_path.name} ({img.width}x{img.height})")
+                    
                     result['valid'].append(image_path)
-                    logger.debug(f"图片验证通过: {image_path.name}")
+                    logger.debug(f"图片验证通过: {image_path.name} ({img.width}x{img.height})")
                     
             except Exception as e:
                 result['invalid'].append(image_path)
                 logger.error(f"验证图片失败: {image_path}, 错误: {str(e)}")
         
         return result
+
+    def optimize_image_for_upload(self, image_path: Path, cat_type: int = 0) -> Optional[Path]:
+        """
+        优化图片以符合上传要求
+        
+        Args:
+            image_path: 原始图片路径
+            cat_type: 分类类型，0=服装，1=非服装
+            
+        Returns:
+            优化后的图片路径，如果优化失败返回None
+        """
+        try:
+            with Image.open(image_path) as img:
+                # 根据分类类型设置目标尺寸
+                if cat_type == 0:  # 服装类
+                    target_width, target_height = 1350, 1800
+                else:  # 非服装类
+                    target_width, target_height = 800, 800
+                
+                # 计算缩放比例，保持宽高比
+                width_ratio = target_width / img.width
+                height_ratio = target_height / img.height
+                scale_ratio = min(width_ratio, height_ratio)
+                
+                # 计算新尺寸
+                new_width = int(img.width * scale_ratio)
+                new_height = int(img.height * scale_ratio)
+                
+                # 如果图片已经符合要求，直接返回
+                if (img.width >= target_width and img.height >= target_height and 
+                    abs(img.width / img.height - target_width / target_height) < 0.1):
+                    return image_path
+                
+                # 调整图片尺寸
+                resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                
+                # 创建目标尺寸的白色背景
+                if cat_type == 0:  # 服装类
+                    final_img = Image.new('RGB', (target_width, target_height), 'white')
+                    # 居中放置图片
+                    x_offset = (target_width - new_width) // 2
+                    y_offset = (target_height - new_height) // 2
+                    final_img.paste(resized_img, (x_offset, y_offset))
+                else:  # 非服装类
+                    final_img = Image.new('RGB', (target_width, target_height), 'white')
+                    # 居中放置图片
+                    x_offset = (target_width - new_width) // 2
+                    y_offset = (target_height - new_height) // 2
+                    final_img.paste(resized_img, (x_offset, y_offset))
+                
+                # 保存优化后的图片
+                optimized_path = image_path.parent / f"optimized_{image_path.name}"
+                final_img.save(optimized_path, 'JPEG', quality=90, optimize=True)
+                
+                logger.info(f"图片优化完成: {image_path.name} -> {optimized_path.name}")
+                return optimized_path
+                
+        except Exception as e:
+            logger.error(f"优化图片失败: {image_path}, 错误: {str(e)}")
+            return None
+
+    def select_best_images(self, image_paths: List[Path], max_count: int = 5) -> List[Path]:
+        """
+        智能选择最佳图片
+        
+        Args:
+            image_paths: 图片路径列表
+            max_count: 最大选择数量
+            
+        Returns:
+            选择的最佳图片路径列表
+        """
+        if not image_paths:
+            return []
+        
+        # 按文件大小和质量排序（优先选择大文件）
+        scored_images = []
+        for image_path in image_paths:
+            try:
+                with Image.open(image_path) as img:
+                    # 计算质量分数
+                    file_size = image_path.stat().st_size
+                    width, height = img.size
+                    
+                    # 基础分数：文件大小 + 分辨率
+                    score = file_size + (width * height * 0.1)
+                    
+                    # 宽高比加分
+                    ratio = width / height
+                    if 0.7 <= ratio <= 0.8:  # 接近3:4的比例
+                        score += 1000000
+                    
+                    # 分辨率加分
+                    if width >= 1500 and height >= 2000:
+                        score += 500000
+                    elif width >= 1340 and height >= 1785:
+                        score += 200000
+                    
+                    scored_images.append((score, image_path))
+                    
+            except Exception as e:
+                logger.warning(f"评估图片失败: {image_path}, 错误: {str(e)}")
+                continue
+        
+        # 按分数降序排序
+        scored_images.sort(key=lambda x: x[0], reverse=True)
+        
+        # 选择前max_count张图片
+        selected = [img_path for _, img_path in scored_images[:max_count]]
+        
+        logger.info(f"从 {len(image_paths)} 张图片中选择了 {len(selected)} 张最佳图片")
+        return selected

@@ -119,21 +119,29 @@ class AutoTemuApp:
             return False
 
     def process_single_url(self, url: str, output_dir: Optional[str] = None) -> TemuListingResult:
-        """处理单个商品URL（真实运行）：复用经验证的完整添加流程。"""
+        """处理单个商品URL（真实运行）：使用生产环境的商品管理器。"""
         logger.info(f"开始处理商品URL(真实运行): {url}")
         try:
-            from importlib import import_module
-            tester_mod = import_module("docs.examples.test_real_product")
-            tester = tester_mod.RealProductTester()
-            ok = tester.run_complete_test(url)
-            if ok:
+            from src.core.product_manager import ProductManager
+            
+            # 创建商品管理器
+            product_manager = ProductManager()
+            
+            # 添加商品
+            result = product_manager.add_product(url, force_scrape=True)
+            
+            if result["success"]:
                 return TemuListingResult(
                     success=True,
-                    product_id=tester.created_goods_id,
-                    sku_ids=tester.created_sku_ids,
+                    product_id=result["product_id"],
+                    sku_ids=result["sku_ids"],
                     image_ids=[]
                 )
-            return TemuListingResult(success=False, errors=["真实运行失败"])
+            else:
+                return TemuListingResult(
+                    success=False, 
+                    errors=[result.get("error", "商品添加失败")]
+                )
         except Exception as e:
             logger.error(f"真实运行异常: {e}")
             return TemuListingResult(success=False, errors=[f"异常: {e}"])
@@ -268,6 +276,11 @@ def main():
         if args.golden:
             # 直接复用金测试脚本的完整流程，确保与真实测试一致
             try:
+                import os
+                # 金测试可以使用缓存，提高测试速度
+                if "FORCE_SCRAPE" in os.environ:
+                    del os.environ["FORCE_SCRAPE"]
+                
                 # 动态导入，避免循环依赖
                 from importlib import import_module
                 tester_mod = import_module("docs.examples.test_real_product")
