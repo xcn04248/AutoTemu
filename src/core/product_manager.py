@@ -518,9 +518,13 @@ class ProductManager:
             cat_type = self._get_cat_type(int(self.temu_product.category_id))
             logger.info(f"商品分类类型: {'服装类' if cat_type == 0 else '非服装类'}")
             
-            # 选择缩放规格 - 暂时统一使用800x800
-            scaling_type = 1  # 800x800
-            logger.info(f"图片缩放规格: {scaling_type} (800x800 - 统一规格)")
+            # 选择缩放规格 - 根据商品分类类型选择
+            if cat_type == 0:  # 服装类
+                scaling_type = 2  # 1350x1800
+                logger.info(f"图片缩放规格: {scaling_type} (1350x1800 - 服装类)")
+            else:  # 非服装类
+                scaling_type = 1  # 800x800
+                logger.info(f"图片缩放规格: {scaling_type} (800x800 - 非服装类)")
             
             # 过滤和选择最佳图片
             valid_images = self._filter_and_select_images(all_images, cat_type)

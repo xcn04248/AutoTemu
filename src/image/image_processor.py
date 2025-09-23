@@ -344,6 +344,9 @@ class ImageProcessor:
                 logger.error(f"处理图片时发生未知错误: {url}, 错误: {str(e)}")
                 continue
 
+        # 检查图片数量是否足够，如果不足则补充合规图片
+        self._supplement_images_if_needed(result)
+
         # 记录处理结果
         total_processed = sum(len(images) for images in result.values())
         logger.info(f"图片处理完成: 总计 {total_processed} 张, 主图 {len(result['main'])} 张, "
@@ -351,6 +354,56 @@ class ImageProcessor:
                    f"其他 {len(result['other'])} 张, 过滤 {len(result['filtered'])} 张")
 
         return result
+
+    def _supplement_images_if_needed(self, result: Dict[str, List[Path]], min_images: int = 3):
+        """
+        如果合规图片数量不足，通过复制其他合规图片来补充数量
+        
+        Args:
+            result: 图片处理结果
+            min_images: 最少需要的图片数量
+        """
+        # 收集所有合规的图片（除了被过滤的）
+        compliant_images = []
+        for category in ['main', 'detail', 'size', 'other']:
+            compliant_images.extend(result[category])
+        
+        total_compliant = len(compliant_images)
+        
+        if total_compliant < min_images and total_compliant > 0:
+            logger.info(f"合规图片数量不足: {total_compliant} 张，需要至少 {min_images} 张，开始补充...")
+            
+            # 计算需要补充的数量
+            needed = min_images - total_compliant
+            
+            # 通过复制现有合规图片来补充
+            for i in range(needed):
+                # 选择要复制的图片（循环使用现有图片）
+                source_image = compliant_images[i % len(compliant_images)]
+                
+                # 创建新的文件名
+                source_path = Path(source_image)
+                new_filename = f"{source_path.stem}_copy_{i+1}{source_path.suffix}"
+                new_path = source_path.parent / new_filename
+                
+                try:
+                    # 复制图片文件
+                    import shutil
+                    shutil.copy2(source_path, new_path)
+                    
+                    # 添加到结果中
+                    result['other'].append(new_path)
+                    compliant_images.append(new_path)
+                    
+                    logger.info(f"已补充图片: {new_filename}")
+                    
+                except Exception as e:
+                    logger.error(f"复制图片失败: {source_path} -> {new_path}, 错误: {str(e)}")
+            
+            logger.info(f"图片补充完成，现在共有 {len(compliant_images)} 张合规图片")
+        
+        elif total_compliant == 0:
+            logger.warning("没有合规图片可用，无法进行补充")
 
     def get_image_info(self, image_path: Path) -> Dict[str, any]:
         """
