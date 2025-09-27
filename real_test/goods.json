@@ -1,0 +1,379 @@
+{
+  "cat1Id": 27011,
+  "productName": "美式复古条纹拼接户外休闲运动裤男女hiphop街舞工装裤机能登山裤",
+  "materialImgUrl": "https://img.kwcdn.com/product/open/1546894eac0a4a698595ab3b76b72a54-goods.jpeg",
+  "cat2Id": 30327,
+  "cat3Id": 30328,
+  "cat4Id": 30476,
+  "cat5Id": 0,
+  "cat6Id": 0,
+  "cat7Id": 0,
+  "cat8Id": 0,
+  "cat9Id": 0,
+  "cat10Id": 0,
+  "productSkcReqs": [
+    {
+      "previewImgUrls": [
+        "https://img.kwcdn.com/product/open/1546894eac0a4a698595ab3b76b72a54-goods.jpeg",
+        "https://img.kwcdn.com/product/open/acc68b050531438ab3bc589b1a3163b7-goods.jpeg",
+        "https://img.kwcdn.com/product/open/0a6b1d17b49641fb8c792e0375187da4-goods.jpeg",
+        "https://img.kwcdn.com/product/open/4daaa16bb0174e07bbb6bc4da8a3adb1-goods.jpeg",
+        "https://img.kwcdn.com/product/open/8abde91ac30b480285b12d33ab2c4263-goods.jpeg"
+      ],
+      "extCode": "",
+      "mainProductSkuSpecReqs": [
+        {
+          "parentSpecId": 1001,
+          "parentSpecName": "颜色",
+          "specId": 3002,
+          "specName": "黑色"
+        }
+      ],
+      "productSkcCarouselImageI18nReqs": [],
+      "productSkuReqs": [
+        {
+          "thumbUrl": "https://img.kwcdn.com/product/open/1546894eac0a4a698595ab3b76b72a54-goods.jpeg",
+          "extCode": "",
+          "currencyType": "CNY",
+          "siteSupplierPrices": [
+            {
+              "siteId": 300,
+              "supplierPrice": 650
+            }
+          ],
+          "productSkuSpecReqs": [
+            {
+              "parentSpecId": 3001,
+              "specId": 9005,
+              "parentSpecName": "Size",
+              "specName": "M"
+            },
+            {
+              "parentSpecId": 1001,
+              "specId": 3002,
+              "parentSpecName": "颜色",
+              "specName": "黑色"
+            }
+          ],
+          "productSkuWhExtAttrReq": {
+            "productSkuVolumeReq": {
+              "len": 300,
+              "width": 250,
+              "height": 20
+            },
+            "productSkuBarCodeReqs": [],
+            "productSkuSensitiveAttrReq": {
+              "isSensitive": 0,
+              "sensitiveList": []
+            },
+            "productSkuWeightReq": {
+              "value": 300000
+            }
+          },
+          "productSkuThumbUrlI18nReqs": []
+        },
+        {
+          "thumbUrl": "https://img.kwcdn.com/product/open/1546894eac0a4a698595ab3b76b72a54-goods.jpeg",
+          "extCode": "",
+          "currencyType": "CNY",
+          "siteSupplierPrices": [
+            {
+              "siteId": 300,
+              "supplierPrice": 650
+            }
+          ],
+          "productSkuSpecReqs": [
+            {
+              "parentSpecId": 3001,
+              "specId": 11002,
+              "parentSpecName": "Size",
+              "specName": "L"
+            },
+            {
+              "parentSpecId": 1001,
+              "specId": 3002,
+              "parentSpecName": "颜色",
+              "specName": "黑色"
+            }
+          ],
+          "productSkuWhExtAttrReq": {
+            "productSkuVolumeReq": {
+              "len": 300,
+              "width": 250,
+              "height": 20
+            },
+            "productSkuBarCodeReqs": [],
+            "productSkuSensitiveAttrReq": {
+              "isSensitive": 0,
+              "sensitiveList": []
+            },
+            "productSkuWeightReq": {
+              "value": 300000
+            }
+          },
+          "productSkuThumbUrlI18nReqs": []
+        }
+      ]
+    }
+  ],
+  "productOuterPackageReq": {
+    "packageShape": 0,
+    "packageType": 2
+  },
+  "productWhExtAttrReq": {
+    "productOrigin": {
+      "region1ShortName": "CN"
+    },
+    "outerGoodsUrl": ""
+  },
+  "productI18nReqs": [
+    {
+      "language": "en",
+      "productName": "Retro Stripe Outdoor Cargo Pants Unisex Hip-hop Hiking"
+    }
+  ],
+  "skuClassification": 1,
+  "pieceUnitCode": 1,
+  "productSemiManagedReq": {
+    "bindSiteIds": [
+      300
+    ],
+    "semiLanguageStrategy": 2
+  },
+  "productShipmentReq": {
+    "freightTemplateId": "LFT-14230731738276073558",
+    "shipmentLimitSecond": 172800
+  },
+  "productPropertyReqs": [
+    {
+      "templatePid": 575495,
+      "pid": 1,
+      "refPid": 12,
+      "valueUnit": "",
+      "vid": 1,
+      "propValue": "再生涤纶",
+      "valueExtendInfo": "",
+      "propName": "材质"
+    },
+    {
+      "templatePid": 575513,
+      "pid": 2,
+      "refPid": 15,
+      "valueUnit": "%",
+      "numberInputValue": "100",
+      "propValue": "100",
+      "propName": "基布成分",
+      "vid": 134
+    },
+    {
+      "templatePid": 575497,
+      "pid": 21,
+      "refPid": 83,
+      "valueUnit": "",
+      "vid": 29210,
+      "propValue": "无",
+      "valueExtendInfo": "",
+      "propName": "细节"
+    },
+    {
+      "templatePid": 575498,
+      "pid": 10,
+      "refPid": 26,
+      "valueUnit": "",
+      "vid": 215,
+      "propValue": "纯色",
+      "valueExtendInfo": "",
+      "propName": "图案"
+    },
+    {
+      "templatePid": 575499,
+      "pid": 3,
+      "refPid": 19,
+      "valueUnit": "",
+      "vid": 149,
+      "propValue": "基础款",
+      "valueExtendInfo": "",
+      "propName": "风格"
+    },
+    {
+      "templatePid": 575500,
+      "pid": 24,
+      "refPid": 76,
+      "valueUnit": "",
+      "vid": 25849,
+      "propValue": "春天",
+      "valueExtendInfo": "",
+      "propName": "季节"
+    },
+    {
+      "templatePid": 575501,
+      "pid": 6,
+      "refPid": 22,
+      "valueUnit": "",
+      "vid": 205,
+      "propValue": "中弹",
+      "valueExtendInfo": "",
+      "propName": "面料"
+    },
+    {
+      "templatePid": 575502,
+      "pid": 67,
+      "refPid": 115,
+      "valueUnit": "",
+      "vid": 25920,
+      "propValue": "成人",
+      "valueExtendInfo": "",
+      "propName": "适用人群"
+    },
+    {
+      "templatePid": 575503,
+      "pid": 7,
+      "refPid": 24,
+      "valueUnit": "",
+      "vid": 209,
+      "propValue": "半透",
+      "valueExtendInfo": "",
+      "propName": "是否透明"
+    },
+    {
+      "templatePid": 575504,
+      "pid": 4,
+      "refPid": 20,
+      "valueUnit": "",
+      "vid": 165,
+      "propValue": "手洗或干洗",
+      "valueExtendInfo": "",
+      "propName": "护理说明"
+    },
+    {
+      "templatePid": 575507,
+      "pid": 12,
+      "refPid": 28,
+      "valueUnit": "",
+      "vid": 293,
+      "propValue": "常规款",
+      "valueExtendInfo": "",
+      "propName": "长度"
+    },
+    {
+      "templatePid": 593517,
+      "pid": 36,
+      "refPid": 114,
+      "valueUnit": "",
+      "vid": 1839,
+      "propValue": "修身",
+      "valueExtendInfo": "",
+      "propName": "版型"
+    },
+    {
+      "templatePid": 897542,
+      "pid": 1224,
+      "refPid": 1192,
+      "valueUnit": "",
+      "vid": 29810,
+      "propValue": "梭织",
+      "valueExtendInfo": "",
+      "propName": "织造方式"
+    },
+    {
+      "templatePid": 1196184,
+      "pid": 1437,
+      "refPid": 1919,
+      "valueUnit": "",
+      "vid": 36892,
+      "propValue": "无印花",
+      "valueExtendInfo": "",
+      "propName": "印花类型"
+    },
+    {
+      "templatePid": 1304945,
+      "pid": 2054,
+      "refPid": 6926,
+      "valueUnit": "",
+      "vid": 161198,
+      "propValue": "光面",
+      "valueExtendInfo": "",
+      "propName": "面料纹理2"
+    },
+    {
+      "templatePid": 1306723,
+      "pid": 2050,
+      "refPid": 6928,
+      "valueUnit": "",
+      "vid": 161110,
+      "propValue": "光面",
+      "valueExtendInfo": "",
+      "propName": "里料纹理"
+    },
+    {
+      "templatePid": 1307767,
+      "pid": 2052,
+      "refPid": 6930,
+      "valueUnit": "g/㎡",
+      "propValue": "180",
+      "propName": "里料克重（g/m²)",
+      "numberInputValue": "180",
+      "vid": 0
+    },
+    {
+      "templatePid": 1380816,
+      "pid": 23,
+      "refPid": 84,
+      "valueUnit": "",
+      "vid": 700,
+      "propValue": "裙裤",
+      "valueExtendInfo": "",
+      "propName": "类型"
+    }
+  ],
+  "sizeTemplateIds": [
+    17592257281876
+  ],
+  "productSpecPropertyReqs": [
+    {
+      "templatePid": 575494,
+      "pid": 13,
+      "refPid": 63,
+      "valueUnit": "",
+      "parentSpecId": 1001,
+      "parentSpecName": "颜色",
+      "specId": 3002,
+      "specName": "黑色",
+      "vid": 378,
+      "propValue": "黑色",
+      "propName": "颜色",
+      "valueGroupId": 3,
+      "valueGroupName": "黑色系"
+    },
+    {
+      "templatePid": 575493,
+      "pid": 14,
+      "refPid": 65,
+      "valueUnit": "",
+      "parentSpecId": 3001,
+      "parentSpecName": "尺码",
+      "specId": 11002,
+      "specName": "L",
+      "vid": 319,
+      "propValue": "L",
+      "propName": "尺码",
+      "valueGroupId": 2,
+      "valueGroupName": "中国码"
+    },
+    {
+      "templatePid": 575493,
+      "pid": 14,
+      "refPid": 65,
+      "valueUnit": "",
+      "parentSpecId": 3001,
+      "parentSpecName": "尺码",
+      "specId": 9005,
+      "specName": "M",
+      "vid": 317,
+      "propValue": "M",
+      "propName": "尺码",
+      "valueGroupId": 2,
+      "valueGroupName": "中国码"
+    }
+  ]
+}

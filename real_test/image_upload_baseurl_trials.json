@@ -1,0 +1,25 @@
+{
+  "https://openapi.kuajingmaihuo.com/openapi/router": {
+    "status": 200,
+    "body": {
+      "success": false,
+      "requestId": "cn-579c50b6-f123-46b4-b43c-e68ff7e5e6fb",
+      "errorCode": 7000016,
+      "errorMsg": "type not exists."
+    }
+  },
+  "https://openapi.kuajingmaihuo.com/router": {
+    "status": 403,
+    "body": {
+      "error_msg": "",
+      "error_code": 40003
+    }
+  },
+  "https://openapi.kuajingmaihuo.com/openapi/router/rest": {
+    "status": 403,
+    "body": {
+      "error_msg": "",
+      "error_code": 40003
+    }
+  }
+}

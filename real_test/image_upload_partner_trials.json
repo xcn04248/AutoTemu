@@ -1,0 +1,52 @@
+{
+  "partner_global_with_version_uri": {
+    "status": 200,
+    "ok": true,
+    "body": {
+      "result": {
+        "urls": null,
+        "imageUrl": "https://pfs.file.temu.com/product-material-private-tag/open/80d18c1b54a74931a6befc78a9b6d3b5-goods.jpeg",
+        "url": "https://pfs.file.temu.com/product-material-private-tag/open/80d18c1b54a74931a6befc78a9b6d3b5-goods.jpeg"
+      },
+      "success": true,
+      "requestId": "pa-cd1e9938-9a81-4508-ae01-43879056c066",
+      "errorCode": 1000000,
+      "errorMsg": ""
+    }
+  },
+  "partner_global_no_version_uri": {
+    "status": 200,
+    "ok": true,
+    "body": {
+      "result": {
+        "urls": null,
+        "imageUrl": "https://pfs.file.temu.com/product-material-private-tag/open/ca5f2532ab7d4ce4ae55d8bb058d460c-goods.jpeg",
+        "url": "https://pfs.file.temu.com/product-material-private-tag/open/ca5f2532ab7d4ce4ae55d8bb058d460c-goods.jpeg"
+      },
+      "success": true,
+      "requestId": "pa-4066327d-f8a4-47e7-ae8d-e57da62cf16c",
+      "errorCode": 1000000,
+      "errorMsg": ""
+    }
+  },
+  "partner_local_with_version_uri": {
+    "status": 200,
+    "ok": false,
+    "body": {
+      "success": false,
+      "requestId": "pa-e7d2139c-685c-41a1-b558-3154b6c3f8ab",
+      "errorCode": 7000016,
+      "errorMsg": "type not exists."
+    }
+  },
+  "partner_local_minimal_raw": {
+    "status": 200,
+    "ok": false,
+    "body": {
+      "success": false,
+      "requestId": "pa-268fe206-d328-47ae-be27-27f803ac7b3c",
+      "errorCode": 7000016,
+      "errorMsg": "type not exists."
+    }
+  }
+}

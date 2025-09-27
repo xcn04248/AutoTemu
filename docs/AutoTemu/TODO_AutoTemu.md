@@ -1,169 +1,285 @@
-# TODO - AutoTemu 商品自动化上架系统
+# TODO - AutoTemu 货品发布API更新待办事项
 
-## 待完成任务清单
+## 当前状态总结
 
-### 🔴 高优先级（核心功能实现）
+### ✅ 已完成 (阶段1-2)
+- **T1**: 新API数据模型创建 - `src/models/bg_models.py`
+- **T2**: 签名工具模块实现 - `src/utils/bg_signature.py`  
+- **T3**: 新API客户端实现 - `src/api/bg_client.py`
+- **T4**: 数据转换器实现 - `src/transform/bg_transformer.py`
+- **T5**: API适配器实现 - `src/api/api_adapter.py`
 
-#### T6: 爬虫模块实现
-- [ ] 重构example/scrape_firecrawl.py代码
-- [ ] 创建src/scraper/product_scraper.py
-- [ ] 实现ProductScraper类
-- [ ] 集成配置管理和日志系统
-- [ ] 添加重试装饰器
-- [ ] 编写单元测试
+### 🔄 待完成 (阶段3)
 
-#### T7: OCR客户端封装  
-- [ ] 创建src/image/ocr_client.py
-- [ ] 封装百度OCR API调用
-- [ ] 实现access_token获取和缓存
-- [ ] 添加请求频率控制
-- [ ] 处理API异常
-- [ ] 编写单元测试
+## T6: 业务逻辑集成 [高优先级]
 
-#### T8: 图片处理模块
-- [ ] 创建src/image/processor.py
-- [ ] 实现图片下载功能（带重试）
-- [ ] 集成OCR客户端进行中文检测
-- [ ] 实现图片尺寸调整（保持3:4比例）
-- [ ] 支持图片格式转换和压缩
-- [ ] 编写单元测试
+### 任务描述
+更新ProductManager使用新的ApiAdapter，保持现有接口不变的同时支持新API。
 
-### 🟡 中优先级（数据处理）
+### 具体工作
+1. **更新ProductManager初始化**
+   ```python
+   # 在 src/core/product_manager.py 中
+   from src.api.api_adapter import create_api_adapter
+   
+   def __init__(self):
+       # 现有初始化...
+       self.api_adapter = create_api_adapter()
+   ```
 
-#### T9: 尺码映射模块
-- [ ] 创建src/transformer/size_mapper.py
-- [ ] 实现灵活的尺码映射规则
-- [ ] 处理日本尺码到Temu标准的转换
-- [ ] 生成符合Temu要求的尺码表数据
-- [ ] 编写单元测试
+2. **更新商品创建方法**
+   ```python
+   def _create_product(self) -> bool:
+       # 构建上下文信息
+       context = {
+           'uploaded_images': self.uploaded_images_cache,
+           'category_template': self.templates_cache.get(self.temu_product.category_id),
+           'spec_ids': self.spec_ids_cache.get(self.temu_product.category_id, {})
+       }
+       
+       # 使用适配器创建商品
+       result = self.api_adapter.create_product(self.temu_product, context)
+       
+       if result.success:
+           self.created_goods_id = str(result.goods_id)
+           self.created_sku_ids = [str(sid) for sid in result.sku_ids or []]
+           return True
+       else:
+           logger.error(f"商品创建失败: {result.error_message}")
+           return False
+   ```
 
-#### T10: 数据转换模块  
-- [ ] 创建src/transformer/data_transformer.py
-- [ ] 实现价格计算逻辑（原价×1.3）
-- [ ] 数据格式转换（ProductData → TemuProductData）
-- [ ] 数据完整性验证
-- [ ] 编写单元测试
+3. **更新其他API调用**
+   - 分类查询: `self.api_adapter.get_categories()`
+   - 分类推荐: `self.api_adapter.recommend_category()`
+   - 图片上传: `self.api_adapter.upload_image()`
 
-#### T11: Temu API封装
-- [ ] 创建src/temu/adapter.py
-- [ ] 集成temu_api库
-- [ ] 实现商品分类推荐功能
-- [ ] 实现图片上传功能  
-- [ ] 实现商品创建功能
-- [ ] 添加API错误处理
-- [ ] 编写单元测试
+### 验收标准
+- [ ] 现有功能正常工作
+- [ ] 新API调用成功
+- [ ] 业务流程完整
+- [ ] 错误处理正确
 
-### 🟢 低优先级（集成和优化）
+---
 
-#### T12: 主程序集成
-- [ ] 创建src/main.py
-- [ ] 实现命令行参数解析
-- [ ] 集成所有模块的完整流程
-- [ ] 添加进度显示
-- [ ] 异常处理和用户提示
+## T7: 配置和测试更新 [中优先级]
 
-#### T13: 单元测试
-- [ ] 完善各模块的测试用例
-- [ ] 提高测试覆盖率到80%以上
-- [ ] 创建测试数据和fixtures
-- [ ] Mock外部API调用
+### 任务描述
+更新配置文件、环境变量文档，创建必要的测试用例。
 
-#### T14: 集成测试
-- [ ] 创建端到端测试脚本
-- [ ] 准备测试商品URL
-- [ ] 验证完整流程
-- [ ] 性能测试和优化
+### 具体工作
 
-#### T15: 文档完善
-- [ ] 更新README.md
-- [ ] 编写API使用文档
-- [ ] 创建部署指南
-- [ ] 编写故障排查文档
+#### 7.1 配置更新
+1. **更新.env.example文件**
+   ```bash
+   # 新API配置
+   USE_NEW_API=true
+   BG_APP_KEY=your_app_key
+   BG_APP_SECRET=your_app_secret  
+   BG_ACCESS_TOKEN=your_access_token
+   BG_BASE_URL=https://openapi.kuajingmaihuo.com/openapi/router
+   
+   # API切换配置
+   API_FALLBACK_ENABLED=true
+   API_TIMEOUT=30
+   API_MAX_RETRIES=3
+   
+   # 新API特定配置
+   BG_SCALING_TYPE=1
+   BG_COMPRESSION_TYPE=1
+   BG_FORMAT_CONVERSION_TYPE=0
+   ```
+
+2. **更新config.py支持新配置项**
+   ```python
+   class Config:
+       # 现有配置...
+       
+       # 新API配置
+       use_new_api: bool = True
+       bg_app_key: str = ""
+       bg_app_secret: str = ""
+       bg_access_token: str = ""
+       bg_base_url: str = "https://openapi.kuajingmaihuo.com/openapi/router"
+   ```
+
+#### 7.2 测试用例创建
+1. **单元测试**
+   - `tests/test_bg_models.py` - 数据模型测试
+   - `tests/test_bg_signature.py` - 签名算法测试
+   - `tests/test_bg_client.py` - API客户端测试
+   - `tests/test_bg_transformer.py` - 数据转换测试
+   - `tests/test_api_adapter.py` - 适配器测试
+
+2. **集成测试**
+   - `tests/test_bg_integration.py` - 端到端集成测试
+
+### 验收标准
+- [ ] 配置项完整
+- [ ] 测试覆盖率≥90%
+- [ ] 所有测试通过
+- [ ] 文档更新正确
+
+---
+
+## T8: 文档和最终验证 [中优先级]
+
+### 任务描述
+创建使用文档、故障排除指南，执行最终的端到端验证。
+
+### 具体工作
+
+#### 8.1 文档创建
+1. **API迁移指南** - `docs/guides/api_migration_guide.md`
+   - 新旧API对比
+   - 迁移步骤说明
+   - 配置参数说明
+   - 常见问题解答
+
+2. **故障排除指南** - `docs/guides/troubleshooting.md`
+   - 常见错误及解决方案
+   - 调试方法说明
+   - 日志分析指导
+
+3. **新API使用示例** - `docs/examples/bg_api_examples.py`
+   ```python
+   # 基本使用示例
+   from src.api.api_adapter import create_api_adapter
+   
+   # 创建适配器
+   adapter = create_api_adapter(use_new_api=True)
+   
+   # 测试连接
+   if adapter.test_connection():
+       print("API连接成功")
+   
+   # 创建商品示例...
+   ```
+
+#### 8.2 端到端验证
+1. **完整流程测试**
+   - 从商品URL到成功上架的完整流程
+   - 验证新API各个环节工作正常
+   - 测试API切换和降级功能
+
+2. **性能验证**
+   - 验证新API性能与旧API相当
+   - 测试并发处理能力
+   - 验证错误处理效果
+
+### 验收标准
+- [ ] 文档完整准确
+- [ ] 示例代码可运行
+- [ ] 端到端测试通过
+- [ ] 性能指标达标
+
+---
 
 ## 配置需求
 
-### 必需的环境变量（.env文件）
-```ini
-# Firecrawl配置
-FIRECRAWL_API_KEY=你的Firecrawl API密钥
+### 必需的环境变量
+```bash
+# 基础API配置 (必需)
+TEMU_APP_KEY=your_app_key
+TEMU_APP_SECRET=your_app_secret
+TEMU_ACCESS_TOKEN=your_access_token
 
-# 百度OCR配置  
-BAIDU_API_KEY=你的百度API Key
-BAIDU_SECRET_KEY=你的百度Secret Key
+# 新API配置 (可选，会从TEMU_*复制)
+BG_APP_KEY=${TEMU_APP_KEY}
+BG_APP_SECRET=${TEMU_APP_SECRET}  
+BG_ACCESS_TOKEN=${TEMU_ACCESS_TOKEN}
 
-# Temu API配置
-TEMU_APP_KEY=你的Temu App Key
-TEMU_APP_SECRET=你的Temu App Secret
-TEMU_ACCESS_TOKEN=你的Temu Access Token
-TEMU_BASE_URL=https://openapi-jp.temu.com
-
-# 业务配置
-PRICE_MARKUP=1.3
-LOG_LEVEL=INFO
-IMAGE_SAVE_PATH=./images
+# API控制配置 (可选)
+USE_NEW_API=true
+API_FALLBACK_ENABLED=true
 ```
 
-## 已知问题和限制
+### 可选的配置项
+```bash
+# API端点配置
+BG_BASE_URL=https://openapi.kuajingmaihuo.com/openapi/router
+TEMU_BASE_URL=https://openapi-b-global.temu.com
 
-1. **API配额限制**
-   - 百度OCR API有调用频率限制
-   - Temu API可能有日调用量限制
-   - 需要实现请求频率控制
+# 图片处理配置
+BG_SCALING_TYPE=1  # 1:800x800, 2:1350x1800
+BG_COMPRESSION_TYPE=1
+BG_FORMAT_CONVERSION_TYPE=0
 
-2. **图片处理**
-   - 部分图片可能无法满足Temu的3:4比例要求
-   - OCR可能存在误判（将非中文识别为中文）
+# 价格转换配置
+TEMU_CNY_TO_JPY_RATE=20
 
-3. **数据映射**
-   - 某些特殊尺码可能无法准确映射
-   - 商品分类推荐可能不够精确
+# 运费模板配置
+TEMU_FREIGHT_TEMPLATE_ID=LFT-14230731738276073558
 
-## 开发建议
+# 调试配置
+DEBUG=false
+```
 
-1. **优先完成核心流程**
-   - 先实现基本的爬取→处理→上架流程
-   - 确保单个商品能够成功处理
-   - 再考虑批量处理和优化
+---
 
-2. **充分测试**
-   - 每个模块都要有对应的单元测试
-   - 使用Mock避免测试时调用真实API
-   - 准备多种类型的测试数据
+## 风险提示
 
-3. **日志和监控**
-   - 充分利用已实现的日志系统
-   - 关键操作都要记录日志
-   - 便于问题排查和性能分析
+### 高风险项目
+1. **T6业务逻辑集成** - 需要仔细测试，确保不破坏现有功能
+2. **生产环境部署** - 建议先在测试环境充分验证
 
-4. **错误处理**
-   - 利用已实现的异常类和重试机制
-   - 对外部API调用都要有超时和重试
-   - 提供清晰的错误信息
+### 缓解措施
+1. **分步骤部署** - 先启用新API但保持降级功能
+2. **监控告警** - 密切监控API调用成功率和错误日志
+3. **快速回滚** - 保持`USE_NEW_API=false`的快速回滚能力
 
-## 部署准备
+---
 
-1. **环境准备**
-   - Python 3.8+
-   - 稳定的网络连接
-   - 足够的磁盘空间（存储图片）
+## 验证清单
 
-2. **依赖安装**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
+### 功能验证
+- [ ] 新API商品创建成功
+- [ ] 图片上传正常工作
+- [ ] 分类推荐功能正常
+- [ ] 数据转换正确无误
+- [ ] 错误处理机制有效
+- [ ] API切换功能正常
+- [ ] 降级机制工作正常
 
-3. **配置文件**
-   ```bash
-   cp .env.example .env
-   # 编辑.env文件，填入实际的API密钥
-   ```
+### 质量验证  
+- [ ] 代码质量符合标准
+- [ ] 测试覆盖率达标
+- [ ] 性能指标满足要求
+- [ ] 日志记录完整
+- [ ] 文档更新正确
+- [ ] 配置管理灵活
 
-## 联系支持
+### 部署验证
+- [ ] 环境变量配置正确
+- [ ] 依赖包安装成功
+- [ ] 服务启动正常
+- [ ] 端到端流程测试通过
+- [ ] 监控告警配置完成
 
-如需技术支持或有任何问题，请：
-1. 查看日志文件（logs目录）
-2. 检查环境变量配置
-3. 确认API密钥有效性
-4. 查看故障排查文档（待编写）
+---
+
+## 支持联系
+
+### 技术支持
+- 如遇新API相关问题，请查看 `docs/guides/troubleshooting.md`
+- 如需配置帮助，请参考 `docs/guides/api_migration_guide.md`
+- 如有其他问题，请检查日志文件并提供详细的错误信息
+
+### 紧急处理
+如果新API出现严重问题，可以通过以下方式快速回滚：
+```bash
+# 方法1: 环境变量
+export USE_NEW_API=false
+
+# 方法2: 配置文件
+echo "USE_NEW_API=false" >> .env
+
+# 方法3: 代码级别
+# 在ProductManager初始化中设置use_new_api=False
+```
+
+---
+
+**最后更新**: 2025年9月26日
+**状态**: 阶段1-2已完成，阶段3待执行
+**预计完成时间**: 剩余5-8小时工作量

@@ -1,0 +1,80 @@
+{
+  "global_json_with_version_uri": {
+    "status": 200,
+    "ok": false,
+    "body": {
+      "success": false,
+      "requestId": "cn-c918a26f-0379-49de-9a1a-be31188d5f71",
+      "errorCode": 7000016,
+      "errorMsg": "type not exists."
+    }
+  },
+  "global_json_no_version_uri": {
+    "status": 200,
+    "ok": false,
+    "body": {
+      "success": false,
+      "requestId": "cn-4a8286ea-c1cc-4ff7-98ef-82b79e07ad9a",
+      "errorCode": 7000016,
+      "errorMsg": "type not exists."
+    }
+  },
+  "global_json_with_version_raw": {
+    "status": 200,
+    "ok": false,
+    "body": {
+      "success": false,
+      "requestId": "cn-24e47394-fa19-4fcc-b481-766d99c5de01",
+      "errorCode": 7000016,
+      "errorMsg": "type not exists."
+    }
+  },
+  "global_form_with_version_uri": {
+    "status": 415,
+    "ok": false,
+    "body": {
+      "success": false,
+      "errorCode": 3000000,
+      "errorMsg": "Content type 'application/x-www-form-urlencoded' not supported"
+    }
+  },
+  "local_json_with_version_uri": {
+    "status": 200,
+    "ok": false,
+    "body": {
+      "success": false,
+      "requestId": "cn-37389922-af68-4837-8b3c-5a375932c82b",
+      "errorCode": 7000016,
+      "errorMsg": "type not exists."
+    }
+  },
+  "local_json_minimal": {
+    "status": 200,
+    "ok": false,
+    "body": {
+      "success": false,
+      "requestId": "cn-5d3f7700-2151-45fb-969c-b6387c531049",
+      "errorCode": 7000016,
+      "errorMsg": "type not exists."
+    }
+  },
+  "local_json_uri_only": {
+    "status": 200,
+    "ok": false,
+    "body": {
+      "success": false,
+      "requestId": "cn-b900b6a5-2baa-41ad-b06a-f53223cd287b",
+      "errorCode": 7000016,
+      "errorMsg": "type not exists."
+    }
+  },
+  "local_form_with_version_raw": {
+    "status": 415,
+    "ok": false,
+    "body": {
+      "success": false,
+      "errorCode": 3000000,
+      "errorMsg": "Content type 'application/x-www-form-urlencoded' not supported"
+    }
+  }
+}

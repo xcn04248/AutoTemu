@@ -1,170 +1,286 @@
-# CONSENSUS - AutoTemu 商品自动化上架系统
+# CONSENSUS - AutoTemu 货品发布API更新技术方案共识
 
-## 最终需求确认
+## 明确的需求描述和验收标准
 
-基于用户需求和技术调研，以下是AutoTemu商品自动化上架系统的最终共识文档。
+### 核心需求
+将AutoTemu系统从现有的 `temu_api` 库迁移到新的 `bg.goods.add` API规范，实现完整的商品上架功能。
 
-## 系统目标
+### 功能需求
+1. **商品创建功能** - 使用新的 `bg.goods.add` 接口创建商品
+2. **图片处理功能** - 适配新的图片上传和引用机制
+3. **尺码表功能** - 使用新的尺码表接口族
+4. **分类管理功能** - 适配新的分类查询接口
+5. **属性管理功能** - 使用新的属性模板接口
+6. **规格管理功能** - 适配新的规格创建接口
 
-开发一个自动化系统，从jp0663.com网站抓取商品信息，经过数据处理和转换后，自动上架到Temu日本站。
+### 非功能需求
+1. **性能要求** - 保持现有性能水平
+2. **可靠性要求** - 保持现有错误处理能力
+3. **可维护性要求** - 保持模块化架构
+4. **兼容性要求** - 保持现有配置和接口
 
-## 核心功能模块
-
-### 1. 商品信息爬取模块
-- **技术基础**：基于已有的Firecrawl实现（example/scrape_firecrawl.py）
-- **抓取内容**：商品名称、价格、描述、图片链接、尺码信息、商品详情
-- **输入参数**：单个商品URL
-- **输出格式**：结构化JSON数据
-
-### 2. 图片处理模块
-- **OCR筛选**：使用百度OCR API识别并过滤包含中文的图片
-- **图片要求**：
-  - 尺寸：3:4比例，宽度≥1340px，高度≥1785px
-  - 大小：≤2M
-  - 格式：JPG/JPEG/PNG
-- **处理流程**：下载→OCR检测→尺寸调整→格式转换→存储
-
-### 3. 数据转换模块
-- **价格处理**：原价 × 1.3（加价30%）
-- **分类映射**：调用Temu API的category_recommend功能自动推荐类目
-- **尺码映射**：
-  - 建立标准尺码表（至少包含S、M、L三个码数）
-  - 遵循Temu跳码规则
-  - 将源网站尺码数据映射到Temu标准
-
-### 4. Temu API集成模块
-- **认证管理**：从.env文件读取API凭证
-- **商品创建**：调用bg.local.goods.add接口
-- **图片上传**：调用bg.local.goods.image.upload接口
-- **错误处理**：API调用失败自动重试（最多3次）
-
-### 5. 系统基础设施
-- **配置管理**：使用.env文件管理敏感信息
-- **日志系统**：记录各模块运行状态和错误信息
-- **错误处理**：网络异常、API失败等情况的处理和重试
+### 验收标准
+1. **功能完整性** - 所有现有功能正常工作
+2. **API兼容性** - 新API调用成功
+3. **数据一致性** - 商品数据正确传递
+4. **错误处理** - 错误信息正确显示
+5. **测试通过** - 所有测试用例通过
 
 ## 技术实现方案
 
-### 架构设计
-```
-输入URL → 爬虫模块 → 数据清洗 → 图片处理 → 数据转换 → Temu API → 上架结果
-            ↓           ↓           ↓           ↓           ↓
-          日志记录    日志记录    日志记录    日志记录    日志记录
-```
+### 架构设计原则
+1. **适配器模式** - 使用适配器模式处理API差异
+2. **分层架构** - 保持业务逻辑与API实现分离
+3. **配置驱动** - 支持API端点的配置化切换
+4. **向后兼容** - 保持现有接口的兼容性
 
-### 技术栈
-- Python 3.8+
-- Firecrawl（爬虫）
-- 百度OCR API（图片文字识别）
-- Temu API SDK（电商平台接口）
-- Pillow（图片处理）
-- requests（HTTP请求）
-- python-dotenv（环境变量管理）
-- logging（日志记录）
+### 核心组件设计
 
-### 数据流规范
-
-1. **爬虫输出格式**：
-```json
-{
-    "productName": "商品名称",
-    "price": 1000,
-    "description": "商品描述",
-    "imageLink": "主图URL",
-    "sizes": [
-        {"size": "S", "sizeImageLink": "尺码图URL"}
-    ],
-    "productDetails": {
-        "details": "详细描述",
-        "detailImageLinks": ["详情图URL1", "详情图URL2"]
-    }
-}
-```
-
-2. **Temu商品创建格式**：
-```json
-{
-    "goodsBasic": {
-        "goodsName": "商品名称",
-        "catId": 12345,
-        "hdThumbUrl": "主图URL",
-        "carouselImageList": ["轮播图URLs"]
-    },
-    "goodsServicePromise": {...},
-    "goodsProperty": {...},
-    "skuList": [
-        {
-            "skuPrice": 1300,
-            "skuQuantity": 100,
-            "specList": [{"specId": 123, "specValue": "S"}]
-        }
-    ]
-}
+#### 1. 新API客户端 (`src/api/bg_client.py`)
+```python
+class BgGoodsClient:
+    """新的bg.goods.add API客户端"""
+    
+    def __init__(self, app_key: str, app_secret: str, access_token: str):
+        self.app_key = app_key
+        self.app_secret = app_secret
+        self.access_token = access_token
+        self.base_url = "https://openapi.kuajingmaihuo.com/openapi/router"
+    
+    def sign_request(self, params: dict) -> str:
+        """实现新的签名算法"""
+        pass
+    
+    def goods_add(self, product_data: dict) -> dict:
+        """调用bg.goods.add接口"""
+        pass
+    
+    def image_upload(self, image_url: str) -> str:
+        """上传图片并返回URL"""
+        pass
+    
+    def sizecharts_create(self, size_data: dict) -> str:
+        """创建尺码表"""
+        pass
 ```
 
-## 验收标准
+#### 2. 数据模型扩展 (`src/models/bg_models.py`)
+```python
+@dataclass
+class BgGoodsAddData:
+    """新的bg.goods.add数据模型"""
+    productName: str
+    carouselImageUrls: List[str]
+    materialImgUrl: str
+    productSkcReqs: List[dict]
+    productSkuReqs: List[dict]
+    sizeTemplateIds: List[str]
+    # ... 其他字段
 
-1. **功能完整性**
-   - ✓ 能够成功抓取jp0663.com的商品信息
-   - ✓ 正确识别并过滤包含中文的图片
-   - ✓ 价格自动加价30%
-   - ✓ 自动推荐商品分类
-   - ✓ 成功调用Temu API上架商品
+@dataclass
+class BgProductSkcReq:
+    """SKC请求数据模型"""
+    previewImgUrls: List[str]
+    mainProductSkuSpecReqs: List[dict]
+    productSkuReqs: List[dict]
 
-2. **系统可靠性**
-   - ✓ 网络异常时自动重试
-   - ✓ API调用失败有详细错误日志
-   - ✓ 数据验证确保必填字段完整
+@dataclass
+class BgProductSkuReq:
+    """SKU请求数据模型"""
+    thumbUrl: str
+    supplierPrice: int
+    currencyType: str
+    productSkuSpecReqs: List[dict]
+    productSkuWhExtAttrReq: dict
+```
 
-3. **代码质量**
-   - ✓ 模块化设计，便于维护
-   - ✓ 完善的错误处理机制
-   - ✓ 详细的日志记录
-   - ✓ 配置与代码分离
+#### 3. 数据转换器扩展 (`src/transform/bg_transformer.py`)
+```python
+class BgDataTransformer:
+    """新的数据转换器"""
+    
+    def __init__(self, bg_client: BgGoodsClient):
+        self.bg_client = bg_client
+    
+    def transform_to_bg_format(self, temu_product: TemuProduct) -> BgGoodsAddData:
+        """将TemuProduct转换为BgGoodsAddData"""
+        pass
+    
+    def build_product_skc_reqs(self, temu_product: TemuProduct) -> List[BgProductSkcReq]:
+        """构建SKC请求数据"""
+        pass
+    
+    def build_product_sku_reqs(self, skus: List[TemuSKU]) -> List[BgProductSkuReq]:
+        """构建SKU请求数据"""
+        pass
+```
 
-## 约束条件
+#### 4. 适配器层 (`src/api/api_adapter.py`)
+```python
+class ApiAdapter:
+    """API适配器，统一新旧API接口"""
+    
+    def __init__(self, use_new_api: bool = True):
+        self.use_new_api = use_new_api
+        if use_new_api:
+            self.client = BgGoodsClient(...)
+        else:
+            self.client = TemuClient(...)
+    
+    def create_product(self, product_data: dict) -> dict:
+        """统一的商品创建接口"""
+        if self.use_new_api:
+            return self.client.goods_add(product_data)
+        else:
+            return self.client.product.goods_add(**product_data)
+```
 
-1. **技术约束**
-   - 必须使用Python venv虚拟环境
-   - API密钥等敏感信息必须存储在.env文件中
-   - 图片处理需符合Temu平台规范
+### 技术约束
 
-2. **业务约束**
-   - 仅支持单个商品URL处理
-   - 上架失败的商品暂不做特殊处理
-   - 当前仅支持jp0663.com网站
+#### 1. 签名算法实现
+- 实现文档中描述的签名算法
+- 支持参数排序和编码
+- 处理时区和编码问题
 
-3. **扩展性考虑**
-   - 数据源接口设计便于未来支持其他网站
-   - 模块化架构便于功能扩展
-   - 配置化管理便于适配不同市场
+#### 2. 图片处理流程
+- 先上传图片获取URL
+- 在商品创建时引用图片URL
+- 支持图片格式验证和尺寸调整
 
-## 风险控制
+#### 3. 尺码表处理
+- 使用 `bg.goods.sizecharts` 接口族
+- 支持尺码表的创建和引用
+- 处理服装类商品的尺码要求
 
-1. **技术风险**
-   - OCR识别准确率：通过人工复核机制补充
-   - API限流：实现请求频率控制
-   - 网络不稳定：实现断点续传机制
+#### 4. 错误处理
+- 实现新的错误码映射
+- 保持现有错误处理机制
+- 提供详细的错误信息
 
-2. **业务风险**
-   - 商品信息不完整：记录问题商品供人工处理
-   - 分类推荐错误：提供手动指定分类选项
+### 集成方案
 
-## 项目交付物
+#### 1. 配置管理
+```python
+# 在配置中添加新API相关配置
+class Config:
+    # 现有配置...
+    use_new_api: bool = True
+    bg_app_key: str = ""
+    bg_app_secret: str = ""
+    bg_access_token: str = ""
+    bg_base_url: str = "https://openapi.kuajingmaihuo.com/openapi/router"
+```
 
-1. **源代码**
-   - 完整的Python项目代码
-   - 单元测试和集成测试
+#### 2. 依赖注入
+```python
+# 在ProductManager中使用适配器
+class ProductManager:
+    def __init__(self):
+        # 现有初始化...
+        self.api_adapter = ApiAdapter(use_new_api=True)
+    
+    def _create_product(self) -> bool:
+        """使用适配器创建商品"""
+        product_data = self._build_product_data()
+        result = self.api_adapter.create_product(product_data)
+        # 处理结果...
+```
 
-2. **文档**
-   - API使用说明
-   - 部署指南
-   - 操作手册
+#### 3. 数据流转换
+```
+ScrapedProduct -> TemuProduct -> BgGoodsAddData -> API调用
+```
 
-3. **配置文件**
-   - .env.example（环境变量模板）
-   - requirements.txt（依赖列表）
+## 任务边界限制
 
-## 确认声明
+### 包含范围
+1. **API客户端实现** - 新的BgGoodsClient类
+2. **数据模型扩展** - 新的BgGoodsAddData等模型
+3. **数据转换器** - 新的BgDataTransformer类
+4. **适配器层** - ApiAdapter类
+5. **配置更新** - 添加新API相关配置
+6. **测试用例** - 新的API测试用例
 
-本共识文档已充分考虑用户需求和技术可行性，所有不确定性已通过沟通解决。系统设计遵循模块化、可扩展、易维护的原则，确保项目的成功交付和后续发展。
+### 不包含范围
+1. **爬虫逻辑修改** - 保持现有实现
+2. **OCR功能修改** - 保持现有实现
+3. **基础工具修改** - 保持现有实现
+4. **用户界面修改** - 保持现有实现
+
+### 验收标准
+
+#### 功能验收
+1. **商品创建成功** - 使用新API成功创建商品
+2. **图片上传成功** - 图片正确上传和引用
+3. **尺码表创建成功** - 尺码表正确创建和关联
+4. **分类推荐成功** - 分类推荐功能正常
+5. **属性设置成功** - 商品属性正确设置
+
+#### 质量验收
+1. **代码质量** - 通过代码审查
+2. **测试覆盖率** - 保持现有测试覆盖率
+3. **性能指标** - 保持现有性能水平
+4. **错误处理** - 错误处理正确有效
+5. **日志记录** - 日志记录完整准确
+
+#### 兼容性验收
+1. **向后兼容** - 现有功能正常工作
+2. **配置兼容** - 现有配置继续有效
+3. **接口兼容** - 现有接口保持不变
+4. **数据兼容** - 现有数据格式支持
+
+## 确认所有不确定性已解决
+
+### 技术不确定性
+✅ **API迁移策略** - 采用适配器模式，支持新旧API切换
+✅ **数据模型设计** - 创建新的数据模型，保持现有模型
+✅ **错误处理策略** - 实现错误码映射，保持现有机制
+✅ **测试策略** - 创建新测试用例，保持现有测试
+
+### 业务不确定性
+✅ **功能完整性** - 确保所有现有功能正常工作
+✅ **性能要求** - 保持现有性能水平
+✅ **兼容性要求** - 保持向后兼容
+✅ **质量要求** - 保持代码质量标准
+
+### 实施不确定性
+✅ **实施顺序** - 按模块逐步实施
+✅ **风险控制** - 使用适配器模式降低风险
+✅ **回滚策略** - 支持新旧API切换
+✅ **验证方法** - 使用金测试验证功能
+
+## 项目特性规范已对齐
+
+### 技术特性
+- **模块化设计** - 保持现有模块结构
+- **配置驱动** - 支持API端点配置
+- **错误处理** - 统一的错误处理机制
+- **日志记录** - 完整的日志记录系统
+
+### 业务特性
+- **商品上架** - 完整的商品上架流程
+- **图片处理** - 图片上传和引用
+- **尺码管理** - 尺码表创建和管理
+- **分类管理** - 分类推荐和设置
+
+### 质量特性
+- **代码质量** - 符合代码规范
+- **测试覆盖** - 完整的测试用例
+- **文档完整** - 详细的API文档
+- **性能优化** - 高效的API调用
+
+## 最终确认
+
+基于以上技术方案，本次更新将采用**适配器模式**实现新旧API的平滑迁移，在保持现有架构和功能的基础上，逐步适配新的API规范。更新将确保功能完整性、向后兼容性和代码质量，同时提供灵活的配置选项支持不同API的使用。
+
+**核心优势：**
+1. **风险可控** - 使用适配器模式降低迁移风险
+2. **功能完整** - 确保所有功能正常工作
+3. **向后兼容** - 保持现有接口和配置
+4. **质量保证** - 保持代码质量和测试覆盖率
+
+**实施保障：**
+1. **渐进式迁移** - 按模块逐步实施
+2. **充分测试** - 完整的测试用例覆盖
+3. **详细文档** - 完整的API文档和示例
+4. **持续监控** - 完整的日志和错误处理

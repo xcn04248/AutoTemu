@@ -26,6 +26,9 @@ from src.transform.data_transformer import DataTransformer
 from src.transform.size_mapper import SizeMapper
 from temu_api import TemuClient
 from src.models.data_models import ProductData
+from src.api.api_adapter import ApiAdapter
+from src.api.bg_client import BgGoodsClient
+from src.transform.bg_transformer import BgDataTransformer
 from PIL import Image
 import io
 import requests
@@ -37,7 +40,7 @@ logger = get_logger("product_manager")
 class ProductManager:
     """商品管理器 - 生产环境的核心商品添加逻辑"""
     
-    def __init__(self):
+    def __init__(self, use_new_api: bool = True):
         """初始化商品管理器"""
         # 初始化各个模块
         self.scraper = ProductScraper()
@@ -47,14 +50,32 @@ class ProductManager:
         self.size_mapper = SizeMapper()
         self.data_transformer = DataTransformer(self.size_mapper)
         
-        # 初始化Temu客户端
-        self.temu_client = TemuClient(
-            app_key=os.getenv("TEMU_APP_KEY"),
-            app_secret=os.getenv("TEMU_APP_SECRET"),
-            access_token=os.getenv("TEMU_ACCESS_TOKEN"),
-            base_url=os.getenv("TEMU_BASE_URL", "https://openapi-b-global.temu.com"),
-            debug=True
-        )
+        # 根据配置选择API客户端
+        self.use_new_api = use_new_api
+        if use_new_api:
+            # 初始化新版API客户端
+            from src.utils.config import get_config
+            config = get_config()
+            self.bg_client = BgGoodsClient(
+                app_key=config.bg_app_key,
+                app_secret=config.bg_app_secret,
+                access_token=config.bg_access_token,
+                base_url=config.bg_base_url,
+                debug=True
+            )
+            self.bg_transformer = BgDataTransformer()
+            self.api_adapter = ApiAdapter()
+            logger.info("使用新版API客户端 (bg.goods.add)")
+        else:
+            # 初始化旧版API客户端
+            self.temu_client = TemuClient(
+                app_key=os.getenv("TEMU_APP_KEY"),
+                app_secret=os.getenv("TEMU_APP_SECRET"),
+                access_token=os.getenv("TEMU_ACCESS_TOKEN"),
+                base_url=os.getenv("TEMU_BASE_URL", "https://openapi-b-global.temu.com"),
+                debug=True
+            )
+            logger.info("使用旧版API客户端 (bg.local.goods.add)")
         
         # 缓存数据
         self.scraped_product = None
@@ -123,19 +144,35 @@ class ProductManager:
     
     def _execute_add_workflow(self, url: str) -> bool:
         """执行完整的商品添加工作流"""
-        workflow_steps = [
-            ("抓取商品信息", self._scrape_product),
-            ("处理商品图片", self._process_images),
-            ("处理尺码表", self._process_size_chart),
-            ("转换数据格式", self._transform_data),
-            ("获取商品分类", self._get_categories),
-            ("获取分类推荐", self._get_category_recommendation),
-            # ("查找叶子分类", self._find_leaf_category),  # 暂时禁用叶子分类查找
-            ("获取分类模板", self._get_category_template),
-            ("生成规格ID", self._generate_spec_ids),
-            ("上传商品图片", self._upload_images),
-            ("添加商品", self._create_product)
-        ]
+        if self.use_new_api:
+            # 新版API工作流
+            workflow_steps = [
+                ("抓取商品信息", self._scrape_product),
+                ("处理商品图片", self._process_images),
+                ("处理尺码表", self._process_size_chart),
+                ("转换数据格式", self._transform_data),
+                ("获取商品分类", self._get_categories_new),
+                ("获取分类推荐", self._get_category_recommendation_new),
+                ("获取分类模板", self._get_category_template_new),
+                ("生成规格ID", self._generate_spec_ids_new),
+                ("上传商品图片", self._upload_images_new),
+                ("添加商品", self._create_product_new)
+            ]
+        else:
+            # 旧版API工作流
+            workflow_steps = [
+                ("抓取商品信息", self._scrape_product),
+                ("处理商品图片", self._process_images),
+                ("处理尺码表", self._process_size_chart),
+                ("转换数据格式", self._transform_data),
+                ("获取商品分类", self._get_categories),
+                ("获取分类推荐", self._get_category_recommendation),
+                # ("查找叶子分类", self._find_leaf_category),  # 暂时禁用叶子分类查找
+                ("获取分类模板", self._get_category_template),
+                ("生成规格ID", self._generate_spec_ids),
+                ("上传商品图片", self._upload_images),
+                ("添加商品", self._create_product)
+            ]
         
         for step_name, step_func in workflow_steps:
             logger.info(f"执行步骤: {step_name}")
@@ -1105,3 +1142,209 @@ class ProductManager:
             json.dump(data, f, ensure_ascii=False, indent=2)
         
         logger.info("抓取的商品信息已保存到 scraped_product.json")
+    
+    # 新版API方法
+    def _get_categories_new(self) -> bool:
+        """获取商品分类 (新版API)"""
+        try:
+            categories = self.api_adapter.get_categories(parent_cat_id=0)
+            if categories:
+                self.categories_cache = {cat.catId: cat for cat in categories}
+                logger.info(f"获取到 {len(categories)} 个分类")
+                return True
+            else:
+                logger.error("获取分类失败")
+                return False
+        except Exception as e:
+            logger.error(f"获取分类异常: {e}")
+            return False
+    
+    def _get_category_recommendation_new(self) -> bool:
+        """获取分类推荐 (新版API)"""
+        if not self.temu_product:
+            return False
+        
+        try:
+            # 使用新版API获取分类推荐
+            # 这里需要根据新版API的具体实现来调整
+            # 暂时使用默认分类
+            self.temu_product.category_id = "30847"
+            logger.info("使用默认分类: 30847 (服饰)")
+            return True
+        except Exception as e:
+            logger.error(f"分类推荐异常: {e}")
+            return False
+    
+    def _get_category_template_new(self) -> bool:
+        """获取分类模板 (新版API)"""
+        if not self.temu_product.category_id:
+            return False
+        
+        try:
+            template_response = self.api_adapter.get_property_template(int(self.temu_product.category_id))
+            if template_response and template_response.success:
+                template = template_response.result
+                self.templates_cache[self.temu_product.category_id] = template
+                
+                properties = template.properties if template else []
+                required_properties = [p for p in properties if p.required]
+                
+                logger.info(f"获取分类模板成功: 属性数量 {len(properties)}, 必填属性 {len(required_properties)}")
+                return True
+            else:
+                logger.error(f"获取分类模板失败: {template_response.errorMsg if template_response else 'Unknown error'}")
+                return False
+        except Exception as e:
+            logger.error(f"获取分类模板异常: {e}")
+            return False
+    
+    def _generate_spec_ids_new(self) -> bool:
+        """生成规格ID (新版API)"""
+        if not self.temu_product.category_id:
+            return False
+        
+        try:
+            # 检查模板能力
+            tmpl = self.templates_cache.get(self.temu_product.category_id) or {}
+            if isinstance(tmpl, dict) and tmpl.get("inputMaxSpecNum") == 0:
+                # 不允许自定义规格
+                self.spec_ids_cache[self.temu_product.category_id] = {}
+                logger.info("当前类目不支持自定义规格，跳过生成specId")
+                return True
+            
+            # 查找Size父规格ID
+            parent_spec_id = None
+            for p in (tmpl.get("userInputParentSpecList") or []):
+                if (p.get("parentSpecName") or "").lower() == "size":
+                    parent_spec_id = p.get("parentSpecId")
+                    break
+            
+            if not parent_spec_id:
+                parent_spec_id = 3001
+
+            spec_ids = {}
+            # 为唯一尺码生成ID
+            sizes = []
+            for sku in self.temu_product.skus:
+                s = (sku.size or "").strip()
+                if s and s not in sizes:
+                    sizes.append(s)
+
+            for spec_value in sizes or ["Default"]:
+                spec_id = self.api_adapter.get_spec_id(
+                    cat_id=int(self.temu_product.category_id),
+                    parent_spec_id=int(parent_spec_id),
+                    child_spec_name=spec_value
+                )
+                if spec_id:
+                    spec_ids[spec_value] = spec_id
+                    logger.info(f"生成尺码规格ID: {spec_value} -> {spec_id}")
+                else:
+                    logger.warning(f"生成尺码规格ID失败: {spec_value}")
+
+            self.spec_ids_cache[self.temu_product.category_id] = spec_ids
+            logger.info("规格ID生成完成")
+            return True
+        
+        except Exception as e:
+            logger.error(f"生成规格ID异常: {e}")
+            return False
+    
+    def _upload_images_new(self) -> bool:
+        """上传图片 (新版API)"""
+        # 收集候选图片URL
+        all_images = []
+        
+        if hasattr(self.scraped_product, 'main_image_url') and self.scraped_product.main_image_url:
+            all_images.append(self.scraped_product.main_image_url)
+        
+        if hasattr(self.scraped_product, 'detail_images') and self.scraped_product.detail_images:
+            detail_images = [u for u in self.scraped_product.detail_images if isinstance(u, str)]
+            url_images = [u for u in detail_images if u.startswith('http')]
+            all_images.extend(url_images)
+        
+        logger.info(f"总共收集到 {len(all_images)} 张候选图片")
+        
+        if not all_images:
+            logger.info("没有图片需要上传")
+            return True
+        
+        try:
+            # 获取类目类型
+            cat_type = self._get_cat_type(int(self.temu_product.category_id))
+            logger.info(f"商品分类类型: {'服装类' if cat_type == 0 else '非服装类'}")
+            
+            # 选择缩放规格
+            if cat_type == 0:  # 服装类
+                scaling_type = 2  # 1350x1800
+            else:  # 非服装类
+                scaling_type = 1  # 800x800
+            
+            # 过滤和选择最佳图片
+            valid_images = self._filter_and_select_images(all_images, cat_type)
+            if not valid_images:
+                logger.error("没有符合要求的图片")
+                return False
+            
+            logger.info(f"准备上传 {len(valid_images)} 张图片")
+            
+            uploaded_images = []
+            for i, image_url in enumerate(valid_images):
+                if len(uploaded_images) >= 5:
+                    break
+                    
+                logger.info(f"处理图片 {len(uploaded_images)+1}/{min(5, len(valid_images))}: {image_url[:80]}...")
+                
+                # 使用新版API上传图片
+                uploaded_url = self.api_adapter.upload_image(image_url, scaling_type)
+                if uploaded_url:
+                    uploaded_images.append(uploaded_url)
+                    logger.info(f"图片上传成功: {uploaded_url}")
+                else:
+                    logger.warning(f"图片上传失败，跳过: {image_url[:50]}...")
+
+            self.uploaded_images_cache = uploaded_images
+            logger.info(f"图片上传完成，成功上传 {len(uploaded_images)} 张")
+            
+            return len(uploaded_images) > 0
+
+        except Exception as e:
+            logger.error(f"上传图片异常: {e}")
+            return False
+    
+    def _create_product_new(self) -> bool:
+        """添加商品 (新版API)"""
+        try:
+            # 将ProductData转换为ScrapedProduct
+            scraped_product = self._convert_to_scraped_product()
+            
+            # 获取分类信息
+            category_info = {"catIdList": [int(self.temu_product.category_id)]}
+            
+            # 获取属性模板
+            property_template = self.templates_cache.get(self.temu_product.category_id, {})
+            
+            # 获取规格ID映射
+            spec_id_map = self.spec_ids_cache.get(self.temu_product.category_id, {})
+            
+            # 使用API适配器创建商品
+            result = self.api_adapter.create_product(
+                scraped_product=scraped_product,
+                category_info=category_info,
+                property_template=property_template,
+                spec_id_map=spec_id_map,
+                uploaded_image_urls=self.uploaded_images_cache
+            )
+            
+            if result.success:
+                self.created_goods_id = result.product_id
+                self.created_sku_ids = result.sku_ids
+                logger.info(f"商品添加成功: {self.created_goods_id}")
+                return True
+            else:
+                logger.error(f"商品添加失败: {', '.join(result.errors)}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"添加商品异常: {e}")
+            return False

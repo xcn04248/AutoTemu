@@ -12,6 +12,8 @@
 - 🖼️ **图片处理**: OCR识别中文内容，自动过滤含中文图片
 - 🔄 **数据转换**: 智能数据转换和尺码映射到Temu格式
 - 🛒 **API集成**: 完整的Temu API集成和商品上架流程
+- 🆕 **新版API支持**: 支持最新的bg.goods.add半托管发品API
+- 🔄 **API切换**: 支持新旧API无缝切换，保证向后兼容
 - 🛡️ **错误处理**: 完善的错误处理和自动重试机制
 - 📊 **合规检查**: 自动合规性检查和属性验证
 
@@ -42,13 +44,64 @@ cp env.example .env
 vim .env
 ```
 
-### 3. 运行示例
+#### 重要配置项
+```bash
+# API版本控制
+TEMU_API_VERSION=new  # new, old, both
+USE_NEW_API=true      # true使用新版API，false使用旧版API
+
+# Temu API配置
+TEMU_APP_KEY=your_temu_app_key_here
+TEMU_APP_SECRET=your_temu_app_secret_here
+TEMU_ACCESS_TOKEN=your_temu_access_token_here
+TEMU_BASE_URL=https://openapi-jp.temu.com
+
+# 新版API特定配置
+DEFAULT_PARENT_SPEC_ID=3001
+DEFAULT_WAREHOUSE_ID=WHS-XXXX
+DEFAULT_SKU_STOCK=100
+PRODUCT_NAME_MAX_LENGTH=250
+TEMU_CNY_TO_JPY_RATE=20.0
+```
+
+### 3. API版本选择
+
+#### 使用新版API (推荐)
+```python
+from src.core.product_manager import ProductManager
+
+# 使用新版API
+manager = ProductManager(use_new_api=True)
+result = manager.add_product("https://example.com/product")
+```
+
+#### 使用旧版API (兼容)
+```python
+from src.core.product_manager import ProductManager
+
+# 使用旧版API
+manager = ProductManager(use_new_api=False)
+result = manager.add_product("https://example.com/product")
+```
+
+#### 环境变量控制
+```bash
+# 在.env文件中设置
+USE_NEW_API=true  # 使用新版API
+# 或
+USE_NEW_API=false # 使用旧版API
+```
+
+### 4. 运行示例
 ```bash
 # 运行完整流程示例
 python docs/examples/complete_product_listing.py
 
 # 或运行基本示例
 python src/main.py
+
+# 运行测试
+python run_tests.py --type new_api --verbose
 ```
 
 ## 📚 文档

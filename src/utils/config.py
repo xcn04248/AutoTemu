@@ -42,10 +42,23 @@ class Config:
         self.firecrawl_api_key = self._get_required_env("FIRECRAWL_API_KEY")
         self.baidu_api_key = self._get_required_env("BAIDU_API_KEY")
         self.baidu_secret_key = self._get_required_env("BAIDU_SECRET_KEY")
-        self.temu_app_key = self._get_required_env("TEMU_APP_KEY")
-        self.temu_app_secret = self._get_required_env("TEMU_APP_SECRET")
-        self.temu_access_token = self._get_required_env("TEMU_ACCESS_TOKEN")
-        self.temu_base_url = os.getenv("TEMU_BASE_URL", "https://openapi-b-global.temu.com")
+        
+        # 新BG API配置（优先使用）
+        self.bg_app_key = os.getenv("BG_APP_KEY") or self._get_optional_env("TEMU_APP_KEY")
+        self.bg_app_secret = os.getenv("BG_APP_SECRET") or self._get_optional_env("TEMU_APP_SECRET")
+        # 优先读取 BG_APP_ACCESS_TOKEN，其次 BG_ACCESS_TOKEN，最后回退 TEMU_ACCESS_TOKEN
+        self.bg_access_token = (
+            os.getenv("BG_APP_ACCESS_TOKEN")
+            or os.getenv("BG_ACCESS_TOKEN")
+            or self._get_optional_env("TEMU_ACCESS_TOKEN")
+        )
+        self.bg_base_url = os.getenv("BG_BASE_URL", "https://openapi.kuajingmaihuo.com/openapi/router")
+        
+        # 兼容旧配置
+        self.temu_app_key = self.bg_app_key
+        self.temu_app_secret = self.bg_app_secret
+        self.temu_access_token = self.bg_access_token
+        self.temu_base_url = self.bg_base_url
         
         # 业务配置
         self.price_markup = float(os.getenv("PRICE_MARKUP", "1.3"))
@@ -80,6 +93,18 @@ class Config:
                 f"请检查.env文件或环境变量设置。"
             )
         return value
+    
+    def _get_optional_env(self, key: str) -> Optional[str]:
+        """
+        获取可选的环境变量
+        
+        Args:
+            key: 环境变量名
+            
+        Returns:
+            环境变量值，如果未设置则返回None
+        """
+        return os.getenv(key)
     
     def _ensure_directories(self):
         """确保必要的目录存在"""
