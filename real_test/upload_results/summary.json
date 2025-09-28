@@ -3,31 +3,7 @@
     {
       "file": "img_0.jpg",
       "api": "bg.goods.image.upload.global",
-      "url": "https://img.kwcdn.com/product/open/1546894eac0a4a698595ab3b76b72a54-goods.jpeg",
-      "host": "img.kwcdn.com"
-    },
-    {
-      "file": "img_2.jpg",
-      "api": "bg.goods.image.upload.global",
-      "url": "https://img.kwcdn.com/product/open/acc68b050531438ab3bc589b1a3163b7-goods.jpeg",
-      "host": "img.kwcdn.com"
-    },
-    {
-      "file": "img_3.jpg",
-      "api": "bg.goods.image.upload.global",
-      "url": "https://img.kwcdn.com/product/open/0a6b1d17b49641fb8c792e0375187da4-goods.jpeg",
-      "host": "img.kwcdn.com"
-    },
-    {
-      "file": "img_4.jpg",
-      "api": "bg.goods.image.upload.global",
-      "url": "https://img.kwcdn.com/product/open/4daaa16bb0174e07bbb6bc4da8a3adb1-goods.jpeg",
-      "host": "img.kwcdn.com"
-    },
-    {
-      "file": "img_5.jpg",
-      "api": "bg.goods.image.upload.global",
-      "url": "https://img.kwcdn.com/product/open/8abde91ac30b480285b12d33ab2c4263-goods.jpeg",
+      "url": "https://img.kwcdn.com/product/open/873c705148e54ca0a6bda4d944ed6138-goods.jpeg",
       "host": "img.kwcdn.com"
     }
   ]

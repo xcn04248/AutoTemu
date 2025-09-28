@@ -1,0 +1,11 @@
+{
+  "error": "API调用失败: 货品类目属性更新，请刷新页面后重新创建货品",
+  "errorCode": 6000002,
+  "response": {
+    "success": false,
+    "requestId": "pa-8fa9fc74-025f-4e5f-84ff-8faf0686f79d",
+    "errorCode": 6000002,
+    "errorMsg": "货品类目属性更新，请刷新页面后重新创建货品"
+  },
+  "trace": "Traceback (most recent call last):\n  File \"/Users/chunanxia/AutoTemu/real_test/test_add_goods.py\", line 50, in main\n    resp = client._make_request(\"temu.goods.add\", payload, require_auth=True)\n  File \"/Users/chunanxia/AutoTemu/src/api/bg_client.py\", line 138, in _make_request\n    raise e\n  File \"/Users/chunanxia/AutoTemu/src/api/bg_client.py\", line 126, in _make_request\n    raise BgApiException(f\"API调用失败: {error_msg}\", error_code, result)\nsrc.api.bg_client.BgApiException: API调用失败: 货品类目属性更新，请刷新页面后重新创建货品\n"
+}

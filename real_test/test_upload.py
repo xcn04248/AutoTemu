@@ -7,12 +7,12 @@ Simple image uploader for partner gateway.
 Features:
 - Reads images from real_test/images_filtered or real_test/images
 - Uploads via temu.goods.image.upload.global (V1)
-- Fallback: bg.goods.image.upload.global (V1), then bg.goods.image.upload
+- Fallback: bg.goods.image.upload.global (V1)
 - Saves each raw JSON response to real_test/upload_results/*.json
 - Prints a compact summary including returned URLs/domains
 
 Usage:
-  python real_test/test_upload.py [--limit 8]
+  python real_test/test_upload.py [--limit 8] [--size-mode {0,1,2}]
 """
 
 import os
@@ -45,15 +45,18 @@ def save_json(obj, out_path: str):
         json.dump(obj, f, ensure_ascii=False, indent=2)
 
 
-def upload_one(client: BgGoodsClient, image_path: str):
+def upload_one(client: BgGoodsClient, image_path: str, options: dict | None = None):
     with open(image_path, "rb") as f:
         b64 = "data:image/jpeg;base64," + base64.b64encode(f.read()).decode("ascii")
 
     # Primary: temu.goods.image.upload.global (V1)
     try:
+        payload = {"image": b64, "version": "V1"}
+        if options:
+            payload["options"] = options
         resp = client._make_request(
             "temu.goods.image.upload.global",
-            {"image": b64, "version": "V1"},
+            payload,
             require_auth=True,
         )
         return resp, "temu.goods.image.upload.global"
@@ -62,22 +65,20 @@ def upload_one(client: BgGoodsClient, image_path: str):
 
     # Fallback: bg.goods.image.upload.global (V1)
     try:
+        payload = {"image": b64, "version": "V1"}
+        if options:
+            payload["options"] = options
         resp = client._make_request(
             "bg.goods.image.upload.global",
-            {"image": b64, "version": "V1"},
+            payload,
             require_auth=True,
         )
         return resp, "bg.goods.image.upload.global"
     except Exception:
         pass
 
-    # Fallback: bg.goods.image.upload
-    resp = client._make_request(
-        "bg.goods.image.upload",
-        {"image": b64},
-        require_auth=True,
-    )
-    return resp, "bg.goods.image.upload"
+    # If both above fail, raise for caller to handle
+    raise RuntimeError("All upload API attempts failed: temu.goods.image.upload.global and bg.goods.image.upload.global")
 
 
 def extract_url(resp: dict):
@@ -97,6 +98,7 @@ def extract_url(resp: dict):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=8)
+    parser.add_argument("--size-mode", type=int, choices=(0, 1, 2), default=2, help="0=orig, 1=1:1 (800x800), 2=3:4 (1350x1800)")
     args = parser.parse_args()
 
     workspace = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -120,10 +122,33 @@ def main():
         debug=False,
     )
 
+    # Build upload options per 图片处理 API组文档
+    # Prefer 3:4 portrait cropping to satisfy apparel carousel requirement (>=1340x1785)
+    def load_leaf_cate_id():
+        try:
+            test_cat_path = os.path.join(workspace, "real_test", "test_cat.json")
+            with open(test_cat_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            summary = data.get("summary") or []
+            if summary and isinstance(summary[0], dict):
+                return summary[0].get("leafId")
+        except Exception:
+            return None
+        return None
+
+    cate_id = load_leaf_cate_id()
+    options = {
+        "boost": True,
+        "doIntelligenceCrop": True,
+        "sizeMode": args.size_mode,
+    }
+    if isinstance(cate_id, int):
+        options["cateId"] = cate_id
+
     rows = []
     for idx, fp in enumerate(files, 1):
         try:
-            resp, used_api = upload_one(client, fp)
+            resp, used_api = upload_one(client, fp, options)
             url = extract_url(resp)
             host = urlparse(url).hostname if isinstance(url, str) else None
             save_json(resp, os.path.join(out_dir, f"upload_{idx:02d}.json"))

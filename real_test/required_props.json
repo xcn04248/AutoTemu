@@ -1,0 +1,188 @@
+{
+  "productPropertyReqs": [
+    {
+      "templatePid": 1332925,
+      "pid": 1,
+      "refPid": 12,
+      "valueUnit": "",
+      "propName": "材质",
+      "vid": 2,
+      "propValue": "亚麻"
+    },
+    {
+      "templatePid": 1332926,
+      "pid": 2,
+      "refPid": 15,
+      "valueUnit": "%",
+      "propName": "成分",
+      "vid": 35385,
+      "propValue": "尼龙Nylon",
+      "numberInputValue": "100"
+    },
+    {
+      "templatePid": 1332932,
+      "pid": 21,
+      "refPid": 83,
+      "valueUnit": "",
+      "propName": "细节",
+      "vid": 549,
+      "propValue": "假纽扣"
+    },
+    {
+      "templatePid": 1332933,
+      "pid": 10,
+      "refPid": 26,
+      "valueUnit": "",
+      "propName": "图案",
+      "vid": 215,
+      "propValue": "纯色"
+    },
+    {
+      "templatePid": 1332935,
+      "pid": 7,
+      "refPid": 24,
+      "valueUnit": "",
+      "propName": "是否透明",
+      "vid": 209,
+      "propValue": "半透"
+    },
+    {
+      "templatePid": 1332937,
+      "pid": 6,
+      "refPid": 22,
+      "valueUnit": "",
+      "propName": "面料",
+      "vid": 205,
+      "propValue": "中弹"
+    },
+    {
+      "templatePid": 1332940,
+      "pid": 23,
+      "refPid": 84,
+      "valueUnit": "",
+      "propName": "类型",
+      "vid": 706,
+      "propValue": "紧身"
+    },
+    {
+      "templatePid": 1332942,
+      "pid": 24,
+      "refPid": 76,
+      "valueUnit": "",
+      "propName": "季节",
+      "vid": 639,
+      "propValue": "秋"
+    },
+    {
+      "templatePid": 1332943,
+      "pid": 4,
+      "refPid": 20,
+      "valueUnit": "",
+      "propName": "护理说明",
+      "vid": 165,
+      "propValue": "手洗或干洗"
+    },
+    {
+      "templatePid": 1332944,
+      "pid": 3,
+      "refPid": 19,
+      "valueUnit": "",
+      "propName": "风格",
+      "vid": 136,
+      "propValue": "复古"
+    },
+    {
+      "templatePid": 1332949,
+      "pid": 1437,
+      "refPid": 1919,
+      "valueUnit": "",
+      "propName": "印花类型",
+      "vid": 36892,
+      "propValue": "无印花"
+    },
+    {
+      "templatePid": 1332950,
+      "pid": 1224,
+      "refPid": 1192,
+      "valueUnit": "",
+      "propName": "织造方式",
+      "vid": 29810,
+      "propValue": "梭织"
+    },
+    {
+      "templatePid": 1332952,
+      "pid": 1514,
+      "refPid": 2103,
+      "valueUnit": "",
+      "propName": "款式来源",
+      "vid": 70452,
+      "propValue": "打版款"
+    },
+    {
+      "templatePid": 1332954,
+      "pid": 2054,
+      "refPid": 6926,
+      "valueUnit": "",
+      "propName": "面料纹理1",
+      "vid": 161198,
+      "propValue": "光面"
+    },
+    {
+      "templatePid": 1332956,
+      "pid": 2050,
+      "refPid": 6928,
+      "valueUnit": "",
+      "propName": "里料纹理",
+      "vid": 161110,
+      "propValue": "光面"
+    },
+    {
+      "templatePid": 1332957,
+      "pid": 2052,
+      "refPid": 6930,
+      "valueUnit": "g/㎡",
+      "propName": "面料克重1（g/m²)",
+      "numberInputValue": "1",
+      "propValue": "",
+      "vid": 0
+    },
+    {
+      "templatePid": 1332958,
+      "pid": 2052,
+      "refPid": 6931,
+      "valueUnit": "g/㎡",
+      "propName": "面料克重2（g/m²)",
+      "numberInputValue": "1",
+      "propValue": "",
+      "vid": 0
+    },
+    {
+      "templatePid": 1332959,
+      "pid": 2052,
+      "refPid": 6934,
+      "valueUnit": "g/㎡",
+      "propName": "里料克重（g/m²)",
+      "numberInputValue": "1",
+      "propValue": "",
+      "vid": 0
+    },
+    {
+      "templatePid": 1332923,
+      "pid": 13,
+      "refPid": 63,
+      "valueUnit": "",
+      "propName": "颜色",
+      "vid": 376,
+      "propValue": "白色"
+    },
+    {
+      "templatePid": 1332924,
+      "pid": 14,
+      "refPid": 65,
+      "valueUnit": "",
+      "propName": "尺码",
+      "vid": 1912,
+      "propValue": "24"
+    }
+  ]
+}

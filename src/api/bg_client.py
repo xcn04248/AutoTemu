@@ -133,9 +133,15 @@ class BgGoodsClient:
         except json.JSONDecodeError as e:
             logger.error(f"JSON解析异常: {e}")
             raise RequestException(f"响应解析失败: {e}")
+        except BgApiException as e:
+            # 保留服务端原始错误码与响应
+            raise e
         except Exception as e:
             logger.error(f"API请求异常: {e}")
-            raise BgApiException(f"API请求失败: {e}")
+            # 透传可能的 error_code/response 字段，避免信息丢失
+            error_code = getattr(e, "error_code", None)
+            response = getattr(e, "response", None)
+            raise BgApiException(f"API请求失败: {e}", error_code, response)
     
     @api_retry(max_attempts=3)
     def goods_add(self, product_data: Union[BgGoodsAddData, dict]) -> Dict[str, Any]:

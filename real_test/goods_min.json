@@ -1,0 +1,149 @@
+{
+  "productName": "美式复古条纹拼接户外休闲运动裤男女hiphop街舞工装裤机能登山裤",
+  "materialImgUrl": "https://img.kwcdn.com/product/fancy/e0790137-e8e7-40ce-94e6-bcd564f1a4bd.jpg",
+  "skuClassification": 1,
+  "pieceUnitCode": 1,
+  "cat1Id": 27011,
+  "cat2Id": 28946,
+  "cat3Id": 28947,
+  "cat4Id": 39018,
+  "cat5Id": 39022,
+  "cat6Id": 0,
+  "cat7Id": 0,
+  "cat8Id": 0,
+  "cat9Id": 0,
+  "cat10Id": 0,
+  "productSemiManagedReq": {
+    "bindSiteIds": [
+      300
+    ]
+  },
+  "productShipmentReq": {
+    "freightTemplateId": "LFT-14230731738276073558",
+    "shipmentLimitSecond": 172800
+  },
+  "productWhExtAttrReq": {
+    "productOrigin": {
+      "region1ShortName": "CN"
+    },
+    "outerGoodsUrl": ""
+  },
+  "sizeTemplateIds": [
+    17592257281876
+  ],
+  "productSpecPropertyReqs": [
+    {
+      "templatePid": 1332923,
+      "pid": 13,
+      "refPid": 63,
+      "valueUnit": "",
+      "parentSpecId": 1001,
+      "parentSpecName": "颜色",
+      "specId": 3002,
+      "specName": "黑色",
+      "vid": 378,
+      "propValue": "黑色",
+      "propName": "颜色",
+      "valueGroupId": 3,
+      "valueGroupName": "黑色系"
+    },
+    {
+      "templatePid": 1332924,
+      "pid": 14,
+      "refPid": 65,
+      "valueUnit": "",
+      "parentSpecId": 3001,
+      "parentSpecName": "尺码",
+      "specId": 11002,
+      "specName": "L",
+      "vid": 319,
+      "propValue": "L",
+      "propName": "尺码",
+      "valueGroupId": 2,
+      "valueGroupName": "中国码"
+    },
+    {
+      "templatePid": 1332924,
+      "pid": 14,
+      "refPid": 65,
+      "valueUnit": "",
+      "parentSpecId": 3001,
+      "parentSpecName": "尺码",
+      "specId": 9005,
+      "specName": "M",
+      "vid": 317,
+      "propValue": "M",
+      "propName": "尺码",
+      "valueGroupId": 2,
+      "valueGroupName": "中国码"
+    }
+  ],
+  "productSkcReqs": [
+    {
+      "extCode": "AUTO-1",
+      "previewImgUrls": [
+        "https://img.kwcdn.com/product/fancy/8757d8fd-9b53-4b25-b881-9f7f3be26308.jpg",
+        "https://img.kwcdn.com/product/fancy/0bbb8b8e-9ee5-4a10-8e92-e3cac9595ab8.jpg",
+        "https://img.kwcdn.com/product/fancy/52a62bc0-3eb3-4e56-8d40-9402fd31734c.jpg"
+      ],
+      "mainProductSkuSpecReqs": [
+        {
+          "parentSpecId": 1001,
+          "parentSpecName": "颜色",
+          "specId": 3002,
+          "specName": "黑色"
+        }
+      ],
+      "productSkuReqs": [
+        {
+          "extCode": "AUTO-1-M",
+          "thumbUrl": "https://img.kwcdn.com/product/fancy/8757d8fd-9b53-4b25-b881-9f7f3be26308.jpg",
+          "currencyType": "CNY",
+          "siteSupplierPrices": [
+            {
+              "siteId": 300,
+              "supplierPrice": 650
+            }
+          ],
+          "productSkuSpecReqs": [
+            {
+              "parentSpecId": 3001,
+              "specId": 9005,
+              "parentSpecName": "Size",
+              "specName": "M"
+            },
+            {
+              "parentSpecId": 1001,
+              "specId": 3002,
+              "parentSpecName": "颜色",
+              "specName": "黑色"
+            }
+          ],
+          "productSkuWhExtAttrReq": {
+            "productSkuVolumeReq": {
+              "len": 300,
+              "width": 250,
+              "height": 20
+            },
+            "productSkuWeightReq": {
+              "value": 300000
+            }
+          },
+          "productSkuThumbUrlI18nReqs": []
+        }
+      ]
+    }
+  ],
+  "productPropertyReqs": [
+    {
+      "templatePid": 1332925,
+      "pid": 1,
+      "refPid": 12,
+      "valueUnit": "",
+      "vid": 1,
+      "propValue": "再生涤纶",
+      "propName": "材质",
+      "numberInputValue": ""
+    }
+  ]
+}

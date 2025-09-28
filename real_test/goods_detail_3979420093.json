@@ -1,0 +1,197 @@
+{
+  "result": {
+    "productId": 3979420093,
+    "categories": {
+      "catType": null,
+      "cat8": {
+        "catId": 0,
+        "catName": ""
+      },
+      "cat9": {
+        "catId": 0,
+        "catName": ""
+      },
+      "cat6": {
+        "catId": 0,
+        "catName": ""
+      },
+      "cat7": {
+        "catId": 0,
+        "catName": ""
+      },
+      "cat4": {
+        "catId": 39018,
+        "catName": "女士牛仔"
+      },
+      "cat5": {
+        "catId": 39022,
+        "catName": "女式牛仔长裤"
+      },
+      "cat2": {
+        "catId": 28946,
+        "catName": "女士时尚"
+      },
+      "cat3": {
+        "catId": 28947,
+        "catName": "女装"
+      },
+      "cat10": {
+        "catId": 0,
+        "catName": ""
+      },
+      "cat1": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品"
+      },
+      "leafCat": {
+        "catId": 39022,
+        "catName": "女式牛仔长裤"
+      }
+    },
+    "productWhExtAttr": {
+      "productOrigin": {
+        "region2Id": 43000000000006,
+        "region1ShortName": "CN"
+      }
+    },
+    "goodsLayerDecorationList": [
+      {
+        "floorId": 626569469057,
+        "priority": 0,
+        "type": "image",
+        "lang": "zh",
+        "contentList": [
+          {
+            "imgUrl": "https://img.kwcdn.com/product/open/e5ccdf86ede04b1ebe5f893a25aa5e29-goods.jpeg",
+            "textModuleDetails": {
+              "backgroundColor": null,
+              "fontFamily": null,
+              "fontSize": null,
+              "align": null,
+              "fontColor": null
+            },
+            "width": 790,
+            "text": null,
+            "height": 900
+          }
+        ],
+        "key": "DecImage"
+      },
+      {
+        "floorId": 626569469089,
+        "priority": 1,
+        "type": "image",
+        "lang": "zh",
+        "contentList": [
+          {
+            "imgUrl": "https://img.kwcdn.com/product/open/86c6248e7f6c49da8a7c7fb75a6f56b2-goods.jpeg",
+            "textModuleDetails": {
+              "backgroundColor": null,
+              "fontFamily": null,
+              "fontSize": null,
+              "align": null,
+              "fontColor": null
+            },
+            "width": 1080,
+            "text": null,
+            "height": 1440
+          }
+        ],
+        "key": "DecImage"
+      },
+      {
+        "floorId": 626569469121,
+        "priority": 2,
+        "type": "image",
+        "lang": "zh",
+        "contentList": [
+          {
+            "imgUrl": "https://img.kwcdn.com/product/open/585d4f3a44a84d91acb2c1fb3bff6525-goods.jpeg",
+            "textModuleDetails": {
+              "backgroundColor": null,
+              "fontFamily": null,
+              "fontSize": null,
+              "align": null,
+              "fontColor": null
+            },
+            "width": 1080,
+            "text": null,
+            "height": 1440
+          }
+        ],
+        "key": "DecImage"
+      },
+      {
+        "floorId": 626569469153,
+        "priority": 3,
+        "type": "image",
+        "lang": "zh",
+        "contentList": [
+          {
+            "imgUrl": "https://img.kwcdn.com/product/open/a397a249dfed4804aea2f9ab9103b0f7-goods.jpeg",
+            "textModuleDetails": {
+              "backgroundColor": null,
+              "fontFamily": null,
+              "fontSize": null,
+              "align": null,
+              "fontColor": null
+            },
+            "width": 1080,
+            "text": null,
+            "height": 1440
+          }
+        ],
+        "key": "DecImage"
+      },
+      {
+        "floorId": 626569469185,
+        "priority": 4,
+        "type": "image",
+        "lang": "zh",
+        "contentList": [
+          {
+            "imgUrl": "https://img.kwcdn.com/product/open/1b0bc836a2f5469f9a0ddd8368e7ddc4-goods.jpeg",
+            "textModuleDetails": {
+              "backgroundColor": null,
+              "fontFamily": null,
+              "fontSize": null,
+              "align": null,
+              "fontColor": null
+            },
+            "width": 1080,
+            "text": null,
+            "height": 1440
+          }
+        ],
+        "key": "DecImage"
+      },
+      {
+        "floorId": 626569469217,
+        "priority": 5,
+        "type": "image",
+        "lang": "zh",
+        "contentList": [
+          {
+            "imgUrl": "https://img.kwcdn.com/product/open/179175d681734517a91f3cbab9933422-goods.jpeg",
+            "textModuleDetails": {
+              "backgroundColor": null,
+              "fontFamily": null,
+              "fontSize": null,
+              "align": null,
+              "fontColor": null
+            },
+            "width": 1080,
+            "text": null,
+            "height": 1440
+          }
+        ],
+        "key": "DecImage"
+      }
+    ],
+    "productName": "甜酷日韩百搭时尚微喇牛仔裤女新款辣妹低腰显高显瘦垂感牛仔裤"
+  },
+  "success": true,
+  "requestId": "pa-5a6620fd-1b31-4710-aad7-b9a9be87fd0a",
+  "errorCode": 1000000,
+  "errorMsg": ""
+}

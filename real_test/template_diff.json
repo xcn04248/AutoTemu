@@ -1,0 +1,27 @@
+{
+  "leafCatId": 30476,
+  "requiredCount": 0,
+  "currentCount": 18,
+  "missingRequiredPids": [],
+  "extraCurrentPids": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    10,
+    12,
+    21,
+    23,
+    24,
+    36,
+    67,
+    1224,
+    1437,
+    2050,
+    2052,
+    2054
+  ],
+  "propTemplateMissingPids": []
+}
