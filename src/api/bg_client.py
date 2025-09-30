@@ -14,6 +14,7 @@ import os
 from ..utils.logger import get_logger
 from ..utils.bg_signature import SignatureHelper, get_current_timestamp
 from ..utils.retry import api_retry
+from ..utils.api_route_mapper import get_api_route_info, get_actual_api_name
 from ..models.bg_models import BgGoodsAddData
 
 logger = get_logger(__name__)
@@ -56,7 +57,7 @@ class BgGoodsClient:
         self.app_key = app_key
         self.app_secret = app_secret
         self.access_token = access_token
-        self.base_url = base_url or "https://openapi.kuajingmaihuo.com/openapi/router"
+        self.base_url = base_url or "https://openapi-b-partner.temu.com/openapi/router"
         self.debug = debug
         self.timeout = timeout
         
@@ -98,16 +99,23 @@ class BgGoodsClient:
             BgApiException: API调用异常
         """
         try:
+            # 根据API名称获取正确的路由和实际API名称
+            base_url, actual_api_method, status = get_api_route_info(api_method)
+            
+            # 如果API已迁移，记录日志
+            if status == "migrated" and actual_api_method != api_method:
+                logger.info(f"API {api_method} 已迁移到 {actual_api_method}，使用新网关")
+            
             # 构建并签名请求
             params = self.signature_helper.sign_request(
-                api_method=api_method,
+                api_method=actual_api_method,
                 data=data,
                 access_token=self.access_token if require_auth else None
             )
             
-            # 发送请求
+            # 发送请求到正确的网关
             response = self.session.post(
-                self.base_url,
+                base_url,
                 json=params,
                 timeout=self.timeout
             )
@@ -117,7 +125,7 @@ class BgGoodsClient:
             result = response.json()
             
             # 记录日志
-            self._log_api_call(api_method, params, result)
+            self._log_api_call(actual_api_method, params, result)
             
             # 检查业务错误
             if not result.get("success", False):
@@ -178,7 +186,7 @@ class BgGoodsClient:
     def image_upload(self, file_url: str, scaling_type: int = 1, 
                     compression_type: int = 1, format_conversion_type: int = 0) -> str:
         """
-        上传图片
+        上传图片 (使用新的global接口)
         
         Args:
             file_url: 图片URL或本地文件路径
@@ -191,27 +199,39 @@ class BgGoodsClient:
         """
         logger.info(f"上传图片: {file_url[:80]}...")
         
-        # 按文档使用驼峰命名参数
+        import base64
+        import requests
+        
+        # 下载图片并转换为base64编码
+        try:
+            response = requests.get(file_url, timeout=30)
+            response.raise_for_status()
+            image_base64 = base64.b64encode(response.content).decode('utf-8')
+        except Exception as e:
+            raise BgApiException(f"图片下载或编码失败: {e}")
+        
+        # 按文档使用参数
         data = {
-            "fileUrl": file_url,
-            "scalingType": scaling_type,
-            "compressionType": compression_type,
-            "formatConversionType": format_conversion_type,
+            "image": image_base64,
             "imageBizType": 1
         }
         
-        # 使用已授权的全局图片上传接口
-        # 使用商品图片上传接口
-        result = self._make_request("bg.goods.image.upload", data, require_auth=True)
+        # 使用新的全局图片上传接口
+        result = self._make_request("bg.goods.image.upload.global", data, require_auth=True)
         
         # 提取图片URL
         result_data = result.get("result", {})
-        image_url = (
-            result_data.get("url") or
-            result_data.get("imageUrl") or
-            result_data.get("hdThumbUrl") or
-            result_data.get("fileUrl")
-        )
+        # 根据文档，新的接口返回urls列表
+        if "urls" in result_data and result_data["urls"]:
+            image_url = result_data["urls"][0].get("url") or result_data["urls"][0].get("imageUrl")
+        else:
+            # 兼容旧的返回格式
+            image_url = (
+                result_data.get("url") or
+                result_data.get("imageUrl") or
+                result_data.get("hdThumbUrl") or
+                result_data.get("fileUrl")
+            )
         
         if not image_url:
             raise BgApiException("图片上传失败: 响应中没有图片URL")
@@ -336,23 +356,13 @@ class BgGoodsClient:
         """
         logger.info(f"获取规格ID: cat_id={cat_id}, parent_spec_id={parent_spec_id}, child_spec_name={child_spec_name}")
         
-        # 文档为 bg.goods.spec.create（创建规格并返回 specId），若存在 id.get 也可能参数为 camelCase
+        # 使用bg.goods.spec.create接口创建自定义规格
         data = {
             "catId": cat_id,
             "parentSpecId": parent_spec_id,
-            "childSpecName": child_spec_name
+            "specName": child_spec_name
         }
-        try:
-            # 优先尝试 create
-            result = self._make_request("bg.goods.spec.create", data, require_auth=True)
-        except Exception:
-            # 回退尝试 id.get（部分网关存在），并使用 snake_case
-            data_fallback = {
-                "cat_id": cat_id,
-                "parent_spec_id": parent_spec_id,
-                "child_spec_name": child_spec_name
-            }
-            result = self._make_request("bg.goods.spec.id.get", data_fallback, require_auth=True)
+        result = self._make_request("bg.goods.spec.create", data, require_auth=True)
         return result
 
     def attrs_get(self, cat_id: int) -> Dict[str, Any]:
@@ -435,23 +445,53 @@ class BgGoodsClient:
         result = self._make_request("bg.goods.sizecharts.template.create", data)
         return result
     
-    def sizecharts_create(self, meta: Dict[str, Any], values: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def sizecharts_create(self, meta: Dict[str, Any], values: List[Dict[str, Any]], 
+                         cat_id: Optional[int] = None, class_id: Optional[int] = None, 
+                         name: Optional[str] = None, reusable: Optional[bool] = None,
+                         general_size_type: Optional[int] = None, local_size_source: Optional[int] = None) -> Dict[str, Any]:
         """
         创建尺码表
         
         Args:
             meta: 尺码表元数据
             values: 尺码表数据
+            cat_id: 类目ID
+            class_id: 尺码分类ID
+            name: 模板名称
+            reusable: 是否可复用
+            general_size_type: 发布尺码类型 (同尺码组id)
+            local_size_source: 本地码来源
             
         Returns:
             创建结果
         """
         logger.info(f"创建尺码表: meta={meta}, values_count={len(values)}")
         
-        data = {
+        # 根据API要求，将meta和values包装在content字段中
+        content = {
             "meta": meta,
-            "values": values
+            "records": values
         }
+        
+        # 添加可选参数到content对象
+        if general_size_type is not None:
+            content["generalSizeType"] = general_size_type
+        if local_size_source is not None:
+            content["localSizeSource"] = local_size_source
+        
+        data = {
+            "content": content
+        }
+        
+        # 添加顶层可选参数
+        if cat_id is not None:
+            data["catId"] = cat_id
+        if class_id is not None:
+            data["classId"] = class_id
+        if name is not None:
+            data["name"] = name
+        if reusable is not None:
+            data["reusable"] = reusable
         
         result = self._make_request("bg.goods.sizecharts.create", data)
         return result
@@ -675,7 +715,7 @@ def create_bg_client(app_key: str = None, app_secret: str = None,
 if __name__ == "__main__":
     # 测试客户端创建
     try:
-        client = create_bg_client(debug=True)
+        client = create_bg_client(debug=False)
         print("客户端创建成功")
         
         # 测试连接

@@ -125,11 +125,9 @@ class BgDataTransformer:
                 shipmentLimitSecond=172800  # 2天
             )
         
-        # 移除商品级规格占位，避免后端校验 Reference Property Name 为空
-        bg_data.productSpecPropertyReqs = []
-
         # 确保每个SKU携带规格列表（默认以尺码为规格）
         for skc in bg_data.productSkcReqs:
+            # 确保主规格列表不为空
             if not skc.mainProductSkuSpecReqs:
                 skc.mainProductSkuSpecReqs.append(
                     BgMainProductSkuSpecReq(
@@ -139,13 +137,25 @@ class BgDataTransformer:
                         specName="Size"
                     )
                 )
+            # 为每个SKU添加规格属性
             for sku in skc.productSkuReqs:
-                if not sku.productSkuSpecReqs:
-                    # 从extCode或图片推断对应的Temu SKU尺寸，回退到M
-                    infer_size = "M"
+                if not sku.productSkuSpecReqs and sku.extCode:
+                    # 从extCode推断对应的Temu SKU尺寸
+                    infer_size = "M"  # 默认尺寸
                     try:
-                        if sku.extCode and "_002" in sku.extCode:
+                        # 根据extCode推断尺寸
+                        if "_001" in sku.extCode:
+                            infer_size = "S"
+                        elif "_002" in sku.extCode:
+                            infer_size = "M"
+                        elif "_003" in sku.extCode:
                             infer_size = "L"
+                        elif "_004" in sku.extCode:
+                            infer_size = "XL"
+                        elif "_005" in sku.extCode:
+                            infer_size = "2XL"
+                        elif "_006" in sku.extCode:
+                            infer_size = "3XL"
                     except Exception:
                         pass
                     sku.productSkuSpecReqs.append(
@@ -157,8 +167,9 @@ class BgDataTransformer:
                         )
                     )
 
-        # 商品属性占位也移除，避免 Base Property Value 为空
-        bg_data.productPropertyReqs = []
+        # 确保商品属性列表不为空，避免 Base Property Value 为空
+        if not bg_data.productPropertyReqs:
+            bg_data.productPropertyReqs = []
 
         # 将外部商品链接映射为扩展编码，便于溯源（商品/SKC/SKU）
         try:
@@ -263,7 +274,7 @@ class BgDataTransformer:
         """
         spec_properties = []
         
-        if not spec_ids or not product.skus:
+        if not product.skus:
             return spec_properties
         
         # 提取唯一尺码
@@ -275,25 +286,24 @@ class BgDataTransformer:
         
         # 为每个尺码创建规格属性
         for size in sizes:
-            if size in spec_ids:
-                spec_prop = BgProductSpecProperty(
-                    templatePid=0,
-                    pid=0,
-                    refPid=0,
-                    propName="Size",
-                    vid=0,
-                    propValue=size,
-                    valueUnit="",
-                    parentSpecId=3001,  # 默认Size父规格ID
-                    parentSpecName="Size",
-                    specId=spec_ids[size],
-                    specName=size,
-                    valueGroupId=0,
-                    valueGroupName="",
-                    numberInputValue="",
-                    valueExtendInfo=""
-                )
-                spec_properties.append(spec_prop)
+            spec_prop = BgProductSpecProperty(
+                templatePid=0,
+                pid=0,
+                refPid=0,
+                propName="Size",
+                vid=0,
+                propValue=size,
+                valueUnit="",
+                parentSpecId=3001,  # 默认Size父规格ID
+                parentSpecName="Size",
+                specId=spec_ids.get(size, 0) if spec_ids else 0,
+                specName=size,
+                valueGroupId=0,
+                valueGroupName="",
+                numberInputValue="",
+                valueExtendInfo=""
+            )
+            spec_properties.append(spec_prop)
         
         logger.info(f"构建了 {len(spec_properties)} 个规格属性")
         return spec_properties
@@ -323,7 +333,7 @@ class BgDataTransformer:
                     parentSpecId=3001,
                     parentSpecName="Size",
                     specId=0,
-                    specName=""
+                    specName="Size"
                 )
             ],
             productSkuReqs=self._build_product_sku_reqs(product.skus, uploaded_images, spec_ids)

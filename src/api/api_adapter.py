@@ -466,7 +466,7 @@ def create_api_adapter(use_new_api: bool = None, fallback_enabled: bool = None,
 if __name__ == "__main__":
     # 测试适配器
     try:
-        adapter = create_api_adapter(debug=True)
+        adapter = create_api_adapter(debug=False)
         
         # 测试连接
         status = adapter.get_api_status()

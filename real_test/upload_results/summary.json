@@ -1,10 +1,68 @@
 {
-  "items": [
-    {
-      "file": "img_0.jpg",
-      "api": "bg.goods.image.upload.global",
-      "url": "https://img.kwcdn.com/product/open/873c705148e54ca0a6bda4d944ed6138-goods.jpeg",
-      "host": "img.kwcdn.com"
+  "total_images": 5,
+  "successful_uploads": 5,
+  "failed_uploads": 0,
+  "upload_time": "2025-09-30 17:16:24",
+  "results": {
+    "img_0.jpg": {
+      "original_path": "/Users/chunanxia/AutoTemu/real_test/images_filtered/img_0.jpg",
+      "uploaded_url": "https://img.kwcdn.com/product/open/da1edbe1765f44d3a81ea5df811e2038-goods.jpeg",
+      "carousel_urls": [
+        "https://img.kwcdn.com/product/fancy/3df753a5-1e85-436e-924f-1a1c6a20faa2.jpg",
+        "https://img.kwcdn.com/product/fancy/70d7815b-b1cc-4094-b0d2-f6dbdfa0b8c5.jpg",
+        "https://img.kwcdn.com/product/fancy/81a89276-5d84-4c70-a7e8-fbba14e15b1f.jpg",
+        "https://img.kwcdn.com/product/fancy/7a2d44ef-4f33-49d7-b8ee-1a9f0a23f347.jpg"
+      ],
+      "upload_time": "2025-09-30 17:16:13",
+      "status": "success"
+    },
+    "img_2.jpg": {
+      "original_path": "/Users/chunanxia/AutoTemu/real_test/images_filtered/img_2.jpg",
+      "uploaded_url": "https://img.kwcdn.com/product/open/5823381b76eb41d78c69103dd91f9f81-goods.jpeg",
+      "carousel_urls": [
+        "https://img.kwcdn.com/product/fancy/7fe1893e-ad21-494b-9b34-a1d6b4728bba.jpg",
+        "https://img.kwcdn.com/product/fancy/a052335b-9f3c-4802-bcdd-20cf2675c94b.jpg",
+        "https://img.kwcdn.com/product/fancy/f0071c17-6d4a-4784-9eeb-5c082ad4e678.jpg",
+        "https://img.kwcdn.com/product/fancy/7d6ecf62-0313-4e2d-8a5a-997e4cc4a7ba.jpg"
+      ],
+      "upload_time": "2025-09-30 17:16:15",
+      "status": "success"
+    },
+    "img_3.jpg": {
+      "original_path": "/Users/chunanxia/AutoTemu/real_test/images_filtered/img_3.jpg",
+      "uploaded_url": "https://img.kwcdn.com/product/open/36f05d302c0641a48356f91c1e387aba-goods.jpeg",
+      "carousel_urls": [
+        "https://img.kwcdn.com/product/fancy/b4ec460d-e4f0-4607-a0e7-3ced68c77fe9.jpg",
+        "https://img.kwcdn.com/product/fancy/26e105a7-3c44-44de-a02f-0fbb30cf9c3e.jpg",
+        "https://img.kwcdn.com/product/fancy/90c48ab5-5c5f-4860-a1a8-167f4f67e577.jpg",
+        "https://img.kwcdn.com/product/fancy/7d96e66b-52fe-437c-ba08-a965801e8f90.jpg"
+      ],
+      "upload_time": "2025-09-30 17:16:19",
+      "status": "success"
+    },
+    "img_4.jpg": {
+      "original_path": "/Users/chunanxia/AutoTemu/real_test/images_filtered/img_4.jpg",
+      "uploaded_url": "https://img.kwcdn.com/product/open/2f9e008e7cfb4847864e0edaa8266e02-goods.jpeg",
+      "carousel_urls": [
+        "https://img.kwcdn.com/product/fancy/f167d293-743b-4692-a5ca-31cb54cc52ea.jpg",
+        "https://img.kwcdn.com/product/fancy/3fd0f300-382a-4045-8612-b5e7d5b7eb64.jpg",
+        "https://img.kwcdn.com/product/fancy/177c51c0-053a-4195-a1f8-2fd9b1bb6a8a.jpg",
+        "https://img.kwcdn.com/product/fancy/c10b5a9e-cbb2-478a-bf60-fdd630f6d10b.jpg"
+      ],
+      "upload_time": "2025-09-30 17:16:21",
+      "status": "success"
+    },
+    "img_5.jpg": {
+      "original_path": "/Users/chunanxia/AutoTemu/real_test/images_filtered/img_5.jpg",
+      "uploaded_url": "https://img.kwcdn.com/product/open/a698bbb0af644fadb5ac969cd8e282be-goods.jpeg",
+      "carousel_urls": [
+        "https://img.kwcdn.com/product/fancy/f7395d67-5c03-4174-a133-5715f3e63c79.jpg",
+        "https://img.kwcdn.com/product/fancy/0d014437-aa45-40ea-a450-827bdca5f924.jpg",
+        "https://img.kwcdn.com/product/fancy/90efb61d-168d-43a9-8101-41fa497bf964.jpg",
+        "https://img.kwcdn.com/product/fancy/fe7ce4b3-4d7b-4c46-9319-12750e685a47.jpg"
+      ],
+      "upload_time": "2025-09-30 17:16:23",
+      "status": "success"
     }
-  ]
+  }
 }

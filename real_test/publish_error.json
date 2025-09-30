@@ -1,0 +1,11 @@
+{
+  "error": "API调用失败: 请重置规格模版，输入必填规格:颜色",
+  "errorCode": 6000002,
+  "response": {
+    "success": false,
+    "requestId": "pa-84ccc44c-ff47-471e-81e9-2c69a18f0fd5",
+    "errorCode": 6000002,
+    "errorMsg": "请重置规格模版，输入必填规格:颜色"
+  },
+  "trace": "Traceback (most recent call last):\n  File \"/Users/chunanxia/AutoTemu/real_test/test_add_goods.py\", line 50, in main\n    resp = client._make_request(\"temu.goods.add\", payload, require_auth=True)\n  File \"/Users/chunanxia/AutoTemu/src/api/bg_client.py\", line 146, in _make_request\n    raise e\n  File \"/Users/chunanxia/AutoTemu/src/api/bg_client.py\", line 134, in _make_request\n    raise BgApiException(f\"API调用失败: {error_msg}\", error_code, result)\nsrc.api.bg_client.BgApiException: API调用失败: 请重置规格模版，输入必填规格:颜色\n"
+}

@@ -1,0 +1,1738 @@
+{
+  "product_title": "圆领卫衣男春秋季2025新款长袖t恤打底美式复古男生宽松潮牌上衣",
+  "search_results": [
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30327,
+        "catName": "男士时尚",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 30467,
+        "catName": "男士时尚帽衫",
+        "parentCatId": 30465,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 30328,
+        "catName": "男装",
+        "parentCatId": 30327,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 30465,
+        "catName": "男士时尚帽衫和卫衣",
+        "parentCatId": 30328,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 27157,
+        "catName": "体育专用服装",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 28281,
+        "catName": "连帽衫",
+        "parentCatId": 28269,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 28268,
+        "catName": "瑜伽服",
+        "parentCatId": 27157,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 28269,
+        "catName": "男士瑜伽服",
+        "parentCatId": 28268,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": {
+        "catId": 32249,
+        "catName": "连帽衫",
+        "parentCatId": 32237,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 6,
+        "isHidden": false
+      },
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 31757,
+        "catName": "健身、训练用品",
+        "parentCatId": 31148,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 32237,
+        "catName": "男士瑜伽服",
+        "parentCatId": 32236,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 32226,
+        "catName": "瑜伽用品",
+        "parentCatId": 31757,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 32236,
+        "catName": "服装",
+        "parentCatId": 32226,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 31148,
+        "catName": "运动与户外用品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30327,
+        "catName": "男士时尚",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 30469,
+        "catName": "男装T恤",
+        "parentCatId": 30468,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 30328,
+        "catName": "男装",
+        "parentCatId": 30327,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 30468,
+        "catName": "男装上衣、T恤、衬衫",
+        "parentCatId": 30328,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30327,
+        "catName": "男士时尚",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 30478,
+        "catName": "T 恤",
+        "parentCatId": 30477,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 30328,
+        "catName": "男装",
+        "parentCatId": 30327,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 30477,
+        "catName": "男士 T 恤和背心",
+        "parentCatId": 30328,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30327,
+        "catName": "男士时尚",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 30466,
+        "catName": "男士时尚卫衣",
+        "parentCatId": 30465,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 30328,
+        "catName": "男装",
+        "parentCatId": 30327,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 30465,
+        "catName": "男士时尚帽衫和卫衣",
+        "parentCatId": 30328,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": {
+        "catId": 36872,
+        "catName": "男士排球服",
+        "parentCatId": 36871,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 6,
+        "isHidden": false
+      },
+      "cat7DTO": {
+        "catId": 36877,
+        "catName": "卫衣",
+        "parentCatId": 36872,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 7,
+        "isHidden": false
+      },
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 35097,
+        "catName": "运动服装和器材",
+        "parentCatId": 31148,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 36871,
+        "catName": "服装",
+        "parentCatId": 36855,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 36320,
+        "catName": "团队运动",
+        "parentCatId": 35097,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 36855,
+        "catName": "排球用品",
+        "parentCatId": 36320,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 31148,
+        "catName": "运动与户外用品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": {
+        "catId": 27095,
+        "catName": "男士宽松古尔达套装",
+        "parentCatId": 27089,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 6,
+        "isHidden": false
+      },
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 27012,
+        "catName": "传统服装",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 27089,
+        "catName": "男士南亚传统文化服装",
+        "parentCatId": 27062,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 27040,
+        "catName": "泛亚传统文化服装",
+        "parentCatId": 27012,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 27062,
+        "catName": "印度传统服装",
+        "parentCatId": 27040,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": {
+        "catId": 30230,
+        "catName": "男士新奇卫衣",
+        "parentCatId": 30223,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 6,
+        "isHidden": false
+      },
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30065,
+        "catName": "新奇物品",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 30223,
+        "catName": "男士新奇服装",
+        "parentCatId": 30102,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 30066,
+        "catName": "新奇服装和产品",
+        "parentCatId": 30065,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 30102,
+        "catName": "新奇服装",
+        "parentCatId": 30066,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": {
+        "catId": 30286,
+        "catName": "男童新奇卫衣",
+        "parentCatId": 30277,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 6,
+        "isHidden": false
+      },
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30065,
+        "catName": "新奇物品",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 30277,
+        "catName": "男童新奇服装",
+        "parentCatId": 30102,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 30066,
+        "catName": "新奇服装和产品",
+        "parentCatId": 30065,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 30102,
+        "catName": "新奇服装",
+        "parentCatId": 30066,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30725,
+        "catName": "男童时尚",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 30843,
+        "catName": "男童T恤",
+        "parentCatId": 30840,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 30726,
+        "catName": "男童服装",
+        "parentCatId": 30725,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 30840,
+        "catName": "男童上衣、T恤、衬衫",
+        "parentCatId": 30726,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30725,
+        "catName": "男童时尚",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 30847,
+        "catName": "男童时尚卫衣",
+        "parentCatId": 30845,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 30726,
+        "catName": "男童服装",
+        "parentCatId": 30725,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 30845,
+        "catName": "男童时尚帽衫和卫衣",
+        "parentCatId": 30726,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": {
+        "catId": 30293,
+        "catName": "男童新奇睡衣",
+        "parentCatId": 30277,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 6,
+        "isHidden": false
+      },
+      "cat7DTO": {
+        "catId": 30294,
+        "catName": "男童新奇睡衣上衣",
+        "parentCatId": 30293,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 7,
+        "isHidden": false
+      },
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30065,
+        "catName": "新奇物品",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 30277,
+        "catName": "男童新奇服装",
+        "parentCatId": 30102,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 30066,
+        "catName": "新奇服装和产品",
+        "parentCatId": 30065,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 30102,
+        "catName": "新奇服装",
+        "parentCatId": 30066,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": {
+        "catId": 27105,
+        "catName": "男童宽松古尔达套装",
+        "parentCatId": 27099,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 6,
+        "isHidden": false
+      },
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 27012,
+        "catName": "传统服装",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 27099,
+        "catName": "男童南亚传统文化服装",
+        "parentCatId": 27062,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 27040,
+        "catName": "泛亚传统文化服装",
+        "parentCatId": 27012,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 27062,
+        "catName": "印度传统服装",
+        "parentCatId": 27040,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30327,
+        "catName": "男士时尚",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 40227,
+        "catName": "大码男士卫衣",
+        "parentCatId": 40226,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 40168,
+        "catName": "大码男装",
+        "parentCatId": 30327,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 40226,
+        "catName": "大码男士休闲运动服",
+        "parentCatId": 40168,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 23228,
+        "catName": "复古游戏和微型游戏机",
+        "parentCatId": 23177,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 23255,
+        "catName": "Atari 5200 游戏",
+        "parentCatId": 23251,
+        "catType": 0,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 23245,
+        "catName": "Atari 传统系统",
+        "parentCatId": 23228,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 23251,
+        "catName": "Atari 5200 游戏，游戏机及配件",
+        "parentCatId": 23245,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 23177,
+        "catName": "视频游戏",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 23228,
+        "catName": "复古游戏和微型游戏机",
+        "parentCatId": 23177,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 23253,
+        "catName": "Atari 5200 游戏机",
+        "parentCatId": 23251,
+        "catType": 0,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 23245,
+        "catName": "Atari 传统系统",
+        "parentCatId": 23228,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 23251,
+        "catName": "Atari 5200 游戏，游戏机及配件",
+        "parentCatId": 23245,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 23177,
+        "catName": "视频游戏",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 23228,
+        "catName": "复古游戏和微型游戏机",
+        "parentCatId": 23177,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 23252,
+        "catName": "Atari 5200 配件",
+        "parentCatId": 23251,
+        "catType": 0,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 23245,
+        "catName": "Atari 传统系统",
+        "parentCatId": 23228,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 23251,
+        "catName": "Atari 5200 游戏，游戏机及配件",
+        "parentCatId": 23245,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 23177,
+        "catName": "视频游戏",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 28946,
+        "catName": "女士时尚",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 39031,
+        "catName": "大码卫衣",
+        "parentCatId": 39028,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 39027,
+        "catName": "大码女装",
+        "parentCatId": 28946,
+        "catType": 1,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 39028,
+        "catName": "成衣",
+        "parentCatId": 39027,
+        "catType": 1,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 32875,
+        "catName": "户外休闲",
+        "parentCatId": 31148,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 33974,
+        "catName": "卫衣",
+        "parentCatId": 33937,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 33936,
+        "catName": "徒步和户外休闲服装",
+        "parentCatId": 32875,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 33937,
+        "catName": "男士户外服饰",
+        "parentCatId": 33936,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 31148,
+        "catName": "运动与户外用品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 30972,
+        "catName": "皮具箱包",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": null,
+      "cat3DTO": {
+        "catId": 30980,
+        "catName": "旅行箱包",
+        "parentCatId": 30972,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 30982,
+        "catName": "登机箱（20寸及以下）",
+        "parentCatId": 30980,
+        "catType": 0,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 1650,
+        "catName": "狗狗用品类",
+        "parentCatId": 1464,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": null,
+      "cat3DTO": {
+        "catId": 1651,
+        "catName": "狗服饰及配件",
+        "parentCatId": 1650,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 1665,
+        "catName": "狗卫衣",
+        "parentCatId": 1651,
+        "catType": 0,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 1464,
+        "catName": "宠物用品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": {
+        "catId": 27101,
+        "catName": "男童南亚宽松裤子",
+        "parentCatId": 27099,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 6,
+        "isHidden": false
+      },
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 27012,
+        "catName": "传统服装",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 27099,
+        "catName": "男童南亚传统文化服装",
+        "parentCatId": 27062,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 27040,
+        "catName": "泛亚传统文化服装",
+        "parentCatId": 27012,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 27062,
+        "catName": "印度传统服装",
+        "parentCatId": 27040,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 27157,
+        "catName": "体育专用服装",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 27621,
+        "catName": "卫衣",
+        "parentCatId": 27584,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 27583,
+        "catName": "户外服饰",
+        "parentCatId": 27157,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 27584,
+        "catName": "男士户外服饰",
+        "parentCatId": 27583,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 32875,
+        "catName": "户外休闲",
+        "parentCatId": 31148,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 34087,
+        "catName": "卫衣",
+        "parentCatId": 34050,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 33936,
+        "catName": "徒步和户外休闲服装",
+        "parentCatId": 32875,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 34050,
+        "catName": "女童户外服饰",
+        "parentCatId": 33936,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 31148,
+        "catName": "运动与户外用品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 1491,
+        "catName": "猫用品",
+        "parentCatId": 1464,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": null,
+      "cat3DTO": {
+        "catId": 39223,
+        "catName": "猫服饰及配件",
+        "parentCatId": 1491,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 40277,
+        "catName": "猫卫衣",
+        "parentCatId": 39223,
+        "catType": 0,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 1464,
+        "catName": "宠物用品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": {
+        "catId": 33147,
+        "catName": "卫衣",
+        "parentCatId": 33110,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 6,
+        "isHidden": false
+      },
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 32875,
+        "catName": "户外休闲",
+        "parentCatId": 31148,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 33110,
+        "catName": "男士户外服饰",
+        "parentCatId": 33109,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 33069,
+        "catName": "攀岩用品",
+        "parentCatId": 32875,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 33109,
+        "catName": "服装",
+        "parentCatId": 33069,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 31148,
+        "catName": "运动与户外用品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    },
+    {
+      "cat9DTO": null,
+      "cat8DTO": null,
+      "cat6DTO": null,
+      "cat7DTO": null,
+      "cat10DTO": null,
+      "cat2DTO": {
+        "catId": 27157,
+        "catName": "体育专用服装",
+        "parentCatId": 27011,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 2,
+        "isHidden": false
+      },
+      "cat5DTO": {
+        "catId": 27734,
+        "catName": "卫衣",
+        "parentCatId": 27697,
+        "catType": 1,
+        "isLeaf": true,
+        "hiddenType": 0,
+        "catLevel": 5,
+        "isHidden": false
+      },
+      "cat3DTO": {
+        "catId": 27583,
+        "catName": "户外服饰",
+        "parentCatId": 27157,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 3,
+        "isHidden": false
+      },
+      "cat4DTO": {
+        "catId": 27697,
+        "catName": "女童户外服饰",
+        "parentCatId": 27583,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 4,
+        "isHidden": false
+      },
+      "cat1DTO": {
+        "catId": 27011,
+        "catName": "服装、鞋靴和珠宝饰品",
+        "parentCatId": 0,
+        "catType": 0,
+        "isLeaf": false,
+        "hiddenType": 0,
+        "catLevel": 1,
+        "isHidden": false
+      }
+    }
+  ],
+  "selected_category": {
+    "cat9DTO": null,
+    "cat8DTO": null,
+    "cat6DTO": null,
+    "cat7DTO": null,
+    "cat10DTO": null,
+    "cat2DTO": {
+      "catId": 30327,
+      "catName": "男士时尚",
+      "parentCatId": 27011,
+      "catType": 0,
+      "isLeaf": false,
+      "hiddenType": 0,
+      "catLevel": 2,
+      "isHidden": false
+    },
+    "cat5DTO": {
+      "catId": 30469,
+      "catName": "男装T恤",
+      "parentCatId": 30468,
+      "catType": 1,
+      "isLeaf": true,
+      "hiddenType": 0,
+      "catLevel": 5,
+      "isHidden": false
+    },
+    "cat3DTO": {
+      "catId": 30328,
+      "catName": "男装",
+      "parentCatId": 30327,
+      "catType": 0,
+      "isLeaf": false,
+      "hiddenType": 0,
+      "catLevel": 3,
+      "isHidden": false
+    },
+    "cat4DTO": {
+      "catId": 30468,
+      "catName": "男装上衣、T恤、衬衫",
+      "parentCatId": 30328,
+      "catType": 0,
+      "isLeaf": false,
+      "hiddenType": 0,
+      "catLevel": 4,
+      "isHidden": false
+    },
+    "cat1DTO": {
+      "catId": 27011,
+      "catName": "服装、鞋靴和珠宝饰品",
+      "parentCatId": 0,
+      "catType": 0,
+      "isLeaf": false,
+      "hiddenType": 0,
+      "catLevel": 1,
+      "isHidden": false
+    }
+  },
+  "extracted_category_ids": {
+    "cat2Id": 30327,
+    "cat5Id": 30469,
+    "cat3Id": 30328,
+    "cat4Id": 30468,
+    "cat1Id": 27011
+  },
+  "total_results": 28
+}

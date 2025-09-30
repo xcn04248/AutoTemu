@@ -1,16 +1,5 @@
 {
-  "result": {
-    "urls": [
-      "https://img.kwcdn.com/product/fancy/0bbb8b8e-9ee5-4a10-8e92-e3cac9595ab8.jpg",
-      "https://img.kwcdn.com/product/fancy/5ceb2b15-c006-4ad9-bfd3-63b5b0ce5816.jpg",
-      "https://img.kwcdn.com/product/fancy/d4376276-cb38-401d-8a53-7abfbb107af7.jpg",
-      "https://img.kwcdn.com/product/fancy/beaed2e3-925e-4395-8858-772f52577fc7.jpg"
-    ],
-    "imageUrl": "https://img.kwcdn.com/product/open/247c765968854b3495648510e866d9e2-goods.jpeg",
-    "url": null
-  },
-  "success": true,
-  "requestId": "pa-ee417aa6-7a7d-4099-854f-e8cf2a99abc7",
-  "errorCode": 1000000,
-  "errorMsg": ""
+  "filename": "img_2.jpg",
+  "url": "https://img.kwcdn.com/product/open/5823381b76eb41d78c69103dd91f9f81-goods.jpeg",
+  "upload_time": "2025-09-30 17:16:15"
 }

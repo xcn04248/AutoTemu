@@ -1,0 +1,312 @@
+{
+  "cat1Id": 27011,
+  "cat2Id": 30327,
+  "cat3Id": 30328,
+  "cat4Id": 30468,
+  "cat5Id": 30469,
+  "cat6Id": 0,
+  "cat7Id": 0,
+  "cat8Id": 0,
+  "cat9Id": 0,
+  "cat10Id": 0,
+  "productName": "圆领卫衣男春秋季2025新款长袖t恤打底美式复古男生宽松潮牌上衣",
+  "productI18nReqs": [
+    {
+      "productName": "Round Neck Sweatshirt Men Spring Autumn 2025 New Long Sleeve T-Shirt American Retro Loose Trendy Top",
+      "language": "en"
+    }
+  ],
+  "materialImgUrl": "https://img.kwcdn.com/product/open/da1edbe1765f44d3a81ea5df811e2038-goods.jpeg",
+  "productPropertyReqs": [
+    {
+      "valueUnit": "",
+      "propValue": "棉",
+      "propName": "材质",
+      "refPid": 12,
+      "vid": 2,
+      "pid": 1,
+      "templatePid": 596278,
+      "valueExtendInfo": "",
+      "materialImageUrl": "https://img.kwcdn.com/product/open/da1edbe1765f44d3a81ea5df811e2038-goods.jpeg"
+    },
+    {
+      "valueUnit": "%",
+      "propValue": "棉",
+      "propName": "成分",
+      "refPid": 15,
+      "vid": 2,
+      "numberInputValue": "100.00",
+      "pid": 2,
+      "templatePid": 596295,
+      "valueExtendInfo": ""
+    },
+    {
+      "valueUnit": "",
+      "propValue": "运动",
+      "propName": "风格",
+      "refPid": 19,
+      "vid": 142,
+      "pid": 3,
+      "templatePid": 596298,
+      "valueExtendInfo": ""
+    },
+    {
+      "valueUnit": "",
+      "propValue": "可机洗",
+      "propName": "护理说明",
+      "refPid": 20,
+      "vid": 164,
+      "pid": 4,
+      "templatePid": 596281,
+      "valueExtendInfo": ""
+    },
+    {
+      "valueUnit": "",
+      "propValue": "圆领",
+      "propName": "领型",
+      "refPid": 21,
+      "vid": 168,
+      "pid": 5,
+      "templatePid": 596285,
+      "valueExtendInfo": ""
+    },
+    {
+      "valueUnit": "",
+      "propValue": "中弹",
+      "propName": "面料",
+      "refPid": 22,
+      "vid": 205,
+      "pid": 6,
+      "templatePid": 596288,
+      "valueExtendInfo": ""
+    },
+    {
+      "valueUnit": "",
+      "propValue": "否",
+      "propName": "是否透明",
+      "refPid": 24,
+      "vid": 210,
+      "pid": 7,
+      "templatePid": 596289,
+      "valueExtendInfo": ""
+    },
+    {
+      "valueUnit": "",
+      "propValue": "纯色",
+      "propName": "图案",
+      "refPid": 26,
+      "vid": 213,
+      "pid": 10,
+      "templatePid": 596290,
+      "valueExtendInfo": ""
+    },
+    {
+      "valueUnit": "",
+      "propValue": "春",
+      "propName": "季节",
+      "refPid": 76,
+      "vid": 640,
+      "pid": 24,
+      "templatePid": 596299,
+      "valueExtendInfo": ""
+    },
+    {
+      "valueUnit": "",
+      "propValue": "无",
+      "propName": "细节",
+      "refPid": 83,
+      "vid": 545,
+      "pid": 21,
+      "templatePid": 596291,
+      "valueExtendInfo": ""
+    },
+    {
+      "valueUnit": "",
+      "propValue": "卫衣",
+      "propName": "类型",
+      "refPid": 84,
+      "vid": 1201,
+      "pid": 23,
+      "templatePid": 596283,
+      "valueExtendInfo": ""
+    },
+    {
+      "valueUnit": "",
+      "propValue": "日常",
+      "propName": "场合",
+      "refPid": 96,
+      "vid": 716,
+      "pid": 26,
+      "templatePid": 596300,
+      "valueExtendInfo": ""
+    }
+  ],
+  "productImageReqs": [
+    {
+      "imageUrl": "https://img.kwcdn.com/product/open/da1edbe1765f44d3a81ea5df811e2038-goods.jpeg"
+    },
+    {
+      "imageUrl": "https://img.kwcdn.com/product/open/5823381b76eb41d78c69103dd91f9f81-goods.jpeg"
+    },
+    {
+      "imageUrl": "https://img.kwcdn.com/product/open/36f05d302c0641a48356f91c1e387aba-goods.jpeg"
+    },
+    {
+      "imageUrl": "https://img.kwcdn.com/product/open/2f9e008e7cfb4847864e0edaa8266e02-goods.jpeg"
+    },
+    {
+      "imageUrl": "https://img.kwcdn.com/product/open/a698bbb0af644fadb5ac969cd8e282be-goods.jpeg"
+    },
+    {
+      "imageUrl": "https://img.kwcdn.com/product/open/6fc4f814438e4804910cbc16a0eccfb4-goods.jpeg"
+    }
+  ],
+  "productDesc": "5022华棉320克黑/白/灰 M-3XL P23 网络图",
+  "productDescI18nReqs": [
+    {
+      "productDesc": "5022 Chinese Cotton 320g Black/White/Gray M-3XL P23 Network Image",
+      "language": "en"
+    }
+  ],
+  "productWeight": 0.5,
+  "productLength": 70,
+  "productWidth": 50,
+  "productHeight": 2,
+  "productPackageLength": 72,
+  "productPackageWidth": 52,
+  "productPackageHeight": 4,
+  "productPackageWeight": 0.6,
+  "currency": "CNY",
+  "fulfillmentChannel": 1,
+  "siteCode": "JP",
+  "warehouseCode": "JP_OSAKA",
+  "mainSalesSpecList": [
+    {
+      "specId": 3001,
+      "parentSpecName": "尺码",
+      "parentSpecId": 3001,
+      "specName": "尺码"
+    }
+  ],
+  "productSkcReqs": [
+    {
+      "outerSkcId": "SKC001",
+      "skcName": "自定义风格规格",
+      "skcPropertyReqs": [
+        {
+          "propertyValueId": 18012,
+          "propertyValueName": "自定义风格规格",
+          "propertyId": 18012,
+          "propertyName": "风格"
+        }
+      ],
+      "skcImageUrl": "https://img.kwcdn.com/product/fancy/3df753a5-1e85-436e-924f-1a1c6a20faa2.jpg",
+      "extCode": "SKC001",
+      "mainProductSkuSpecReqs": [
+        {
+          "specId": 3001,
+          "parentSpecName": "尺码",
+          "parentSpecId": 3001,
+          "specName": "M"
+        }
+      ],
+      "productSkuReqs": [
+        {
+          "outerSkuId": "SKU001",
+          "skuName": "M",
+          "skuPropertyReqs": [],
+          "skuSellPrice": 115,
+          "skuStockNum": 100,
+          "skuImageUrl": "https://img.kwcdn.com/product/fancy/3df753a5-1e85-436e-924f-1a1c6a20faa2.jpg",
+          "extCode": "SKU001",
+          "currencyType": "CNY",
+          "siteSupplierPrices": [
+            {
+              "siteId": 100,
+              "supplierPrice": 115
+            }
+          ],
+          "productSkuSpecReqs": [
+            {
+              "specId": 3001,
+              "parentSpecName": "尺码",
+              "parentSpecId": 3001,
+              "specName": "M"
+            }
+          ],
+          "productSkuWhExtAttrReq": {
+            "productSkuWeightReq": {
+              "value": 300000,
+              "inputValue": "300",
+              "inputUnit": "g"
+            },
+            "productSkuVolumeReq": {
+              "len": 300,
+              "width": 250,
+              "height": 20,
+              "inputLen": "30",
+              "inputHeight": "2",
+              "inputWidth": "25",
+              "inputUnit": "cm"
+            },
+            "productSkuSensitiveAttrReq": {
+              "isSensitive": 0,
+              "sensitiveList": []
+            },
+            "productSkuBarCodeReqs": []
+          },
+          "productSkuStockQuantityReq": {
+            "warehouseStockQuantityReqs": [
+              {
+                "warehouseId": "JP_OSAKA",
+                "targetStockAvailable": 100
+              }
+            ]
+          },
+          "thumbUrl": "https://img.kwcdn.com/product/fancy/3df753a5-1e85-436e-924f-1a1c6a20faa2.jpg"
+        }
+      ],
+      "previewImgUrls": [
+        "https://img.kwcdn.com/product/fancy/3df753a5-1e85-436e-924f-1a1c6a20faa2.jpg",
+        "https://img.kwcdn.com/product/fancy/70d7815b-b1cc-4094-b0d2-f6dbdfa0b8c5.jpg",
+        "https://img.kwcdn.com/product/fancy/81a89276-5d84-4c70-a7e8-fbba14e15b1f.jpg"
+      ],
+      "carouselImageUrls": [
+        "https://img.kwcdn.com/product/fancy/3df753a5-1e85-436e-924f-1a1c6a20faa2.jpg",
+        "https://img.kwcdn.com/product/fancy/70d7815b-b1cc-4094-b0d2-f6dbdfa0b8c5.jpg",
+        "https://img.kwcdn.com/product/fancy/81a89276-5d84-4c70-a7e8-fbba14e15b1f.jpg"
+      ]
+    }
+  ],
+  "productSpecReqs": [
+    {
+      "propertyId": 3001,
+      "propertyName": "尺码",
+      "propertyValueReqs": [
+        {
+          "propertyValueId": 1001,
+          "propertyValueName": "M"
+        }
+      ]
+    }
+  ],
+  "productSpecPropertyReqs": [
+    {
+      "parentSpecId": 3001,
+      "parentSpecName": "尺码",
+      "specId": 3001,
+      "specName": "M",
+      "groupId": 2,
+      "vid": 1001,
+      "refPid": 65,
+      "pid": 14,
+      "templatePid": 596276,
+      "propName": "尺码",
+      "propValue": "M",
+      "valueUnit": "",
+      "valueGroupId": 2,
+      "valueGroupName": "中国码",
+      "valueExtendInfo": ""
+    }
+  ]
+}

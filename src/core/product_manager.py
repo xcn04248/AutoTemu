@@ -61,7 +61,7 @@ class ProductManager:
                 app_secret=config.bg_app_secret,
                 access_token=config.bg_access_token,
                 base_url=config.bg_base_url,
-                debug=True
+                debug=False
             )
             self.bg_transformer = BgDataTransformer()
             self.api_adapter = ApiAdapter()
@@ -73,7 +73,7 @@ class ProductManager:
                 app_secret=os.getenv("TEMU_APP_SECRET"),
                 access_token=os.getenv("TEMU_ACCESS_TOKEN"),
                 base_url=os.getenv("TEMU_BASE_URL", "https://openapi-b-global.temu.com"),
-                debug=True
+                debug=False
             )
             logger.info("使用旧版API客户端 (bg.local.goods.add)")
         

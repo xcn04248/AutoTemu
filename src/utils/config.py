@@ -52,7 +52,7 @@ class Config:
             or os.getenv("BG_ACCESS_TOKEN")
             or self._get_optional_env("TEMU_ACCESS_TOKEN")
         )
-        self.bg_base_url = os.getenv("BG_BASE_URL", "https://openapi.kuajingmaihuo.com/openapi/router")
+        self.bg_base_url = os.getenv("BG_BASE_URL", "https://openapi-b-partner.temu.com/openapi/router")
         
         # 兼容旧配置
         self.temu_app_key = self.bg_app_key

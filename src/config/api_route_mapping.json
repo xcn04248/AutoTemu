@@ -1,0 +1,429 @@
+{
+  "api_route_mapping": {
+    "description": "API接口与新老路由的映射表",
+    "last_updated": "2025-09-30",
+    "base_urls": {
+      "old_cn_gateway": "https://openapi.kuajingmaihuo.com/openapi/router",
+      "new_partner_gateway": "https://openapi-b-partner.temu.com/openapi/router"
+    },
+    "migrated_apis": {
+      "description": "已迁移到新partner网关的API，需要使用新路由和新接口type",
+      "apis": {
+        "temu.goods.add": {
+          "old_api": "bg.goods.add",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.list.get": {
+          "old_api": "bg.goods.list.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.detail.get": {
+          "old_api": "bg.goods.detail.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.migrate": {
+          "old_api": "bg.goods.migrate",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.topselling.soldout.get": {
+          "old_api": "bg.goods.topselling.soldout.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.custom.label.get": {
+          "old_api": "bg.goods.custom.label.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.labelv2.get": {
+          "old_api": "bg.goods.labelv2.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.edit.task.submit": {
+          "old_api": "bg.goods.edit.task.submit",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.edit.sensitive.attr": {
+          "old_api": "bg.goods.edit.sensitive.attr",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.edit.pictures.submit": {
+          "old_api": "bg.goods.edit.pictures.submit",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.update": {
+          "old_api": "bg.goods.update",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.add.property": {
+          "old_api": "bg.goods.add.property",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.edit.property": {
+          "old_api": "bg.goods.edit.property",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goodslogistics.template.edit": {
+          "old_api": "bg.goodslogistics.template.edit",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.size.template.edit": {
+          "old_api": "bg.goods.edit",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.edit.guide.file": {
+          "old_api": "bg.goods.edit.guide.file",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.catsmandatory.get": {
+          "old_api": "bg.goods.catsmandatory.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.logistics.template.get": {
+          "old_api": "bg.logistics.template.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.goods.price.list.get": {
+          "old_api": "bg.goods.price.list.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "temu.jitmode.activate": {
+          "old_api": "bg.jitmode.activate",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "bg.goods.image.upload.global": {
+          "old_api": "bg.goods.image.upload",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-05"
+        },
+        "bg.goods.texttopicture.add.global": {
+          "old_api": "bg.goods.texttopicture.add",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-05"
+        },
+        "temu.picturecompression.get": {
+          "old_api": "bg.picturecompression.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-05"
+        },
+        "temu.colorimageurl.get": {
+          "old_api": "bg.colorimageurl.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-05"
+        },
+        "temu.fancy.image.cm2in": {
+          "old_api": "bg.fancy.image.cm2in",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-05"
+        },
+        "temu.goods.photorecommendationcategory.get": {
+          "old_api": "bg.goods.photorecommendationcategory.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-05"
+        },
+        "bg.goods.video.upload.sign.get.global": {
+          "old_api": "bg.goods.video.upload.sign.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-05"
+        },
+        "bg.goods.big.video.upload.result.get.global": {
+          "old_api": "bg.goods.big.video.upload.result.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-05"
+        },
+        "bg.btg.goods.stock.route.add": {
+          "old_api": "bg.goods.routestock.add",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-15"
+        },
+        "bg.btg.goods.stock.quantity.update": {
+          "old_api": "bg.goods.quantity.update",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-15"
+        },
+        "bg.btg.goods.stock.quantity.get": {
+          "old_api": "bg.goods.quantity.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-15"
+        },
+        "bg.btg.goods.stock.warehouse.list.get": {
+          "old_api": "bg.goods.warehouse.list.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-08-15"
+        },
+        "bg.semi.adjust.price.batch.review.order": {
+          "old_api": "bg.semi.adjust.price.batch.review",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-06-30"
+        },
+        "bg.semi.adjust.price.page.query.order": {
+          "old_api": "bg.semi.adjust.price.page.query",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-06-30"
+        },
+        "bg.semi.price.review.page.query.order": {
+          "old_api": "bg.price.review.page.query",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-06-30"
+        },
+        "bg.semi.price.review.confirm.order": {
+          "old_api": "bg.price.review.confirm",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-06-30"
+        },
+        "bg.semi.price.review.reject.order": {
+          "old_api": "bg.price.review.reject",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-06-30"
+        },
+        "bg.marketing.activity.detail.get.global": {
+          "old_api": "bg.marketing.activity.detail.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "bg.marketing.activity.list.get.global": {
+          "old_api": "bg.marketing.activity.list.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "bg.marketing.activity.product.get.global": {
+          "old_api": "bg.marketing.activity.product.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "bg.marketing.activity.session.list.get.global": {
+          "old_api": "bg.marketing.activity.session.list.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "bg.marketing.activity.enroll.list.get.global": {
+          "old_api": "bg.marketing.activity.enroll.list.get",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        },
+        "bg.marketing.activity.enroll.submit.global": {
+          "old_api": "bg.marketing.activity.enroll.submit",
+          "route": "new_partner_gateway",
+          "status": "migrated",
+          "migration_date": "2025-09-12"
+        }
+      }
+    },
+    "legacy_apis": {
+      "description": "仍使用旧CN网关的API",
+      "apis": {
+        "bg.goods.cats.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "类目查询API，暂未迁移"
+        },
+        "bg.goods.attrs.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "属性模板查询API，暂未迁移"
+        },
+        "bg.goods.parentspec.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "父规格列表查询API，暂未迁移"
+        },
+        "bg.goods.spec.create": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "创建规格API，暂未迁移"
+        },
+        "bg.goods.category.match": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "类目映射API，暂未迁移"
+        },
+        "bg.goods.category.mapping": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "中文类目映射API，暂未迁移"
+        },
+        "bg.goods.attribute.mapping": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "内外属性映射API，暂未迁移"
+        },
+        "bg.goods.sizecharts.class.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "尺码分类查询API，暂未迁移"
+        },
+        "bg.goods.sizecharts.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "尺码表模板查询API，暂未迁移"
+        },
+        "bg.goods.sizecharts.template.create": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "尺码表模板创建API，暂未迁移"
+        },
+        "bg.goods.sizecharts.create": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "尺码表创建API，暂未迁移"
+        },
+        "bg.goods.sizecharts.settings.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "尺码模板规则查询API，暂未迁移"
+        },
+        "bg.goods.sizecharts.meta.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "尺码表元信息查询API，暂未迁移"
+        },
+        "bg.goods.imagesizechart.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "图片提取尺码表API，暂未迁移"
+        },
+        "bg.goods.instructions.upload": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "说明书文件上传API，暂未迁移"
+        },
+        "bg.goods.instructionslanguages.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "说明书语种查询API，暂未迁移"
+        },
+        "bg.goods.instructionstranslation.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "说明书翻译API，暂未迁移"
+        },
+        "bg.goods.translationresult.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "说明书翻译结果查询API，暂未迁移"
+        },
+        "bg.modelinfo.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "模特信息查询API，暂未迁移"
+        },
+        "bg.modelcats.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "可添加模特类目查询API，暂未迁移"
+        },
+        "bg.modelinfo.add": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "新增模特信息API，暂未迁移"
+        },
+        "bg.modelinfo.edit": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "编辑模特信息API，暂未迁移"
+        },
+        "bg.mall.info.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "店铺类型信息查询API，暂未迁移"
+        },
+        "bg.open.accesstoken.info.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "授权信息查询API，暂未迁移"
+        },
+        "bg.goods.brand.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "货品品牌查询API，暂未迁移"
+        },
+        "bg.goods.suggest.supplyprice.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "建议申报参考价查询API，暂未迁移"
+        },
+        "bg.product.search": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "货品生命周期状态查询API，暂未迁移"
+        },
+        "bg.goods.warehouse.list.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "仓库信息查询API，暂未迁移"
+        },
+        "bg.logistics.template.get": {
+          "route": "old_cn_gateway",
+          "status": "legacy",
+          "note": "运费模板列表查询API，暂未迁移"
+        }
+      }
+    },
+    "usage_notes": {
+      "migration_status": "部分API已迁移到新partner网关，部分仍使用旧CN网关",
+      "authorization": "新partner网关需要重新获取授权，获取路径：https://agentseller.temu.com/open/system-manage/client-manage",
+      "parallel_period": "当前为新旧接口并行阶段，建议尽快切换到新接口",
+      "deprecation_timeline": "原接口计划逐步下线，请及时更新代码"
+    }
+  }
+}
